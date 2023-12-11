@@ -1,7 +1,7 @@
 
-Adatbázis: H2 in-memory adatbázis
-adatbázis console (php-myadminhoz hasonló)  /h2-console
-jdbc driver: mariadb driver
-
-konfiguráció: src\main\resources\application.properties
+Adatbázis: H2 in-memory adatbázis<br>
+adatbázis console (php-myadminhoz hasonló)  /h2-console<br>
+jdbc driver: mariadb driver<br>
+<br>
+konfiguráció: src\main\resources\application.properties<br>
 
