@@ -1,0 +1,19 @@
+{
+    "id":123456,
+    "userId":12345,
+    "orgId":123,
+    "posterName":"Mental Health ORG",
+    "content":"This is my example post about how great life is",
+    "url":"/posts/123456",
+    "imagePath":["/users/12345/images/123456/1","/users/12345/images/123456/2","/users/12345/images/123456/3"],
+    "likes":100,
+    "dislikes":0,
+    "vote":{
+        "description":"You can decide between the following options:",
+        "options":[
+            {"id":4352, "optionText":"To Be Happy", "votesNum":111},
+            {"id":4353, "optionText":"To Be", "votesNum":0},
+            {"id":4354, "optionText":"Not To Be", "votesNum":11111222}
+        ]
+    }
+}

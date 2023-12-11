@@ -1,0 +1,23 @@
+[
+    {"name":"id", "type":"Long", "example":324564},
+    {"name":"userId", "type":"Long", "example":5684},
+    {"name":"orgId", "type":"Long", "example":1234},
+    {"name":"posterName", "type":"String", "example":"Road Runners Association"},
+    {"name":"posterName", "type":"String", "example":"Long long text about some recent happenings and or near future events that everyone is excited about"},
+    {"name":"url", "type":"String", "example":"/posts/324564"},
+    {"name":"imagePath", "type":"ArrayOfStrings", "example":["/users/5684/images/324564/1","/users/5684/images/324564/2"]},
+    {"name":"likes", "type":"Long", "example":65476},
+    {"name":"dislikes", "type":"Long", "example":34535},
+    {"name":"votes", "type":"object", "example":[
+        {"name":"description", "type":"String", "example":"Here are your options:"},
+        {"name":"options", "type":"ArrayOfObjects", "example":[[
+            {"name":"id", "type":"Long", "example":34564},
+            {"name":"optionText", "type":"String", "example":"option1"},
+            {"name":"votesNum", "type":"Long", "example":234}
+        ],[
+            {"name":"id", "type":"Long", "example":34563},
+            {"name":"optionText", "type":"String", "example":"option2"},
+            {"name":"votesNum", "type":"Long", "example":243}
+        ]]}
+    ]}
+]
