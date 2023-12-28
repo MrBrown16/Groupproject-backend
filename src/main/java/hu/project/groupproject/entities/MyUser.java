@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "users")
@@ -30,10 +29,10 @@ public class MyUser {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name = "user_id")
     Long id;
-
+    
     @NaturalId
     String email;
-
+    
     String userName;
     String firstName;
     String lastName;

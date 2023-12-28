@@ -11,6 +11,5 @@ public class MainController {
     
     @GetMapping
     public void setUp(){
-        //TODO:populate database
     }
 }
