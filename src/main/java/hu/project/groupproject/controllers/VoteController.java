@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.dtos.voteDTOs.VoteDTOPublic;
 import hu.project.groupproject.entities.MyVote;
 import hu.project.groupproject.services.VoteService;
 
@@ -30,7 +31,7 @@ public class VoteController {
     }
 
     @GetMapping("/{id}")
-    public Optional<MyVote> getVote(@PathVariable Long id) {
+    public Optional<VoteDTOPublic> getVote(@PathVariable Long id) {
         return voteService.getVote(id);
     }
     

@@ -51,14 +51,12 @@ public class MyUser {
     @Column(name = "user_id")
     Long id;
     
-    @NaturalId
-    String email;
-    
     String userName;
     String firstName;
     String lastName;
     Long phone;
-
+    @NaturalId
+    String email;
     String profileImagePath;
 
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user

@@ -2,6 +2,7 @@ package hu.project.groupproject.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.dtos.voteOptionsDTOs.VoteOptionDTOPublic;
 import hu.project.groupproject.entities.MyVoteOption;
 import hu.project.groupproject.services.VoteOptionService;
 
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -32,7 +32,7 @@ public class VoteOptionController {
     }
 
     @GetMapping("/{id}")
-    public Optional<MyVoteOption> getVoteOption(@PathVariable Long id) {
+    public Optional<VoteOptionDTOPublic> getVoteOption(@PathVariable Long id) {
         return voteOptionService.getVoteOption(id);
     }
     

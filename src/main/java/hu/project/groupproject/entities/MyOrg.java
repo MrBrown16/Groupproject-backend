@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,12 @@ public class MyOrg {
     @JsonIgnoreProperties("orgs")
     Set<MyUser> users;
 
+    @OneToMany(mappedBy = "org", fetch=FetchType.LAZY) 
+    @Column(name = "posts_fk")
+    @JsonIgnoreProperties("user")
+    Set<MyPost> posts;
+
+    
     @Override
     public int hashCode() {
         final int prime = 31;

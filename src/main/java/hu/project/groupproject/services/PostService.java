@@ -14,8 +14,7 @@ public class PostService {
     
     PostRepository postRepository;
 
-    // @PersistenceContext
-    // EntityManager entityManager;
+
     
     public PostService(PostRepository postRepository){
         this.postRepository=postRepository;

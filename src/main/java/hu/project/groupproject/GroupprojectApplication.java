@@ -5,8 +5,8 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication
 // @ComponentScan(basePackages = "hu.project.groupproject")
+@SpringBootApplication
 @EnableJpaRepositories(basePackages = "hu.project.groupproject")
 public class GroupprojectApplication {
 	

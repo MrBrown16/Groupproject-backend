@@ -34,7 +34,8 @@ public class MyPost {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "org_id") //references MyOrg.id which has a coloumn name of "org_id"
-    MyOrg myOrg;
+    @JsonIgnoreProperties("posts")
+    MyOrg org;
 
     String content;
     String url;
@@ -44,8 +45,8 @@ public class MyPost {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_id")
-    @JsonIgnoreProperties("myPost")
-    MyVote myVote;
+    @JsonIgnoreProperties("post")
+    MyVote vote;
 
     @Override
     public int hashCode() {

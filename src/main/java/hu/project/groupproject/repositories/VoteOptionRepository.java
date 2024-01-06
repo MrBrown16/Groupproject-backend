@@ -2,19 +2,23 @@ package hu.project.groupproject.repositories;
 
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import hu.project.groupproject.dtos.voteOptionsDTOs.VoteOptionDTOInternal;
 import hu.project.groupproject.entities.MyVoteOption;
 
 
 
-// @Repository
 public interface VoteOptionRepository extends JpaRepository<MyVoteOption, Long>{
     
     <T> Optional<T> findById(Long id, Class<T> type);
 
-    // List<MyVoteOption> findByLastName(String lastName);
+    @Query("SELECT new hu.project.groupproject.dtos.voteOptionsDTOs.VoteOptionDTOInternal(o.id, o.optionText, o.votesNum) FROM MyVoteOption o LEFT JOIN o.vote WHERE o.vote.id=:id")
+    List<VoteOptionDTOInternal> findVoteOptionDtosByvoteId(@Param(value = "id") Long id);
 
-    // List<MyVoteOption> findByFirstNameLike(String firstName);
+
 }

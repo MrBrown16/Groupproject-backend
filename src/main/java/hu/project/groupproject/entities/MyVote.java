@@ -28,15 +28,15 @@ public class MyVote {
 
     String description;
 
-    @OneToMany(mappedBy = "myVote", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "vote", fetch=FetchType.LAZY)
     @Column(name = "vote_fk")
-    @JsonIgnoreProperties("myVote")
-    List<MyVoteOption> myVoteOption;
+    @JsonIgnoreProperties("vote")
+    List<MyVoteOption> options;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    @JsonIgnoreProperties("myVote")
-    MyPost myPost;
+    @JsonIgnoreProperties("vote")
+    MyPost post;
 
     @Override
     public int hashCode() {

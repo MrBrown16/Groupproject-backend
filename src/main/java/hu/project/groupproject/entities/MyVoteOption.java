@@ -24,16 +24,14 @@ public class MyVoteOption {
     @Column(name = "vote_option_id")
     Long id;
 
-    @Column(name = "option_text")
     String optionText;
     
-    @Column(name = "votes_num")
     Long votesNum;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "vote_id")
     @JsonIgnoreProperties("myVoteOption")
-    MyVote myVote;
+    MyVote vote;
 
     @Override
     public int hashCode() {

@@ -14,8 +14,6 @@ public class OrgService {
     
     OrgRepository orgRepository;
 
-    // @PersistenceContext
-    // EntityManager entityManager;
     
     public OrgService(OrgRepository orgRepository){
         this.orgRepository=orgRepository;

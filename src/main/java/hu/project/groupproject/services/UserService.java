@@ -14,8 +14,6 @@ public class UserService {
     
     UserRepository userRepository;
 
-    // @PersistenceContext
-    // EntityManager entityManager;
     
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
