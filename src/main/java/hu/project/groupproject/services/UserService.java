@@ -3,6 +3,8 @@ package hu.project.groupproject.services;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import hu.project.groupproject.dtos.userDTOs.UserDTOPublic;
 import hu.project.groupproject.entities.MyUser;
 import hu.project.groupproject.repositories.UserRepository;
 
@@ -22,8 +24,8 @@ public class UserService {
     public MyUser saveUser(MyUser myUser){
         return userRepository.save(myUser);
     }
-    public Optional<MyUser> getUser(Long id){
-        return userRepository.findById(id);
+    public Optional<UserDTOPublic> getUser(Long id){
+        return userRepository.findById(id, UserDTOPublic.class);
     }
 
     public void deleteUser(MyUser user){

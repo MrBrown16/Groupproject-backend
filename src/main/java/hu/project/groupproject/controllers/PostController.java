@@ -2,12 +2,14 @@ package hu.project.groupproject.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.dtos.postDTOs.PostDTOPublic;
 import hu.project.groupproject.entities.MyPost;
 import hu.project.groupproject.services.PostService;
 
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +32,8 @@ public class PostController {
         return postService.savePost(post);
     }
 
-    @GetMapping
-    public Optional<MyPost> getPost(@RequestParam(name = "id") Long id) {
+    @GetMapping("/{id}")
+    public Optional<PostDTOPublic> getPost(@PathVariable Long id) {
         return postService.getPost(id);
     }
     

@@ -1,17 +1,16 @@
 package hu.project.groupproject.controllers;
 
+import java.util.Optional;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.entities.MyVote;
 import hu.project.groupproject.services.VoteService;
-
-import java.util.Optional;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -30,8 +29,8 @@ public class VoteController {
         return voteService.saveVote(vote);
     }
 
-    @GetMapping
-    public Optional<MyVote> getVote(@RequestParam(name = "id") Long id) {
+    @GetMapping("/{id}")
+    public Optional<MyVote> getVote(@PathVariable Long id) {
         return voteService.getVote(id);
     }
     

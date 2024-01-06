@@ -15,6 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -24,6 +27,24 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "users")
+@NamedEntityGraphs(value = { 
+    @NamedEntityGraph(name = "graph.User.public", attributeNodes ={ 
+        @NamedAttributeNode(value ="id" ),
+        @NamedAttributeNode(value = "userName"),
+        @NamedAttributeNode(value = "firstName"),
+        @NamedAttributeNode(value = "lastName"),
+        @NamedAttributeNode(value = "profileImagePath")
+    }),
+    @NamedEntityGraph(name = "graph.User.private", attributeNodes = {
+        @NamedAttributeNode(value ="id" ),
+        @NamedAttributeNode(value = "userName"),
+        @NamedAttributeNode(value = "firstName"),
+        @NamedAttributeNode(value = "lastName"),
+        @NamedAttributeNode(value = "profileImagePath"),
+        @NamedAttributeNode(value = "email"),
+        @NamedAttributeNode(value = "phone")
+    })
+})
 public class MyUser {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
@@ -38,7 +59,6 @@ public class MyUser {
     String lastName;
     Long phone;
 
-    @Column(name = "profile_image_path")
     String profileImagePath;
 
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user

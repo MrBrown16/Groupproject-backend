@@ -27,14 +27,14 @@ public class MyPost {
     @Column(name = "post_id")
     Long id;
 
-    @ManyToOne( fetch=FetchType.LAZY)
+    @ManyToOne(optional = false, fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id") //references MyUser.id which has a coloumn name of "user_id"
     @JsonIgnoreProperties("posts")
     MyUser user;
     
-    // @ManyToOne
-    // @JoinColumn(name = "org_id") //references MyOrg.id which has a coloumn name of "org_id"
-    // MyOrg myOrg;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id") //references MyOrg.id which has a coloumn name of "org_id"
+    MyOrg myOrg;
 
     String content;
     String url;

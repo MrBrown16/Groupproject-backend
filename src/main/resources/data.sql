@@ -1,4 +1,4 @@
-insert into users (email,userName,firstName,lastName,phone,profile_image_path) values
+insert into users (email,userName,firstName,lastName,phone,profileImagePath) values
 ('bbb@ccc.bu','moba','Ákos','Kovács',00303345677,'/photo/path/42'),
 ('aaa@ddd.bu','Blob','Jóska','Kiss',1130322677,'/photo/path/43'),
 ('ccc@eee.bu','Eeevee','Mira','Nagy',4456345677,'/photo/path/45');

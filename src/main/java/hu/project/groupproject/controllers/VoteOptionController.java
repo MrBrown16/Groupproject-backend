@@ -8,6 +8,7 @@ import hu.project.groupproject.services.VoteOptionService;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,8 @@ public class VoteOptionController {
         return voteOptionService.saveVoteOption(voteOption);
     }
 
-    @GetMapping
-    public Optional<MyVoteOption> getVoteOption(@RequestParam(name = "id") Long id) {
+    @GetMapping("/{id}")
+    public Optional<MyVoteOption> getVoteOption(@PathVariable Long id) {
         return voteOptionService.getVoteOption(id);
     }
     

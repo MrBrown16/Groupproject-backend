@@ -2,12 +2,14 @@ package hu.project.groupproject.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.dtos.orgDTOs.OrgDTOPublic;
 import hu.project.groupproject.entities.MyOrg;
 import hu.project.groupproject.services.OrgService;
 
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +32,8 @@ public class OrgController {
         return orgService.saveOrg(org);
     }
 
-    @GetMapping
-    public Optional<MyOrg> getOrg(@RequestParam(name = "id") Long id) {
+    @GetMapping("/{id}")
+    public Optional<OrgDTOPublic> getOrg(@PathVariable Long id) {
         return orgService.getOrg(id);
     }
     

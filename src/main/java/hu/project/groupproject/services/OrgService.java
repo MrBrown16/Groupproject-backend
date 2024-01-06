@@ -3,6 +3,8 @@ package hu.project.groupproject.services;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import hu.project.groupproject.dtos.orgDTOs.OrgDTOPublic;
 import hu.project.groupproject.entities.MyOrg;
 import hu.project.groupproject.repositories.OrgRepository;
 
@@ -22,8 +24,8 @@ public class OrgService {
     public MyOrg saveOrg(MyOrg myOrg){
         return orgRepository.save(myOrg);
     }
-    public Optional<MyOrg> getOrg(Long id){
-        return orgRepository.findById(id);
+    public Optional<OrgDTOPublic> getOrg(Long id){
+        return orgRepository.findById(id, OrgDTOPublic.class);
     }
 
     public void deleteOrg(MyOrg user){
