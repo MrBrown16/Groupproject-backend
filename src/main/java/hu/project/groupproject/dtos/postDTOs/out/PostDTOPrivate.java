@@ -1,4 +1,4 @@
-package hu.project.groupproject.dtos.postDTOs;
+package hu.project.groupproject.dtos.postDTOs.out;
 
 import java.util.List;
 

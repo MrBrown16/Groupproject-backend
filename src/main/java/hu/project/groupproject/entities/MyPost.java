@@ -2,6 +2,8 @@ package hu.project.groupproject.entities;
 
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -40,7 +42,9 @@ public class MyPost {
     String content;
     String url;
     List<String> imagePath; 
+    @ColumnDefault("0")
     Long likes;
+    @ColumnDefault("0")
     Long dislikes;
 
     @OneToOne(fetch = FetchType.LAZY)

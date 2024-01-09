@@ -1,5 +1,7 @@
 package hu.project.groupproject.entities;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -26,6 +28,7 @@ public class MyVoteOption {
 
     String optionText;
     
+    @ColumnDefault("0")
     Long votesNum;
 
     @ManyToOne(fetch=FetchType.LAZY)
