@@ -5,3 +5,5 @@ jdbc driver: mariadb driver<br>
 <br>
 konfiguráció: src\main\resources\application.properties<br>
 
+Requirement(s):
+    -Java 21
