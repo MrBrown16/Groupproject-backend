@@ -20,3 +20,12 @@ Post/Hír létrehozásához ezekre a field/mezőkre van szügség:
     see: PostController
     /post/create-with-vote
     /post/create-no-vote
+
+Post/Hír Módosításához ezekre a field/mezőkre van szügség: 
+    -id Long/Szám (a post id-je)
+    -post Object (ugyanaz mint a létrehozásnál)
+
+    példa:
+    {"id":4,"postDTOCreate":{"userId":2,"orgId":2,"content":"szöveg a város egyik legjobb parkjában való fejlesztésről, és közvéleménykutatés hogy hány fa legyen","voteDescription":"LALALALALALALA_____válassz az opciók közül/ melyik opció tetszik jobban?","optionTexts":["Sok fa legyen Vagy sem","maximum kettő Tölgyfa legyen","mi az a fa?"]}}
+
+    path:/post/:id (:id behejettesítve a példánál pl 4)

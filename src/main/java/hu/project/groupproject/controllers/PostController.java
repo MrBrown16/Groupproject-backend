@@ -3,6 +3,7 @@ package hu.project.groupproject.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.dtos.postDTOs.in.PostDTOCreate;
+import hu.project.groupproject.dtos.postDTOs.in.PostDTOUpdate;
 import hu.project.groupproject.dtos.postDTOs.out.PostDTOPublic;
 import hu.project.groupproject.dtos.postDTOs.out.PostDTOPublicExtended;
 import hu.project.groupproject.entities.MyPost;
@@ -35,8 +36,9 @@ public class PostController {
     }
 
     @PostMapping("/{id}") //TODO:new dto to get user id, org id, post contents, image...  
-    public MyPost updatePost(@PathVariable Long id,@RequestBody MyPost post){
-        return postService.updatePost(post);
+    public boolean updatePost(@PathVariable Long id,@RequestBody PostDTOUpdate post){
+        return postService.updatePost(id,post);
+        // return false;
     }
 
     @GetMapping("/create-no-vote")
