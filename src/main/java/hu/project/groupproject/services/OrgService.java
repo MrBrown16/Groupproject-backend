@@ -26,8 +26,8 @@ public class OrgService {
         return orgRepository.findById(id, OrgDTOPublic.class);
     }
 
-    public void deleteOrg(MyOrg user){
-        orgRepository.delete(user);
+    public void deleteOrg(Long orgId){
+        orgRepository.deleteById(orgId);
     }
 
 }

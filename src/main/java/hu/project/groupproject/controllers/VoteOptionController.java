@@ -20,25 +20,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/voteOption")
 public class VoteOptionController {
 
-    VoteOptionService voteOptionService;
+//ONLY purpose would be testing, no longer needed/an option
 
-    public VoteOptionController(VoteOptionService voteOptionService){
-        this.voteOptionService=voteOptionService;
-    }
 
-    @PostMapping
-    public MyVoteOption saveVoteOption(@RequestBody MyVoteOption voteOption){
-        return voteOptionService.saveVoteOption(voteOption);
-    }
+    // VoteOptionService voteOptionService;
 
-    @GetMapping("/{id}")
-    public Optional<VoteOptionDTOPublic> getVoteOption(@PathVariable Long id) {
-        return voteOptionService.getVoteOption(id);
-    }
+    // public VoteOptionController(VoteOptionService voteOptionService){
+    //     this.voteOptionService=voteOptionService;
+    // }
+
+    // @PostMapping
+    // public MyVoteOption saveVoteOption(@RequestBody MyVoteOption voteOption){
+    //     return voteOptionService.saveVoteOption(voteOption);
+    // }
+
+    // @GetMapping("/{id}")
+    // public Optional<VoteOptionDTOPublic> getVoteOption(@PathVariable Long id) {
+    //     return voteOptionService.getVoteOption(id);
+    // }
     
-    @PostMapping("/del")
-    public void deleteVoteOption(@RequestBody MyVoteOption voteOption) {
-        voteOptionService.deleteVoteOption(voteOption);
-    }
+    // @PostMapping("/del")
+    // public void deleteVoteOption(@RequestBody MyVoteOption voteOption) {
+    //     voteOptionService.deleteVoteOption(voteOption);
+    // }
     
 }

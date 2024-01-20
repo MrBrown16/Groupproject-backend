@@ -1,9 +1,0 @@
-[
-    {"name":"id", "type":"Long", "example":1252},
-    {"name":"email", "type":"String", "example":"fictional@character.com"},
-    {"name":"userName", "type":"String", "example":"fici"},
-    {"name":"firstName", "type":"String", "example":"Fictional"},
-    {"name":"lastName", "type":"String", "example":"Character"},
-    {"name":"phone", "type":"Integer", "example":"00303345677"},
-    {"name":"profileImagePath", "type":"String", "example":"users/1252/profile/img.png"}
-]

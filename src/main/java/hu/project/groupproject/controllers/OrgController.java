@@ -26,7 +26,7 @@ public class OrgController {
         this.orgService=orgService;
     }
 
-    @PostMapping
+    @PostMapping("/new")//TODO:dto instead of entity
     public MyOrg saveOrg(@RequestBody MyOrg org){
         return orgService.saveOrg(org);
     }
@@ -36,9 +36,9 @@ public class OrgController {
         return orgService.getOrg(id);
     }
     
-    @PostMapping("/del")
-    public void deleteOrg(@RequestBody MyOrg org) {
-        orgService.deleteOrg(org);
+    @PostMapping("/del/{id}")
+    public void deleteOrg(@PathVariable Long orgId) {
+        orgService.deleteOrg(orgId);
     }
     
 }

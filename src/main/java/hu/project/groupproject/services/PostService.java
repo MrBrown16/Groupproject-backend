@@ -84,8 +84,8 @@ public class PostService {
 
     public boolean savePost(PostDTOCreate postCreate){
         MyPost post = new MyPost();
-        post.setUser(entityManager.getReference(MyUser.class, postCreate.userId()));
-        post.setOrg(entityManager.getReference(MyOrg.class, postCreate.orgId()));
+        post.setUser(entityManager.find(MyUser.class, postCreate.userId()));
+        post.setOrg(entityManager.find(MyOrg.class, postCreate.orgId()));
         post.setContent(postCreate.content());
         MyVote vote = updateVoteInPost(postCreate);
         // if (postCreate.optionTexts() != null && postCreate.voteDescription() != null && postCreate.optionTexts()!=new String[]{"",""} && postCreate.content()!="") {
@@ -127,8 +127,8 @@ public class PostService {
     //     return postRepository.findById(id, PostDTOPublic.class);
     // }
 
-    public void deletePost(MyPost post){
-        postRepository.delete(post);
+    public void deletePost(Long postId){
+        postRepository.deleteById(postId);
     }
 
 

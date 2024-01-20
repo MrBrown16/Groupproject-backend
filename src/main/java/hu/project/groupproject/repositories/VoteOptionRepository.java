@@ -21,4 +21,6 @@ public interface VoteOptionRepository extends JpaRepository<MyVoteOption, Long>{
     List<VoteOptionDTOInternal> findVoteOptionDtosByvoteId(@Param(value = "id") Long id);
 
 
+    @Query("SELECT o.id FROM MyVoteOption o WHERE o.vote.id=:id")
+    List<Long> findVoteOptionIdByVoteId(@Param(value = "id") Long id);
 }

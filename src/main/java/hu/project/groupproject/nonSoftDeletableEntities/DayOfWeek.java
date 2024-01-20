@@ -1,4 +1,5 @@
-package hu.project.groupproject.entities;
+package hu.project.groupproject.nonSoftDeletableEntities;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
