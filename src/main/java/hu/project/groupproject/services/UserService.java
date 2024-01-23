@@ -34,8 +34,8 @@ public class UserService {
         return userRepository.findById(id, UserDTOPublic.class);
     }
 
-    public void deleteUser(MyUser user){
-        userRepository.delete(user);
+    public void deleteUser(Long id){
+        userRepository.deleteById(id);
     }
 
     @Transactional

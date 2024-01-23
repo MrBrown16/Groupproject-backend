@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import hu.project.groupproject.dtos.postDTOs.in.PostDTOCreate;
@@ -48,20 +47,13 @@ public class PostService {
                         post.setVote(vote);
                     }
                     post = postRepository.save(post);
-        
-                    System.out.println("--------------------------------------------------------"+post.getContent()+": "+post.getId()+"-----------------------------------------------------------------------------------");
                     return true;
                 }
-                
             }
-            
         }
         return false;
-        // return postRepository.save(post);
     }
-    // public MyPost updatePost(MyPost post){
-    //     return postRepository.save(post);
-    // }
+
     public MyVote updateVoteInPost(PostDTOCreate postCreate){
         if (postCreate.optionTexts() != null && postCreate.voteDescription() != null && postCreate.voteDescription() != "" && postCreate.optionTexts()!=new String[]{"",""}&& postCreate.optionTexts().length>=2 && postCreate.content()!="") {
             System.out.println("------------------------------------------------------------------  updateVoteInPost inside if  -----------------------------------------------------------------------------");
@@ -84,29 +76,21 @@ public class PostService {
 
     public boolean savePost(PostDTOCreate postCreate){
         MyPost post = new MyPost();
-        post.setUser(entityManager.find(MyUser.class, postCreate.userId()));
-        post.setOrg(entityManager.find(MyOrg.class, postCreate.orgId()));
-        post.setContent(postCreate.content());
-        MyVote vote = updateVoteInPost(postCreate);
-        // if (postCreate.optionTexts() != null && postCreate.voteDescription() != null && postCreate.optionTexts()!=new String[]{"",""} && postCreate.content()!="") {
-        //     MyVote vote = new MyVote();
-        //     List<MyVoteOption> options = new ArrayList<MyVoteOption>();
-        //     int n = postCreate.optionTexts().length;
-        //     for (int i=0; i<n; i++) {
-        //         MyVoteOption option = new MyVoteOption();
-        //         option.setOptionText(postCreate.optionTexts()[i]);
-        //         option.setVote(vote);
-        //         options.add(option);
-        //     }
-        //     vote.setDescription(postCreate.voteDescription());
-        //     vote.setOptions(options);
-        //     voteService.saveVote(vote);
-        // }
-        post.setVote(vote);
-        post = postRepository.save(post);
-        
-        System.out.println("--------------------------------------------------------"+post.getContent()+": "+post.getId()+"-----------------------------------------------------------------------------------");
-        return true;
+        if (postCreate.orgId() != null && postCreate.userId() != null) {
+            
+            post.setUser(entityManager.find(MyUser.class, postCreate.userId()));
+            post.setOrg(entityManager.find(MyOrg.class, postCreate.orgId()));
+            post.setContent(postCreate.content());
+            MyVote vote = updateVoteInPost(postCreate);
+            if (vote != null) {
+                
+                post.setVote(vote);
+                post = postRepository.save(post);
+            }
+            
+            return true;
+        }
+        return false;
     }
     
     public Optional<PostDTOPublic> getPostShort(Long id){
@@ -123,9 +107,6 @@ public class PostService {
         }
         return Optional.empty();
     }
-    // public Optional<PostDTOPublic> getPost(Long id){
-    //     return postRepository.findById(id, PostDTOPublic.class);
-    // }
 
     public void deletePost(Long postId){
         postRepository.deleteById(postId);
