@@ -1,5 +1,6 @@
 package hu.project.groupproject.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -42,6 +43,32 @@ public class MyOrg {
     Set<MyPost> posts;
 
     
+    public void setUsers(Set<MyUser> users) {
+        if (this.users == null) {
+            this.users = users;
+        } else {
+            if (users != null) {
+                for (MyUser opt : users) {
+                    addUser(opt);
+                }
+            }
+        }
+    }
+
+    public void addUser(MyUser user) {
+        if (this.users == null) {
+            this.users = new HashSet<>();
+        }
+    
+        if (!this.users.contains(user)) {
+            this.users.add(user);
+            
+            if (!user.getOrgs().contains(this)) {
+                user.addOrg(this);
+            }
+        }
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

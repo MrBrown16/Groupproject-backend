@@ -1,5 +1,8 @@
 package hu.project.groupproject.entities;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.NaturalId;
@@ -72,6 +75,31 @@ public class MyUser {
     @JsonIgnoreProperties("users")
     Set<MyOrg> orgs;
 
+    public void setOrgs(Set<MyOrg> orgs) {
+        if (this.orgs == null) {
+            this.orgs = orgs;
+        } else {
+            if (orgs != null) {
+                for (MyOrg opt : orgs) {
+                    addOrg(opt);
+                }
+            }
+        }
+    }
+
+    public void addOrg(MyOrg org) {
+        if (this.orgs == null) {
+            this.orgs = new HashSet<>();
+        }
+    
+        if (!this.orgs.contains(org)) {
+            this.orgs.add(org);
+            
+            if (!org.users.contains(this)) {
+                org.addUser(this);
+            }
+        }
+    }
 
     @Override
     public int hashCode() {
