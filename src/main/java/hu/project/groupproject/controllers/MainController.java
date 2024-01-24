@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class MainController {
     
-    // @GetMapping
-    // public void setUp(){
-    // }
+    @GetMapping
+    public String setUp(){
+        return "SUCCESSFUL LOGIN";
+    }
 }
