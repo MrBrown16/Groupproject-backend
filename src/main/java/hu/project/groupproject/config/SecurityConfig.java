@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,9 +52,10 @@ public class SecurityConfig {
 		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 		http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
 			.oidc(Customizer.withDefaults());	// Enable OpenID Connect 1.0
-		http
+		// http.oauth2Login(Customizer.withDefaults());
 			// Redirect to the login page when not authenticated from the
 			// authorization endpoint
+		http
 			.exceptionHandling((exceptions) -> exceptions
 				.defaultAuthenticationEntryPointFor(
 					new LoginUrlAuthenticationEntryPoint("/login"),
@@ -75,12 +77,12 @@ public class SecurityConfig {
 			.authorizeHttpRequests((authorize) -> authorize
 				.anyRequest().authenticated()
 			)
-			// .csrf(Customizer.withDefaults())
+			.csrf().disable()
 			// .cors(Customizer.withDefaults())
-			.httpBasic(Customizer.withDefaults());
+			.httpBasic(Customizer.withDefaults())
 			// Form login handles the redirect to the login page from the
 			// authorization server filter chain
-			// .formLogin(Customizer.withDefaults());
+			.formLogin(Customizer.withDefaults());
 
 		return http.build();
 	}
