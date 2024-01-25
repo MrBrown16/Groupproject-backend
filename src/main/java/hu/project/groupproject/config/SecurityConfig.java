@@ -39,12 +39,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 //Originally copied from: https://docs.spring.io/spring-authorization-server/reference/getting-started.html
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+	
+	
 	@Bean 
 	@Order(1)
 	public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -77,6 +81,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests((authorize) -> authorize
 				.anyRequest().authenticated()
 			)
+			// .oauth2Client(Customizer.withDefaults())
 			.csrf().disable()
 			// .cors(Customizer.withDefaults())
 			.httpBasic(Customizer.withDefaults())
@@ -152,4 +157,12 @@ public class SecurityConfig {
 		return AuthorizationServerSettings.builder().build();
 	}
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 }
+
+
+
+
