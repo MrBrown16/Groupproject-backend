@@ -1,31 +1,22 @@
+## GROUPPROJECT BACKEND
 
-Adatbázis: H2 in-memory adatbázis<br>
-adatbázis console (php-myadminhoz hasonló)  /h2-console<br>
-jdbc driver: mariadb driver<br>
-<br>
-konfiguráció: src\main\resources\application.properties<br>
-
-Requirement(s):<br>
-    -Java 21<br>
+contents:
+- OLDRESOURCESERVER (faulty but repurposable "business logic" for the resource server)
+- resource-server (spring oauth2 resource server, only the bones)
+- authorization-server(spring oauth2 authorization server, only the bones, some configuration to work with the [frontend](https://github.com/Attila732/Onkormanyzat_))
 
 
+REQUIREMENTS:
+- JAVA 21
 
-Figyelem!<br>
-Post/Hír létrehozásához ezekre a field/mezőkre van szügség: <br>
-    -userId Long/Szám (a login után tárolni kell és itt behelyezni) (kötelező)<br>
-    -orgId Long/Szám (szintén a login után tárolva és behelyezve) (csak egy szervezet megbízottja/tagja hozhat létre ilyet így kötelező)<br>
-    -content String/szöveg (mondandó) (kötelező)<br>
-    -voteDescription String/szöveg A szavazás magyarázata/kérdés (ha van szavazás kötelező egyébként null)<br>
-    -optionTexts String[]/String-szöveg tömb  ["opció 1", "opció kettő", "opció III"] (ha van szavazás kötelező nem üres tömb legalább kettő nem üres Stringgel)<br>
-    see: PostController<br>
-    /post/create-with-vote<br>
-    /post/create-no-vote<br>
-<br>
-Post/Hír Módosításához ezekre a field/mezőkre van szügség: <br>
-    -id Long/Szám (a post id-je)<br>
-    -post Object (ugyanaz mint a létrehozásnál)<br>
 
-    példa:<br>
-    {"id":4,"postDTOCreate":{"userId":2,"orgId":2,"content":"szöveg a város egyik legjobb parkjában való fejlesztésről, és közvéleménykutatés hogy hány fa legyen","voteDescription":"LALALALALALALA_____válassz az opciók közül/ melyik opció tetszik jobban?","optionTexts":["Sok fa legyen Vagy sem","maximum kettő Tölgyfa legyen","mi az a fa?"]}}<br>
+to run:
+- start authorization server VSCode run / terminal: ./mvnw spring-boot:run
+- start resource server VSCode run / terminal: ./mvnw spring-boot:run
+- start [frontend](https://github.com/Attila732/Onkormanyzat_) see the README 
 
-    path:/post/:id (:id behejettesítve a példánál pl 4)<br>
+PORTS:
+- authorization server: 8083
+- OLDRESOURCESERVER:8080
+- resource server: 8082
+- frontend server: 8081
