@@ -9,10 +9,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,38 +28,35 @@ public class UserManagementConfig {
         http.authorizeHttpRequests(
                 authz -> authz
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/error/**")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).permitAll()
                         .anyRequest().authenticated()
+                        // .anyRequest().permitAll()
                         )
-                        .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
+                        // .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
                         .csrf(csrf -> csrf
                                 .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
                     )
         //TODO:set the form login to custom page
                 .formLogin(Customizer.withDefaults()).cors(Customizer.withDefaults());
-                // .formLogin(Customizer.withDefaults()).cors(c->c.disable());
+                // .passwordManagement(Customizer.withDefaults());
         return http.build();
     }
 
-    //TODO:Change in memory to jdbc in database and create accessors
-    // @Bean
-    // public UserDetailsService userDetailsService() {
-    //     UserDetails user = User.withUsername("user")
-    //             .password("pass")
-    //             .authorities("read")
-    //             .build();
-
-    //     return new InMemoryUserDetailsManager(user);
-    // }
+    //TODO:extend JdbcUserDetailsManager and migrate user details from the resource server to here(email,phone,names...)
+    //TODO:build a central authority/role database where users, clients, and in this particular instance organisations(from the resource server orgs)
+    //are all taken into account and a user can have "common roles" (USER, ADMIN, AUDITOR...) and "org roles" (ORG_STAFF, ORG_AUDITOR, ORG_ADMIN...)
+    //all grouped by the registered clients
     @Bean
     UserDetailsManager users(DataSource dataSource) {
         UserDetails user = User.builder()
                 .username("user")
-                .password("pass")
+                .password("{bcrypt}$2a$10$rwdYdhJR6lN0AKxOgAHtAeLkwO9qg1thF9NyQPSDeRAfSR3KG1j8y")
                 .roles("USER")
                 .build();
         UserDetails admin = User.builder()
                 .username("admin")
-                .password("pass")
+                .password("{bcrypt}$2a$10$rwdYdhJR6lN0AKxOgAHtAeLkwO9qg1thF9NyQPSDeRAfSR3KG1j8y")
                 .roles("USER", "ADMIN")
                 .build();
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
@@ -70,9 +65,9 @@ public class UserManagementConfig {
         return users;
     }
 
-    //TODO:Create correct password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        
     }
 }

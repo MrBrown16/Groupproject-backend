@@ -30,36 +30,20 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "users")
-@NamedEntityGraphs(value = { 
-    @NamedEntityGraph(name = "graph.User.public", attributeNodes ={ 
-        @NamedAttributeNode(value ="id" ),
-        @NamedAttributeNode(value = "userName"),
-        @NamedAttributeNode(value = "firstName"),
-        @NamedAttributeNode(value = "lastName"),
-        @NamedAttributeNode(value = "profileImagePath")
-    }),
-    @NamedEntityGraph(name = "graph.User.private", attributeNodes = {
-        @NamedAttributeNode(value ="id" ),
-        @NamedAttributeNode(value = "userName"),
-        @NamedAttributeNode(value = "firstName"),
-        @NamedAttributeNode(value = "lastName"),
-        @NamedAttributeNode(value = "profileImagePath"),
-        @NamedAttributeNode(value = "email"),
-        @NamedAttributeNode(value = "phone")
-    })
-})
 public class MyUser {
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    @Column(name = "user_id")
-    Long id;
     
-    String userName;
     String firstName;
     String lastName;
     Long phone;
     @NaturalId
     String email;
+    
+    
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Column(name = "user_id")
+    Long id;
+    String userName;
     String profileImagePath;
 
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user

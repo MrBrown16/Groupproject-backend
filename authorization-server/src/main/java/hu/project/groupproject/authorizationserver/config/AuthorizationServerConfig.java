@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -61,14 +62,13 @@ public class AuthorizationServerConfig {
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient client = RegisteredClient.withId("1")
                 .clientId("myClient")
-                .clientSecret("secret")
+                .clientSecret("{bcrypt}$2a$10$Veul2yB.g3A4hmtHbmnQeuwfJDrYSfwQ8nilh0f8d5f6tM1mGPPQ.")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .scope(OidcScopes.PROFILE)
                 .scope(OidcScopes.OPENID)
-                // .redirectUri("http://localhost:8081")
                 .redirectUri("http://localhost:8081/login/oauth2/code/myClient")
                 .postLogoutRedirectUri("http://localhost:8081")
                 .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(3600L)).build())
