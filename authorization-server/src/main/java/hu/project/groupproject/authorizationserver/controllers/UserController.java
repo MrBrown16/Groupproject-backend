@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.project.groupproject.dtos.UserDTOPublic;
+import hu.project.groupproject.authorizationserver.dtos.UserDTOPublic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
