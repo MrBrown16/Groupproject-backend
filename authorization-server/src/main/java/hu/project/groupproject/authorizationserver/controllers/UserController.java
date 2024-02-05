@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -50,7 +51,7 @@ public class UserController {
     @GetMapping("/make-admin")
     // @PreAuthorize("hasRole('ADMIN')")
     // @PreAuthorize("hasRole('SUPERADMIN')")
-    public boolean makeAdmin(@RequestBody Map<String, String> details){
+    public boolean makeAdmin(@RequestParam Map<String, String> details){
         String un=details.get("username");
         UserDetails user = manager.loadUserByUsername(un);
         ArrayList<String> roles = new ArrayList<>(user.getAuthorities().size());
