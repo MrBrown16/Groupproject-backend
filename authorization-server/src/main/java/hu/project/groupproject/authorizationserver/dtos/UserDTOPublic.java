@@ -1,4 +1,4 @@
-package hu.project.groupproject.dtos;
+package hu.project.groupproject.authorizationserver.dtos;
 
 import java.util.Collection;
 
