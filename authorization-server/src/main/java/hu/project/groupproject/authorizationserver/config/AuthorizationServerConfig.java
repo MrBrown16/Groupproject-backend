@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,7 +14,6 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -25,13 +23,17 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
 @Configuration
 public class AuthorizationServerConfig {
-
+    //TODO: register security rules/filters in the correst order something like this: 
+    //(https://github.com/spring-projects/spring-security/blob/6.2.1/config/src/main/java/org/springframework/security/config/annotation/web/builders/FilterOrderRegistration.java)
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
@@ -45,7 +47,6 @@ public class AuthorizationServerConfig {
 
         http.exceptionHandling(c -> c
                 .defaultAuthenticationEntryPointFor(
-                        //the page where username password login is found can be different base
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                 )
@@ -54,8 +55,12 @@ public class AuthorizationServerConfig {
             session
                     .sessionCreationPolicy(SessionCreationPolicy.NEVER);
         });
+
         return http.build();
     }
+
+
+
 
     //TODO:possible improvement (priority:low): change in memory clientRepo to jdbc/JPA in database
     @Bean
@@ -89,5 +94,20 @@ public class AuthorizationServerConfig {
         return AuthorizationServerSettings.builder()
         // .authorizationEndpoint("/myLoginPage")
         .build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("http://localhost:8081");
+        config.addAllowedOrigin("http://localhost:8082");
+        config.addAllowedOrigin("http://localhost:8083");
+        config.addAllowedMethod("*"); // Allow all HTTP methods
+        config.addAllowedHeader("*"); // Allow all headers
+        config.setAllowCredentials(true); // Allow credentials (cookies, authorization headers)
+        source.registerCorsConfiguration("/**", config); // Apply CORS to all paths
+        
+        return new CorsFilter(source);
     }
 }

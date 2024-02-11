@@ -47,8 +47,8 @@ public class UserController {
         return false;
     }
 
-    // @PostMapping("/make-admin")
-    @GetMapping("/make-admin")
+    @PostMapping("/make-admin")
+    // @GetMapping("/make-admin")
     // @PreAuthorize("hasRole('ADMIN')")
     // @PreAuthorize("hasRole('SUPERADMIN')")
     public boolean makeAdmin(@RequestParam Map<String, String> details){
