@@ -28,6 +28,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyAuthenticationProvider;
+import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class UtilBeansThingy {
@@ -61,11 +62,11 @@ public class UtilBeansThingy {
                 return users;
         }
 
-        @Bean
-        // @Order(51)
-        UserDetailsService userDetailsService() {
-                return (UserDetailsService) userDetailsManager();
-        }
+        // @Bean
+        // // @Order(51)
+        // UserDetailsService userDetailsService() {
+        //         return (UserDetailsService) userDetailsManager();
+        // }
 
         @Bean
         public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
@@ -77,4 +78,8 @@ public class UtilBeansThingy {
                 return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
         }
+
+        public void setUserDetailsService(MyAuthenticationProvider myAuthenticationProvider){
+                myAuthenticationProvider.setUserDetailsService(userDetailsManager());
+            }
 }

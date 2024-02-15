@@ -22,10 +22,22 @@ import org.springframework.security.oauth2.server.resource.authentication.Bearer
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import hu.project.groupproject.authorizationserver.config.AuthorizationServerConfig;
+import hu.project.groupproject.authorizationserver.config.ResourceSConfig;
+import hu.project.groupproject.authorizationserver.config.UtilBeansThingy;
+import jakarta.annotation.PostConstruct;
 
 
+//TODO: Replace DaoAuthenticationProvider with AbstractUserDetailsAuthenticationProvider and 
+//override the determineUsername() and retrieveUser() methods
 @Component
 public class MyAuthenticationProvider extends DaoAuthenticationProvider {
+    @Autowired
+    private AuthorizationServerConfig authorizationServerConfig;
+    @Autowired
+    ResourceSConfig resourceSConfig;
+    @Autowired
+    UtilBeansThingy utilBeansThingy;
 
     private JwtDecoder jwtDecoder;
     UserDetailsService userDetailsService;
@@ -103,6 +115,8 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
 
 
 
+
+
     /**
      * Thank You https://stackoverflow.com/users/2938594/lance-fallon for this Answer: https://stackoverflow.com/a/45019672
      * it saved me hours at least!!
@@ -115,6 +129,12 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
         }
     }
 
+    @PostConstruct
+    private void setAuthenticationProviderDependencies(){
+        authorizationServerConfig.setAuthenticationProvider(this);
+        resourceSConfig.setAuthenticationProvider(this);
+        utilBeansThingy.setUserDetailsService(this);
+    }
 
 
 }

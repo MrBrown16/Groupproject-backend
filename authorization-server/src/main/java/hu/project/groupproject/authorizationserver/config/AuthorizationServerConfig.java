@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -29,6 +30,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import hu.project.groupproject.authorizationserver.CustomAuthThings.MyAuthenticationProvider;
+
 
 
 @Configuration
@@ -36,7 +39,13 @@ public class AuthorizationServerConfig {
     @Autowired
     DataSource dataSource;
     // @Autowired
-    // MyAuthenticationProvider myAuthenticationProvider;
+    MyAuthenticationProvider myAuthenticationProvider;
+
+    public void setAuthenticationProvider(MyAuthenticationProvider auth){
+        this.myAuthenticationProvider=auth;
+    }
+
+
 
     // TODO: register security rules/filters in the correst order something like
     // this:
@@ -47,12 +56,24 @@ public class AuthorizationServerConfig {
             HttpSecurity http) throws Exception {
 
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        // OAuth2AuthorizationServerConfigurer authServerConf = new OAuth2AuthorizationServerConfigurer();
+        // authServerConf.authorizationEndpoint(
+        //     authE->authE
+        //             .authenticationProvider(myAuthenticationProvider)
+                    
+        // );
+        // http.apply((SecurityConfigurer)authServerConf);
         // http.authorizeHttpRequests(
         //     auth->auth
         //             .anyRequest().authenticated()
         //     );
+
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(Customizer.withDefaults());
+                .oidc(Customizer.withDefaults())
+                .authorizationEndpoint(e->e
+                        .authenticationProvider(myAuthenticationProvider)
+                        
+                );
 
         http.exceptionHandling(c -> c
                 .defaultAuthenticationEntryPointFor(

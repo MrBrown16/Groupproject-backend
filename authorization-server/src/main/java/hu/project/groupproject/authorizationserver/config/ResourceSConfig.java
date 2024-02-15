@@ -51,26 +51,29 @@ public class ResourceSConfig {
     //     this.userDetailsManager=userDetailsManager;
     // }
 
-     @Bean
-    // @Order(2) //look at this 2 because i have spent approx 6 hours on debugging and this was the solution so appreciate it!
-    @Order(2) 
-    public SecurityFilterChain resourceServerSecurityFilterChain(
-            HttpSecurity http
-    ) throws Exception {
+    //  @Bean
+    // // @Order(2) //look at this 2 because i have spent approx 6 hours on debugging and this was the solution so appreciate it!
+    // @Order(2) 
+    // public SecurityFilterChain resourceServerSecurityFilterChain(
+    //         HttpSecurity http
+    // ) throws Exception {
+    //     http.authorizeHttpRequests(
+    //         auth->auth
+    //                 .anyRequest().authenticated()
+    //     );   
 
-
-         http.oauth2ResourceServer(r->r.jwt(Customizer.withDefaults()));
-        // http.oauth2ResourceServer(oauth2ResourceServer ->
-        // oauth2ResourceServer
-        //     .jwt(jwt ->
-        //         jwt
-        //             // .authenticationManager(new ProviderManager(myAuthenticationProvider))
-        //             // .authenticationManager(new ProviderManager(new JwtAuthenticationProvider(jwtDecoder)))
-        //             // .jwtAuthenticationConverter(jwtAuthenticationConverter())
-        //     )
-        // );
-        return http.build();
-    }
+    //      http.oauth2ResourceServer(r->r.jwt(Customizer.withDefaults()));
+    //     // http.oauth2ResourceServer(oauth2ResourceServer ->
+    //     // oauth2ResourceServer
+    //     //     .jwt(jwt ->
+    //     //         jwt
+    //     //             // .authenticationManager(new ProviderManager(myAuthenticationProvider))
+    //     //             // .authenticationManager(new ProviderManager(new JwtAuthenticationProvider(jwtDecoder)))
+    //     //             // .jwtAuthenticationConverter(jwtAuthenticationConverter())
+    //     //     )
+    //     // );
+    //     return http.build();
+    // }
 
     @Bean
     public FilterRegistrationBean<LoggingFilter> loggingFilter() {
@@ -80,7 +83,9 @@ public class ResourceSConfig {
         return registrationBean;
     }
     
-
+    public void setAuthenticationProvider(MyAuthenticationProvider auth){
+        this.myAuthenticationProvider=auth;
+    }
 
 
 

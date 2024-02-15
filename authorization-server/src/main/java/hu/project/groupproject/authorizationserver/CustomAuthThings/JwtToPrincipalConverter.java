@@ -11,8 +11,8 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 public class JwtToPrincipalConverter implements Converter<Jwt, User> {
 
-    // @Autowired
-    // JdbcUserDetailsManager manager;
+    @Autowired
+    JdbcUserDetailsManager manager;
 
 
 
@@ -20,12 +20,12 @@ public class JwtToPrincipalConverter implements Converter<Jwt, User> {
     @Nullable
     public User convert(Jwt source) {
         String sub = source.getSubject();
-        // User user = (User) manager.loadUserByUsername(sub);
-        // System.out.println("_____________________________________ "+user.toString()+" _________________________________________");
-        // // user.getAuthorities();
-        // return user;
+        User user = (User) manager.loadUserByUsername(sub);
+        System.out.println("_____________________________________ "+user.toString()+" _________________________________________");
+        // user.getAuthorities();
+        return user;
         
-        return new User("","",null);
+        // return new User("","",null);
     }
     
 }
