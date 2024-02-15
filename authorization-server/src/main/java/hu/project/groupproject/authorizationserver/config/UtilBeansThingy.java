@@ -13,49 +13,26 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+
+import hu.project.groupproject.authorizationserver.CustomAuthThings.MyAuthenticationProvider;
+
 @Configuration
-public class UserManagementConfig {
+public class UtilBeansThingy {
         @Autowired
-        private DataSource dataSource;
-
-        @Bean
-        @Order(1)
-        public SecurityFilterChain userManagementSecurityFilterChain(
-                        HttpSecurity http) throws Exception {
-                http.authorizeHttpRequests(
-                                authz -> authz
-
-                                                .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
-                                                .permitAll()
-                                                .requestMatchers(AntPathRequestMatcher.antMatcher("/error/**"))
-                                                .permitAll()
-                                                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**"))
-                                                .permitAll()
-                                                // .anyRequest().authenticated()
-                                                .anyRequest().permitAll()
-                )
-                                .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
-                                .csrf(csrf -> csrf
-                                                // .ignoringRequestMatchers(
-                                                //                 AntPathRequestMatcher.antMatcher("/h2-console/**"))
-                                                // Apply CSRF protection only to /login/**
-                                                .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/**"))
-                                                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/login/**")) 
-                                )
-                                // TODO:set the form login to custom page
-                                .formLogin(Customizer.withDefaults()).cors(Customizer.withDefaults())
-                                .authenticationManager(new ProviderManager(DaoAuthenticationProvider()))
-                                .passwordManagement(Customizer.withDefaults());
-                return http.build();
-        }
-
+        DataSource dataSource;
 
         // TODO:extend JdbcUserDetailsManager and migrate user details from the resource
         // server to here(email,phone,names...)
@@ -65,8 +42,9 @@ public class UserManagementConfig {
         // AUDITOR...) and "org roles" (ORG_STAFF, ORG_AUDITOR, ORG_ADMIN...)
         // all grouped by the registered clients
         @Bean
+        // @Order(50)
         UserDetailsManager userDetailsManager() {
-                
+
                 UserDetails user = User.builder()
                                 .username("user")
                                 .password("{bcrypt}$2a$10$rwdYdhJR6lN0AKxOgAHtAeLkwO9qg1thF9NyQPSDeRAfSR3KG1j8y")
@@ -80,16 +58,18 @@ public class UserManagementConfig {
                 JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
                 users.createUser(user);
                 users.createUser(admin);
-                
                 return users;
         }
 
-        @Bean 
-        public AuthenticationProvider DaoAuthenticationProvider(){
-                DaoAuthenticationProvider pw = new DaoAuthenticationProvider();
-                pw.setPasswordEncoder(passwordEncoder());
-                pw.setUserDetailsService(userDetailsManager());
-                return pw;
+        @Bean
+        // @Order(51)
+        UserDetailsService userDetailsService() {
+                return (UserDetailsService) userDetailsManager();
+        }
+
+        @Bean
+        public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+                return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
         }
 
         @Bean
