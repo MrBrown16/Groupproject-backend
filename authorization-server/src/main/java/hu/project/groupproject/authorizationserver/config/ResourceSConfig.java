@@ -9,12 +9,16 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import hu.project.groupproject.authorizationserver.CustomAuthThings.JwtToPrincipalConverter;
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyJwtAuthenticationConverter;
@@ -41,6 +45,7 @@ public class ResourceSConfig {
         oauth2ResourceServer
             .jwt(jwt ->
                 jwt
+                    .authenticationManager(new ProviderManager(authenticationProvider()))
                     // .authenticationManager(new ProviderManager(new JwtAuthenticationProvider(jwtDecoder)))
                     .jwtAuthenticationConverter(jwtAuthenticationConverter())
             )
@@ -55,6 +60,15 @@ public class ResourceSConfig {
         registrationBean.addUrlPatterns("/*"); // Apply filter to all URLs
         return registrationBean;
     }
+    @Bean 
+    public AuthenticationProvider authenticationProvider(){
+        JwtAuthenticationProvider au = new JwtAuthenticationProvider(jwtDecoder);
+        au.setJwtAuthenticationConverter(jwtAuthenticationConverter());
+        return au;
+        
+    }
+
+
     
     @Bean
     public MyJwtAuthenticationConverter jwtAuthenticationConverter() {

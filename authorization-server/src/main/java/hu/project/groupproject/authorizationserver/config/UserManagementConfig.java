@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -48,6 +51,7 @@ public class UserManagementConfig {
                                 )
                                 // TODO:set the form login to custom page
                                 .formLogin(Customizer.withDefaults()).cors(Customizer.withDefaults())
+                                .authenticationManager(new ProviderManager(DaoAuthenticationProvider()))
                                 .passwordManagement(Customizer.withDefaults());
                 return http.build();
         }
@@ -76,9 +80,17 @@ public class UserManagementConfig {
                 JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
                 users.createUser(user);
                 users.createUser(admin);
+                
                 return users;
         }
 
+        @Bean 
+        public AuthenticationProvider DaoAuthenticationProvider(){
+                DaoAuthenticationProvider pw = new DaoAuthenticationProvider();
+                pw.setPasswordEncoder(passwordEncoder());
+                pw.setUserDetailsService(userDetailsManager());
+                return pw;
+        }
 
         @Bean
         public PasswordEncoder passwordEncoder() {
