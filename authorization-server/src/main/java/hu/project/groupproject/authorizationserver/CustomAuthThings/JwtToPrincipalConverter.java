@@ -1,5 +1,7 @@
 package hu.project.groupproject.authorizationserver.CustomAuthThings;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
@@ -14,14 +16,14 @@ public class JwtToPrincipalConverter implements Converter<Jwt, User> {
     @Autowired
     JdbcUserDetailsManager manager;
 
-
+    protected final Log logger = LogFactory.getLog(getClass());
 
     @Override
     @Nullable
     public User convert(Jwt source) {
         String sub = source.getSubject();
         User user = (User) manager.loadUserByUsername(sub);
-        System.out.println("_____________________________________ "+user.toString()+" _________________________________________");
+        this.logger.debug("_____________________________________ "+user.toString()+" _________________________________________");
         // user.getAuthorities();
         return user;
         

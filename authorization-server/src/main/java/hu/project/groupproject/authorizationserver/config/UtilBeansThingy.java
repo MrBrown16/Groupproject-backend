@@ -80,6 +80,6 @@ public class UtilBeansThingy {
         }
 
         public void setUserDetailsService(MyAuthenticationProvider myAuthenticationProvider){
-                myAuthenticationProvider.setUserDetailsService(userDetailsManager());
+                myAuthenticationProvider.setProperties(userDetailsManager(), passwordEncoder(), jwtDecoder(null));
             }
 }

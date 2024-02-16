@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -31,7 +32,7 @@ import jakarta.annotation.PostConstruct;
 //TODO: Replace DaoAuthenticationProvider with AbstractUserDetailsAuthenticationProvider and 
 //override the determineUsername() and retrieveUser() methods
 @Component
-public class MyAuthenticationProvider extends DaoAuthenticationProvider {
+public class MyAuthenticationProvider extends MyUserDetailsAuthenticationProvider implements SetAuthProviderProperties {
     @Autowired
     private AuthorizationServerConfig authorizationServerConfig;
     @Autowired
@@ -50,7 +51,7 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
             this.jwtToPrincipalConverter);
     
     @Autowired //Don't trust it, And don't you touch it!! Without it the whole thing breaks!!
-    public MyAuthenticationProvider(UserDetailsService userDetailsService,JwtDecoder jwtDecoder,PasswordEncoder passwordEncoder) {
+    public MyAuthenticationProvider(JwtDecoder jwtDecoder,PasswordEncoder passwordEncoder,UserDetailsService userDetailsService) {
         this.userDetailsService=userDetailsService;
         this.jwtDecoder=jwtDecoder;
         this.passwordEncoder=passwordEncoder;
@@ -135,6 +136,18 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
         resourceSConfig.setAuthenticationProvider(this);
         utilBeansThingy.setUserDetailsService(this);
     }
+
+    
+    @Override
+    public void setProperties(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JwtDecoder jwtDecoder) {
+        if (userDetailsService!=null && passwordEncoder!=null) {
+            setProperties(passwordEncoder,userDetailsService);
+            this.userDetailsService=userDetailsService;
+            this.passwordEncoder=passwordEncoder;
+        }
+        this.jwtDecoder=jwtDecoder;
+    }
+
 
 
 }
