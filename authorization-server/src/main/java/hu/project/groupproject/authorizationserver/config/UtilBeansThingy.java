@@ -43,7 +43,6 @@ public class UtilBeansThingy {
         // AUDITOR...) and "org roles" (ORG_STAFF, ORG_AUDITOR, ORG_ADMIN...)
         // all grouped by the registered clients
         @Bean
-        // @Order(50)
         UserDetailsManager userDetailsManager() {
 
                 UserDetails user = User.builder()
@@ -62,16 +61,12 @@ public class UtilBeansThingy {
                 return users;
         }
 
-        // @Bean
-        // // @Order(51)
-        // UserDetailsService userDetailsService() {
-        //         return (UserDetailsService) userDetailsManager();
-        // }
 
         @Bean
         public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
                 return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
         }
+
 
         @Bean
         public PasswordEncoder passwordEncoder() {
@@ -79,7 +74,4 @@ public class UtilBeansThingy {
 
         }
 
-        public void setUserDetailsService(MyAuthenticationProvider myAuthenticationProvider){
-                myAuthenticationProvider.setProperties(userDetailsManager(), passwordEncoder(), jwtDecoder(null));
-            }
 }

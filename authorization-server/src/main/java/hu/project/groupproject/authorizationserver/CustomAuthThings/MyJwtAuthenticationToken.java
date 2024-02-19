@@ -3,6 +3,7 @@ package hu.project.groupproject.authorizationserver.CustomAuthThings;
 import java.util.Collection;
 import java.util.Map;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.Transient;
@@ -48,5 +49,6 @@ public class MyJwtAuthenticationToken extends AbstractOAuth2TokenAuthenticationT
     public String getName() {
         return this.name;
     }
+
 
 }
