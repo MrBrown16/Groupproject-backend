@@ -22,6 +22,8 @@ import org.springframework.security.oauth2.server.resource.web.authentication.Be
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 
 import hu.project.groupproject.authorizationserver.CustomAuthThings.JwtToPrincipalConverter;
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyAuthenticationProvider;
@@ -59,6 +61,7 @@ public class ResourceSConfig {
     ) throws Exception {
         http.authorizeHttpRequests(
             auth->auth
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).authenticated()
                     .anyRequest().authenticated()
         );   
 

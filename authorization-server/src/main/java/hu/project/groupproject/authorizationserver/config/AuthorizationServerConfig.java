@@ -19,11 +19,13 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AnonymousConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeAuthenticationProvider;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -81,7 +83,7 @@ public class AuthorizationServerConfig {
     @Order(5)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
             HttpSecurity http) throws Exception {
-
+// OAuth2AuthorizationCodeAuthenticationProvider
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         // OAuth2ClientAuthenticationConfigurer authServerConf = new OAuth2ClientAuthenticationConfigurer();
         // authServerConf.authenticationProvider(myAuthenticationProvider)
@@ -96,9 +98,11 @@ public class AuthorizationServerConfig {
         
         // http.authorizeHttpRequests(
         //     auth->auth
+                    
         //             .anyRequest().authenticated()
         //     );
         // http.oauth2Login(c->c.);
+        http.anonymous(a->a.disable());
         http
 		.securityContext((securityContext) -> securityContext
 			.securityContextRepository(new DelegatingSecurityContextRepository(
@@ -108,6 +112,7 @@ public class AuthorizationServerConfig {
 		);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults())
+                
                 // .authorizationEndpoint(e->e
                 //         .authenticationProvider(myAuthenticationProvider)
                         
@@ -117,6 +122,7 @@ public class AuthorizationServerConfig {
                 ;
 
         http.exceptionHandling(c -> c
+                // .defaultAuthenticationEntryPointFor(null, null)
                 .defaultAuthenticationEntryPointFor(
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)));
@@ -134,20 +140,21 @@ public class AuthorizationServerConfig {
     @Order(6)
     public SecurityFilterChain userManagementSecurityFilterChain(
             HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(
-                authz -> authz
+        // http.authorizeHttpRequests(
+        //         authz -> authz
 
-                        // .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
-                        // .permitAll()
-                        // .requestMatchers(AntPathRequestMatcher.antMatcher("/.well-known/**"))
-                        // .permitAll()
-                        // .requestMatchers(AntPathRequestMatcher.antMatcher("/error/**"))
-                        // .permitAll()
-                        // .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**"))
-                        // .permitAll()
-                        .anyRequest().authenticated()
-                        // .anyRequest().permitAll()
-                        )
+        //                 // .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
+        //                 // .permitAll()
+        //                 // .requestMatchers(AntPathRequestMatcher.antMatcher("/.well-known/**"))
+        //                 // .permitAll()
+        //                 // .requestMatchers(AntPathRequestMatcher.antMatcher("/error/**"))
+        //                 // .permitAll()
+        //                 // .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**"))
+        //                 // .permitAll()
+        //                 .anyRequest().authenticated()
+        //                 // .anyRequest().permitAll()
+        //                 )
+            http
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
                 .csrf(csrf -> csrf
                         // .ignoringRequestMatchers(
