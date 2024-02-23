@@ -30,13 +30,13 @@ import hu.project.groupproject.authorizationserver.CustomAuthThings.MyAuthentica
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyJwtAuthenticationConverter;
 import hu.project.groupproject.authorizationserver.filters.LoggingFilter;
 
-@Configuration
-@PropertySource("classpath:application.properties")
-@Order(80)
+// @Configuration
+// @PropertySource("classpath:application.properties")
+// @Order(80)
 public class ResourceSConfig {
-    @Value("${myVariables.jwk-set-uri}")
+    // @Value("${myVariables.jwk-set-uri}")
     String jwkSetUri;
-    @Autowired
+    // @Autowired
     JwtDecoder jwtDecoder;
     // @Autowired
     MyAuthenticationProvider myAuthenticationProvider;
@@ -53,9 +53,9 @@ public class ResourceSConfig {
     //     this.userDetailsManager=userDetailsManager;
     // }
 
-     @Bean
+    //  @Bean
     // @Order(2) //look at this 2 because i have spent approx 6 hours on debugging and this was the solution so appreciate it!
-    @Order(10) 
+    // @Order(10) 
     public SecurityFilterChain resourceServerSecurityFilterChain(
             HttpSecurity http
     ) throws Exception {
@@ -78,13 +78,7 @@ public class ResourceSConfig {
         return http.build();
     }
 
-    @Bean
-    public FilterRegistrationBean<LoggingFilter> loggingFilter() {
-        FilterRegistrationBean<LoggingFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new LoggingFilter());
-        registrationBean.addUrlPatterns("/*"); // Apply filter to all URLs
-        return registrationBean;
-    }
+    
     
     public void setAuthenticationProvider(MyAuthenticationProvider auth){
         this.myAuthenticationProvider=auth;
