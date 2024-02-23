@@ -61,7 +61,7 @@ public class ResourceSConfig {
     ) throws Exception {
         http.authorizeHttpRequests(
             auth->auth
-                    .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).authenticated()
+                    .requestMatchers("user/**").authenticated()
                     .anyRequest().authenticated()
         );   
 
