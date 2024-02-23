@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.t;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -50,6 +51,7 @@ import hu.project.groupproject.authorizationserver.CustomAuthThings.MyAuthentica
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyJwtAuthenticationConverter;
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyJwtAuthenticationToken;
 import hu.project.groupproject.authorizationserver.CustomAuthThings.MyUserDetailsAuthenticationProvider;
+import hu.project.groupproject.authorizationserver.filters.LoggingFilter;
 
 
 
@@ -170,6 +172,13 @@ public class AuthorizationServerConfig {
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder()
                 .build();
+    }
+    @Bean
+    public FilterRegistrationBean<LoggingFilter> loggingFilter() {
+        FilterRegistrationBean<LoggingFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LoggingFilter());
+        registrationBean.addUrlPatterns("/*"); 
+        return registrationBean;
     }
     
     @Bean
