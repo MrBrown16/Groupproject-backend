@@ -58,7 +58,7 @@ public class DemoController {
     public String postMethodName(@RequestParam("images") MultipartFile[] images) throws IOException {
         MyUser user = new MyUser();
         manager.persist(user);
-        // user.saveImages(images);
+        user.saveImages(images);
         return "success i guess";
     }
     
