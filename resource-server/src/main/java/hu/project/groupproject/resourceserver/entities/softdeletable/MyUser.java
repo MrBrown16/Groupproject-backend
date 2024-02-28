@@ -7,6 +7,7 @@ import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,7 +26,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "users")
-public class MyUser {
+public class MyUser extends LoadableImages{
     
     
     String firstName;
@@ -39,7 +40,8 @@ public class MyUser {
     @Column(name = "user_id")
     Long id;
     String userName;
-    String profileImagePath;
+    //might be redundant convention could be applied instead
+    // String profileImagePath;//(userid/profile)
 
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
     @Column(name = "posts_fk")
@@ -58,6 +60,11 @@ public class MyUser {
     @Column(name = "events_fk")
     @JsonIgnoreProperties("organiserUser")
     Set<MyEvent> events;
+
+    @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
+    @Column(name = "item_fk")
+    @JsonIgnoreProperties("user")
+    Set<MyItemForSale> items;
 
     public void setOrgs(Set<MyOrg> orgs) {
         if (this.orgs == null) {
@@ -109,6 +116,11 @@ public class MyUser {
         } else if (!email.equals(other.email))
             return false;
         return true;
+    }
+
+    @Override
+    public String getPath() {
+        return "users/"+this.id+"/profile/current";
     }
 
     

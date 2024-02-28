@@ -47,34 +47,34 @@ public class UserController {
         return false;
     }
 
-    @PostMapping("/make-admin")
-    // @GetMapping("/make-admin")
-    // @PreAuthorize("hasRole('ADMIN')")
-    // @PreAuthorize("hasRole('SUPERADMIN')")
-    public boolean makeAdmin(@RequestParam Map<String, String> details){
-        String un=details.get("username");
-        UserDetails user = manager.loadUserByUsername(un);
-        ArrayList<String> roles = new ArrayList<>(user.getAuthorities().size());
-        var builder = User.withUserDetails(user);
-        user.getAuthorities().stream().forEach(e->{
-            if(e.getAuthority().contains("ROLE_")){
-                roles.add(e.getAuthority().replace("ROLE_", ""));
-            }
-        });
+    // @PostMapping("/make-admin")
+    // // @GetMapping("/make-admin")
+    // // @PreAuthorize("hasRole('ADMIN')")
+    // // @PreAuthorize("hasRole('SUPERADMIN')")
+    // public boolean makeAdmin(@RequestParam Map<String, String> details){
+    //     String un=details.get("username");
+    //     UserDetails user = manager.loadUserByUsername(un);
+    //     ArrayList<String> roles = new ArrayList<>(user.getAuthorities().size());
+    //     var builder = User.withUserDetails(user);
+    //     user.getAuthorities().stream().forEach(e->{
+    //         if(e.getAuthority().contains("ROLE_")){
+    //             roles.add(e.getAuthority().replace("ROLE_", ""));
+    //         }
+    //     });
 
-        if(roles.contains("ADMIN")){
-            System.out.println("--------------------------------- ALREADY ADMIN --------------------------------");
-        }else{
-            roles.add("ADMIN");
-            for (String role : roles) {
-                builder.roles(role);
-            }
-            user = builder.build();
-            System.out.println("-------------------------------------"+user.toString()+"-------------------------------------");
-            manager.updateUser(user);
-            return true;
-        }
+    //     if(roles.contains("ADMIN")){
+    //         System.out.println("--------------------------------- ALREADY ADMIN --------------------------------");
+    //     }else{
+    //         roles.add("ADMIN");
+    //         for (String role : roles) {
+    //             builder.roles(role);
+    //         }
+    //         user = builder.build();
+    //         System.out.println("-------------------------------------"+user.toString()+"-------------------------------------");
+    //         manager.updateUser(user);
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 }

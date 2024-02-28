@@ -1,6 +1,9 @@
 package hu.project.groupproject.authorizationserver.config;
 
 import java.time.Duration;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
@@ -22,10 +25,14 @@ import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AnonymousConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeAuthenticationProvider;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -114,6 +121,7 @@ public class AuthorizationServerConfig {
 		);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults())
+                // .oidc(oidc->oidc.userInfoEndpoint(ui->ui.userInfoMapper(null)))
                 
                 // .authorizationEndpoint(e->e
                 //         .authenticationProvider(myAuthenticationProvider)
@@ -227,6 +235,7 @@ public class AuthorizationServerConfig {
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
         .scope(OidcScopes.PROFILE)
         .scope(OidcScopes.OPENID)
+        .scope("authorities")
         .redirectUri("http://localhost:8081/login/oauth2/code/myClient")
         .postLogoutRedirectUri("http://localhost:8081")
         .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(3600L)).build())
@@ -236,11 +245,27 @@ public class AuthorizationServerConfig {
     }
     
     //TODO:add authorities instead of scopes
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> auth2TokenCustomizer(){
+        return context -> {
+            if (context.getTokenType().getValue().equals(OAuth2TokenType.ACCESS_TOKEN.getValue())) {
+                Authentication principal = context.getPrincipal();
+                var authorities = principal.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet());
+                
+                context.getClaims().claim("authorities", authorities);
+            }
+        };
+        
+    }
     // @Bean
     // public OAuth2TokenCustomizer<JwtEncodingContext> auth2TokenCustomizer(){
     //     return context -> {
-    //         context.getClaims().claim("authorities", context.getAuthorizedScopes());
+    //         context.getClaims().claim("authorities", context.getAuthorization());
     //     };
+        
     // }
 
 

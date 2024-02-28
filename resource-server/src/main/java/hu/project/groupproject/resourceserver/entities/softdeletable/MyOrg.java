@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,16 +23,17 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "organisations")
-public class MyOrg {
+public class MyOrg extends LoadableImages{
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "org_id")
     Long id;
 
     String name;
-    @Column(name = "logo_path")
-    String logoPath;
-    String url;
+    //might be redundant convention could be applied instead
+    // @Column(name = "logo_path")//(orgid/logos/current)
+    // String logoPath;
+    // String url;
 
     @ManyToMany(mappedBy = "orgs", fetch=FetchType.LAZY)
     @JsonIgnoreProperties("orgs")
@@ -98,5 +100,8 @@ public class MyOrg {
         return true;
     }
 
-
+    @Override
+    public String getPath() {
+        return "orgs/"+this.id+"/logo/current";
+    }
 }

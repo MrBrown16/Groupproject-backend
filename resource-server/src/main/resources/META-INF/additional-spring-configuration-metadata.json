@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "filesystem.images.root",
+  "type": "java.lang.String",
+  "description": "The runtime location where the user's and the organisation's image files can be saved"
+}]}

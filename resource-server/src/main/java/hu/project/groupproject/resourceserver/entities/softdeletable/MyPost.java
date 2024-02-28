@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "posts")
-public class MyPost {
+public class MyPost extends LoadableImages{
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -41,7 +42,8 @@ public class MyPost {
 
     String content;
     String url;
-    List<String> imagePath; 
+    //might be redundant convention could be applied instead
+    List<String> imagePath; //(userid/postid/)
     @ColumnDefault("0")
     Long likes;
     @ColumnDefault("0")
@@ -75,6 +77,15 @@ public class MyPost {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    @Override
+    public String getPath() {
+        if (this.org==null) {
+            return "users/"+this.user.getId()+"/posts/"+this.id;
+        }else{
+            return "orgs/"+this.org.getId()+"/posts/"+this.id;
+        }
     }
 
 
