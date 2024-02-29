@@ -120,7 +120,8 @@ public class MyUser extends LoadableImages{
 
     @Override
     public String getPath() {
-        return "users/"+this.id+"/profile/current";
+        return "users/"+1+"/profile/current";
+        // return "users/"+this.id+"/profile/current";
     }
 
     
