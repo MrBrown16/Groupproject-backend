@@ -2,7 +2,7 @@ package hu.project.groupproject.resourceserver.entities.softdeletable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
+import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -36,15 +37,13 @@ public class MyItemForSale extends LoadableImages{
     @JsonIgnoreProperties("items")
     MyUser user;
     
+    // @Transient
+    // String[] images = this.getUrls();
     
     @Override
     public String getPath() {
         return "users/"+this.user.getId()+"/items/"+this.id;
     }
-
-    // load images from file system and return them (userid/itemid/)
-    // public List<File> getPictures(){
-    // }
 
     // "nev": string
     // "leiras": string

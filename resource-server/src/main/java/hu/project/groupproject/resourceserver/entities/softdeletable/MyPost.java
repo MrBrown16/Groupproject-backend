@@ -1,12 +1,10 @@
 package hu.project.groupproject.resourceserver.entities.softdeletable;
 
-import java.util.List;
-
 import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
+import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -42,8 +41,10 @@ public class MyPost extends LoadableImages{
 
     String content;
     String url;
-    //might be redundant convention could be applied instead
-    List<String> imagePath; //(userid/postid/)
+
+    // @Transient
+    // String[] images = this.getUrls();
+
     @ColumnDefault("0")
     Long likes;
     @ColumnDefault("0")
@@ -79,6 +80,7 @@ public class MyPost extends LoadableImages{
         return true;
     }
 
+    //TODO: make it possible for org admins to post in their own name
     @Override
     public String getPath() {
         if (this.org==null) {

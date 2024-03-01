@@ -32,7 +32,6 @@ public class DataConfig {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
         jpaVendorAdapter.setDatabase(Database.H2);
         jpaVendorAdapter.setGenerateDdl(true);
-        // jpaVendorAdapter.setGenerateDdl(true);
         return jpaVendorAdapter;
     }
 

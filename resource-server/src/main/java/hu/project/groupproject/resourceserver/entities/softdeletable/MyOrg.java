@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
+import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -48,6 +49,9 @@ public class MyOrg extends LoadableImages{
     @Column(name = "events_fk")
     @JsonIgnoreProperties("organiser")
     Set<MyEvent> events;
+
+    // @Transient
+    // String[] images = this.getUrls();
     
     public void setUsers(Set<MyUser> users) {
         if (this.users == null) {

@@ -7,7 +7,7 @@ import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hu.project.groupproject.resourceserver.interfaces.LoadableImages;
+import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +19,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -40,9 +41,10 @@ public class MyUser extends LoadableImages{
     @Column(name = "user_id")
     Long id;
     String userName;
-    //might be redundant convention could be applied instead
-    // String profileImagePath;//(userid/profile)
-
+    
+    // @Transient
+    // String[] images = this.getUrls();
+    
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
     @Column(name = "posts_fk")
     @JsonIgnoreProperties("user")
@@ -65,6 +67,7 @@ public class MyUser extends LoadableImages{
     @Column(name = "item_fk")
     @JsonIgnoreProperties("user")
     Set<MyItemForSale> items;
+
 
     public void setOrgs(Set<MyOrg> orgs) {
         if (this.orgs == null) {

@@ -20,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
+import hu.project.groupproject.resourceserver.dtos.testDTO;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyItemForSale;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyPost;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,13 +70,23 @@ public class DemoController {
     //     return Collections.singletonMap("post_text", "Hello " + username + authentication+ ize);
     // }
 
-    @PostMapping("img")
+    // @PostMapping("img")
+    // @Transactional
+    // public String postMethodName(@RequestParam("images") MultipartFile[] images) throws IOException {
+    //     MyUser user = new MyUser();
+    //     manager.persist(user);
+    //     user.saveImages(images,null);
+    //     return "success i guess";
+    // }
+    //tmp method for testing 
+    //TODO: replace with separate post methods for the different entity types and return "images/"+entity.getpath()
+    @PostMapping("data")
     @Transactional
-    public String postMethodName(@RequestParam("images") MultipartFile[] images) throws IOException {
-        MyUser user = new MyUser();
-        manager.persist(user);
-        user.saveImages(images);
-        return "success i guess";
+    public ImageUploadDetailsDto postData(@RequestBody testDTO testDto) throws IOException {
+        String url= "images/"+testDto.type()+"/"+testDto.id()+"/profile/current";
+        Boolean multiple=false;
+        
+        return new ImageUploadDetailsDto(url, multiple);
     }
     @GetMapping("img")//always returns user 1's profile pictures because MyUser getPath is set to that
     @Transactional
@@ -83,6 +98,23 @@ public class DemoController {
         return user.getUrls();
     }
 
+    @PostMapping("images/**")
+    public void postImageFile(@RequestParam("images") MultipartFile[] images, HttpServletRequest request) throws IOException{
+        String uri = request.getRequestURI();
+        String[] parts = uri.split("/"); //parts[2]= type parts[3]=id 
+        LoadableImages entity = determineImagePlacement(parts);
+        if (entity==null) {
+            // new LoadableImages().saveImages(images, uri);
+        }else{
+            entity.saveImages(images, null);
+        }
+            logger.debug(uri);
+        for (String string : parts) {
+            logger.debug(string);
+        }
+        logger.debug(parts[2]);
+        
+    }
     @GetMapping("images/**")
     public void getImageFile(HttpServletRequest request,HttpServletResponse response) throws IOException{
         String uri = request.getRequestURI();
@@ -94,7 +126,11 @@ public class DemoController {
         logger.debug(uri);
         serveStaticFile(uri, response);
     }
-    public void serveStaticFile(String filePath, HttpServletResponse response) throws IOException {
+
+
+
+    @SuppressWarnings("null")
+    private void serveStaticFile(String filePath, HttpServletResponse response) throws IOException {
 
         if (filePath != null) {
             File file = new File(filePath);
@@ -144,8 +180,8 @@ public class DemoController {
         switch (fileExtension) {
             case "gif":
                 return MediaType.IMAGE_GIF_VALUE;
-            case "txt":
-                return MediaType.TEXT_PLAIN_VALUE;
+            // case "txt":
+            //     return MediaType.TEXT_PLAIN_VALUE;
             case "jpg":
             case "jpeg":
                 return MediaType.IMAGE_JPEG_VALUE;
@@ -156,5 +192,46 @@ public class DemoController {
         }
     }
         
-    
+    private LoadableImages determineImagePlacement(String[] parts){
+        LoadableImages entity=null;
+        switch (parts[2]) {
+            case "users":
+                switch(parts[4]){
+                    case "posts":
+                        entity= manager.find(MyPost.class,Long.parseLong(parts[3]));
+
+                    break;
+                    case "items":
+                        entity= manager.find(MyItemForSale.class,Long.parseLong(parts[3]));
+                        
+                    break;   
+                    case "profile":
+                        entity= manager.find(MyUser.class,Long.parseLong(parts[3]));
+                        
+                    break;  
+                    
+                    default:
+                    break;
+                    }
+                case "orgs":
+                    switch(parts[4]){
+                    case "posts":
+                        entity= manager.find(MyPost.class,Long.parseLong(parts[3]));
+                        
+                    break;  
+                    case "logo":
+                        entity= manager.find(MyOrg.class,Long.parseLong(parts[3]));
+                    
+                    break;
+
+                    default:
+                    break;
+                }
+                
+            default:
+                
+            break;
+        }
+        return entity;
+    }
 }
