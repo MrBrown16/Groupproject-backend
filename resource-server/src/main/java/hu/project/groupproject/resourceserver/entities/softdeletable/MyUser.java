@@ -29,18 +29,20 @@ import lombok.Setter;
 @Table(name = "users")
 public class MyUser extends LoadableImages{
     
+    @Id @GeneratedValue(strategy = GenerationType.UUID) 
+    @Column(name = "user_id")
+    String id;
     
+
+    String userName;
     String firstName;
     String lastName;
     Long phone;
+
     @NaturalId
     String email;
     
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    @Column(name = "user_id")
-    Long id;
-    String userName;
     
     // @Transient
     // String[] images = this.getUrls();
@@ -49,6 +51,11 @@ public class MyUser extends LoadableImages{
     @Column(name = "posts_fk")
     @JsonIgnoreProperties("user")
     Set<MyPost> posts;
+    
+    @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
+    @Column(name = "reservation_fk")
+    @JsonIgnoreProperties("user")
+    Set<MyReservation> reservations;
 
 
     @ManyToMany(fetch = FetchType.LAZY)

@@ -22,9 +22,10 @@ import lombok.Setter;
 @Getter @Setter @RequiredArgsConstructor
 @Table(name = "vote_options")
 public class MyVoteOption {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "vote_option_id")
-    Long id;
+    String id;
 
     String optionText;
     

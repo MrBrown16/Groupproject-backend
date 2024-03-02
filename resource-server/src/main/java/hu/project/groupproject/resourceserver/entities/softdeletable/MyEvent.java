@@ -23,15 +23,18 @@ import lombok.Setter;
 @Table(name = "events")
 public class MyEvent {
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
-    Long id;
+    String id;
 
     String name;
     String description;
     String location;
     List<Integer> publicPhones;
     List<String> publicEmails;
+
+    Timestamp startDate;
+    Timestamp endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "org_id") //references MyOrg.id which has a coloumn name of "org_id"
@@ -43,8 +46,6 @@ public class MyEvent {
     @JsonIgnoreProperties("events")
     MyUser organiserUser;
 
-    Timestamp startDate;
-    Timestamp endDate;
 // "nev": string
 // "leiras": string
 // "helyszin": string

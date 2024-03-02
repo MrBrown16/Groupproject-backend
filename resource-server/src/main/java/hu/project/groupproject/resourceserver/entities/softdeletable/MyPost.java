@@ -25,9 +25,9 @@ import lombok.Setter;
 @Table(name = "posts")
 public class MyPost extends LoadableImages{
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "post_id")
-    Long id;
+    String id;
 
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id") //references MyUser.id which has a coloumn name of "user_id"

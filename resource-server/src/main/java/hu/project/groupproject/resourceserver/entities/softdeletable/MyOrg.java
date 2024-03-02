@@ -26,9 +26,9 @@ import lombok.Setter;
 @Table(name = "organisations")
 public class MyOrg extends LoadableImages{
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "org_id")
-    Long id;
+    String id;
 
     String name;
     //might be redundant convention could be applied instead
@@ -44,6 +44,11 @@ public class MyOrg extends LoadableImages{
     @Column(name = "posts_fk")
     @JsonIgnoreProperties("user")
     Set<MyPost> posts;
+    
+    @OneToMany(mappedBy = "org", fetch=FetchType.LAZY) 
+    @Column(name = "reservation_fk")
+    @JsonIgnoreProperties("user")
+    Set<MyReservation> reservations;
 
     @OneToMany(mappedBy = "organiser", fetch=FetchType.LAZY) 
     @Column(name = "events_fk")

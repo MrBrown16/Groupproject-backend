@@ -22,9 +22,9 @@ import lombok.Setter;
 @Table(name = "items")
 public class MyItemForSale extends LoadableImages{
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "item_id")
-    Long id;
+    String id;
 
     String name;
     String description;

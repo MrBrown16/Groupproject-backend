@@ -18,7 +18,7 @@ public class DayOfWeek {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "day_id")
-    Long id;
+    Integer id;
 
     String name;
 
