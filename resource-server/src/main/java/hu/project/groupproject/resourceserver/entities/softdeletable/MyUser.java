@@ -19,7 +19,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -37,15 +36,10 @@ public class MyUser extends LoadableImages{
     String userName;
     String firstName;
     String lastName;
-    Long phone;
+    Integer phone;
 
     @NaturalId
     String email;
-    
-    
-    
-    // @Transient
-    // String[] images = this.getUrls();
     
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
     @Column(name = "posts_fk")
@@ -56,6 +50,11 @@ public class MyUser extends LoadableImages{
     @Column(name = "reservation_fk")
     @JsonIgnoreProperties("user")
     Set<MyReservation> reservations;
+    
+    @OneToMany(mappedBy = "user", fetch=FetchType.LAZY)
+    @Column(name = "notice_fk")
+    @JsonIgnoreProperties("user")
+    Set<MyNotice> notices;
 
 
     @ManyToMany(fetch = FetchType.LAZY)

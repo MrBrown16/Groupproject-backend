@@ -1,8 +1,8 @@
 package hu.project.groupproject.resourceserver.dtos.En;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
-public record NoticeDto(String userId,String type, String urgency, String description, String location, Integer phone, Instant date) {}
+public record NoticeDto(String userId,String type, String urgency, String description, String location, Integer phone, Timestamp date) {}
 // "userid":string
 // "tipus": string
 // "sulyossag": string

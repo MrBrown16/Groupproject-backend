@@ -15,7 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -31,10 +30,6 @@ public class MyOrg extends LoadableImages{
     String id;
 
     String name;
-    //might be redundant convention could be applied instead
-    // @Column(name = "logo_path")//(orgid/logos/current)
-    // String logoPath;
-    // String url;
 
     @ManyToMany(mappedBy = "orgs", fetch=FetchType.LAZY)
     @JsonIgnoreProperties("orgs")
@@ -55,8 +50,6 @@ public class MyOrg extends LoadableImages{
     @JsonIgnoreProperties("organiser")
     Set<MyEvent> events;
 
-    // @Transient
-    // String[] images = this.getUrls();
     
     public void setUsers(Set<MyUser> users) {
         if (this.users == null) {

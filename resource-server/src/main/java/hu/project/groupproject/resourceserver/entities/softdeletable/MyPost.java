@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -41,9 +40,6 @@ public class MyPost extends LoadableImages{
 
     String content;
     String url;
-
-    // @Transient
-    // String[] images = this.getUrls();
 
     @ColumnDefault("0")
     Long likes;

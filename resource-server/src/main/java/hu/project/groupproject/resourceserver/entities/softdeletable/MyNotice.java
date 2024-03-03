@@ -1,8 +1,9 @@
 package hu.project.groupproject.resourceserver.entities.softdeletable;
 
+import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,34 +19,23 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter @RequiredArgsConstructor
-@Table(name = "items")
-public class MyItemForSale extends LoadableImages{
-
+@Table(name = "notices")
+public class MyNotice {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "item_id")
+    @Column(name = "notice_id")
     String id;
-
-    String name;
-    String description;
-    String condition;
+    
+    String type;
+    String urgency;
+    String description; 
     String location;
     Integer phone;
+    Timestamp date;
     
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_id") //references MyUser.id which has a coloumn name of "user_id"
-    @JsonIgnoreProperties("items")
+    @JoinColumn(name = "user_id") 
+    @JsonIgnoreProperties("notices")
     MyUser user;
 
-    
-    @Override
-    public String getPath() {
-        return "users/"+this.user.getId()+"/items/"+this.id;
-    }
-
-    // "nev": string
-    // "leiras": string
-    // "allapot": string
-    // "kepek": File[]
-    // "helyszin": string
-    // "telefonszam": number|null
 }
+    
