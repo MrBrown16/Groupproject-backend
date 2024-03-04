@@ -32,7 +32,7 @@ public class MyUser extends LoadableImages{
     @Column(name = "user_id")
     String id;
     
-
+    @NaturalId //i hate this, but i would need to redo all the authorization server userhandlings
     String userName;
     String firstName;
     String lastName;

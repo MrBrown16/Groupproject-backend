@@ -8,12 +8,20 @@ import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.services.OrgService;
 
+import java.util.Map;
 import java.util.Optional;
 
+import javax.management.InvalidAttributeValueException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,16 +31,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/org")
 public class OrgController {
 
+    protected final Log logger = LogFactory.getLog(getClass());
+
     OrgService orgService;
 
     public OrgController(OrgService orgService){
         this.orgService=orgService;
     }
 
+    
+    @PostMapping("/addAdmin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void addUserToOrg(@RequestBody Map<String, String> body){
+        String adminId =body.get("adminId");
+        String userId =body.get("userId");
+        String orgId =body.get("orgId");
+        
+        orgService.addUser(orgId,adminId,userId);
+    }
+    //should be more sophisticated so not any admin can remove any and all other admins...
+    @PostMapping("/removeAdmin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void removeUserFromOrg(@RequestBody Map<String, String> body){
+        String adminId =body.get("adminId");
+        String userId =body.get("userId");
+        String orgId =body.get("orgId");
+        
+        orgService.removeUser(orgId,adminId,userId);
+    }
+    
     @PostMapping("/new")
     @PreAuthorize("hasRole('ADMIN')")
     public ImageUploadDetailsDto createOrg(@RequestBody OrgDtoCreate org){
         return orgService.createOrg(org);
+    }
+    
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ImageUploadDetailsDto updateOrg(@PathVariable String orgId, @RequestBody OrgDtoCreate org) throws InvalidAttributeValueException{
+        return orgService.saveOrg(orgId,org);
     }
 
     @GetMapping("/{id}")
@@ -40,7 +77,7 @@ public class OrgController {
         return orgService.getOrg(id);
     }
     
-    @PostMapping("/del/{id}")
+    @DeleteMapping("/del/{id}")
     public void deleteOrg(@PathVariable String orgId) {
         orgService.deleteOrg(orgId);
     }
