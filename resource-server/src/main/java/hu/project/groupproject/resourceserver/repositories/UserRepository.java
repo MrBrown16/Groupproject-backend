@@ -17,5 +17,7 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     // @Query("SELECT oa.user_id FROM orgs_admins oa where oa.user_id=:adminId AND oa.org_id=:orgId")
     // Optional<Long> isAdmin(@Param("adminId") Long adminId, @Param("orgId") Long orgId);
     Optional<MyUser> findByOrgsIdAndId(String orgId, String adminId);
+    
+    Optional<MyUser> findByUserName(String username);
 
 }

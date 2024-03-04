@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StreamUtils;
@@ -24,6 +26,7 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyPost;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
+import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +38,8 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
 
     protected final Log logger = LogFactory.getLog(getClass());
 
+    @Autowired
+    UserService userService;
 
     @PersistenceContext
     EntityManager manager;
@@ -46,6 +51,12 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
     @Transactional
     public ImageUploadDetailsDto postData(@RequestBody testDTO testDto) throws IOException {
         String url= "images/"+testDto.type()+"/"+testDto.id()+"/profile/current";
+        //TODO: remove hardcoded name
+        Optional<MyUser> user = userService.getUserByUserName("Ákos");
+        if (user.isPresent()) {
+            url = "images/users/"+user.get().getId()+"/profile/current";
+        }
+        // String url= "images/"+testDto.type()+"/"+testDto.id()+"/profile/current";
         Boolean multiple=false;
         
         return new ImageUploadDetailsDto(url, multiple);
@@ -164,15 +175,15 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
             case "users":
                 switch(parts[4]){
                     case "posts":
-                        entity= manager.find(MyPost.class,Long.parseLong(parts[3]));
+                        entity= manager.find(MyPost.class,parts[3]);
 
                     break;
                     case "items":
-                        entity= manager.find(MyItemForSale.class,Long.parseLong(parts[3]));
+                        entity= manager.find(MyItemForSale.class,parts[3]);
                         
                     break;   
                     case "profile":
-                        entity= manager.find(MyUser.class,Long.parseLong(parts[3]));
+                        entity= manager.find(MyUser.class,parts[3]);
                         
                     break;  
                     
@@ -182,11 +193,11 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
                 case "orgs":
                     switch(parts[4]){
                     case "posts":
-                        entity= manager.find(MyPost.class,Long.parseLong(parts[3]));
+                        entity= manager.find(MyPost.class,parts[3]);
                         
                     break;  
                     case "logo":
-                        entity= manager.find(MyOrg.class,Long.parseLong(parts[3]));
+                        entity= manager.find(MyOrg.class,parts[3]);
                     
                     break;
 

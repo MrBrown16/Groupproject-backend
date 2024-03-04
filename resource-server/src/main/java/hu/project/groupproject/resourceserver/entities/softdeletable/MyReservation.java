@@ -28,7 +28,7 @@ public class MyReservation {
 
     String preferredName;
     String email;//in case it differs from the registration email
-    Integer phone;//in case it differs from the registration phoneNum
+    Long phone;//in case it differs from the registration phoneNum
 
     Timestamp startDate;
     Integer minutes;

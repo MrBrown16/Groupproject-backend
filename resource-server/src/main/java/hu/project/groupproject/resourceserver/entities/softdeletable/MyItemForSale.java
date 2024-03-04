@@ -29,7 +29,7 @@ public class MyItemForSale extends LoadableImages{
     String description;
     String condition;
     String location;
-    Integer phone;
+    Long phone;
     
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id") //references MyUser.id which has a coloumn name of "user_id"

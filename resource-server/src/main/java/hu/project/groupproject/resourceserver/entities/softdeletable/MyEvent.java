@@ -30,7 +30,7 @@ public class MyEvent {
     String name;
     String description;
     String location;
-    List<Integer> publicPhones;
+    List<Long> publicPhones;
     List<String> publicEmails;
 
     Timestamp startDate;

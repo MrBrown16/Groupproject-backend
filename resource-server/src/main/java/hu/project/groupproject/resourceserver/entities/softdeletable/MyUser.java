@@ -36,7 +36,7 @@ public class MyUser extends LoadableImages{
     String userName;
     String firstName;
     String lastName;
-    Integer phone;
+    Long phone;
 
     @NaturalId
     String email;

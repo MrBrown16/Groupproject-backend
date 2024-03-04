@@ -3,6 +3,7 @@ package hu.project.groupproject.resourceserver.myabstractclasses;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +46,9 @@ public abstract class LoadableImages {
     @SuppressWarnings("null")
     public void saveImages(MultipartFile[] images,String path) throws IOException{
         if (path==null) {
-            path=getPath();
+            logger.debug("Path: "+path);
+            path=this.getPath();
+            logger.debug("Path: "+path);
         }else{
             path = path.replace("/images/", "");
         }
@@ -64,6 +67,9 @@ public abstract class LoadableImages {
                 logger.debug(inputStream.toString());
                 Files.copy(inputStream, destination,
                     StandardCopyOption.REPLACE_EXISTING);
+            } catch (FileAlreadyExistsException e) {
+                //Guess the Replace Existing thing doesn't work...
+                // throw new IOException("File already exists: Failed to store file.", e);
             } catch (IOException e) {
                 throw new IOException("Failed to store file.", e);
             }

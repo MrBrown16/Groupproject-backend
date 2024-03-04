@@ -2,7 +2,7 @@ package hu.project.groupproject.resourceserver.dtos.Hu;
 
 import java.sql.Timestamp;
 
-public record ReservationDtoHu(String userId, String orgId, String nev, String email, Integer telefonszam, Timestamp startDate,Timestamp endDate) {}
+public record ReservationDtoHu(String userId, String orgId, String nev, String email, Long telefonszam, Timestamp startDate,Timestamp endDate) {}
 // "userId":string
 // "orgId":string
 // "nev": string

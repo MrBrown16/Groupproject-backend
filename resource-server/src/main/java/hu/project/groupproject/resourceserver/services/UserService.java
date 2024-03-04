@@ -32,6 +32,9 @@ public class UserService {
     public Optional<UserDtoPublic> getUser(String id){
         return userRepository.findById(id, UserDtoPublic.class);
     }
+    public Optional<MyUser> getUserByUserName(String username){
+        return userRepository.findByUserName(username);
+    }
 
     public void deleteUser(String id){
         userRepository.deleteById(id);

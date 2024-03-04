@@ -29,7 +29,7 @@ public class MyNotice {
     String urgency;
     String description; 
     String location;
-    Integer phone;
+    Long phone;
     Timestamp date;
     
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
