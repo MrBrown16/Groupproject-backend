@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.testDTO;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyItemForSale;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyPost;
@@ -52,9 +53,9 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
     public ImageUploadDetailsDto postData(@RequestBody testDTO testDto) throws IOException {
         String url= "images/"+testDto.type()+"/"+testDto.id()+"/profile/current";
         //TODO: remove hardcoded name
-        Optional<MyUser> user = userService.getUserByUserName("Ákos");
+        Optional<UserDtoPublic> user = userService.getUserByUserName("Ákos");
         if (user.isPresent()) {
-            url = "images/users/"+user.get().getId()+"/profile/current";
+            url = "images/users/"+user.get().id()+"/profile/current";
         }
         // String url= "images/"+testDto.type()+"/"+testDto.id()+"/profile/current";
         Boolean multiple=false;

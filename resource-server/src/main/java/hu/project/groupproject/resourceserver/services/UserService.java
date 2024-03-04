@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.UserRepository;
@@ -20,7 +21,7 @@ public class UserService {
     UserRepository userRepository;
 
     @PersistenceContext
-    EntityManager entityManager;
+    EntityManager manager;
     
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
@@ -32,8 +33,18 @@ public class UserService {
     public Optional<UserDtoPublic> getUser(String id){
         return userRepository.findById(id, UserDtoPublic.class);
     }
-    public Optional<MyUser> getUserByUserName(String username){
-        return userRepository.findByUserName(username);
+    public Optional<UserDtoPublic> getUserByUserName(String username){
+        Optional<UserDtoPublicPartial> optDtoPartial = userRepository.findByUserName(username);
+        if (optDtoPartial.isPresent()) {
+            UserDtoPublicPartial part = optDtoPartial.get();
+            MyUser user = manager.find(MyUser.class, part.id());
+            if (user!=null) {
+                String profile = user.getPath();
+                UserDtoPublic pub = new UserDtoPublic(part.id(), part.userName(), part.firstName(), part.lastName(), profile);
+                return Optional.of(pub);
+            }
+        }
+        return Optional.empty();
     }
 
     public void deleteUser(String id){
@@ -63,15 +74,15 @@ public class UserService {
     @Transactional
     public Boolean addUserToOrg(String adminId, String userId, String orgId){
         if (adminId != null && userId != null && orgId != null) {
-            MyUser admin = entityManager.find(MyUser.class, adminId);
-            MyUser user = entityManager.find(MyUser.class, userId);
-            MyOrg org = entityManager.find(MyOrg.class, orgId);
+            MyUser admin = manager.find(MyUser.class, adminId);
+            MyUser user = manager.find(MyUser.class, userId);
+            MyOrg org = manager.find(MyOrg.class, orgId);
             if (admin != null && user != null && org != null) {
                 Optional<MyUser> foundUser = userRepository.findByOrgsIdAndId(orgId, adminId);
                 if (foundUser.isPresent() && foundUser.get().getId() == adminId) {
                     org.addUser(user);
                     user.addOrg(org);
-                    entityManager.flush();
+                    manager.flush();
                     return true;
                 }
             }

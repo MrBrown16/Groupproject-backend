@@ -4,7 +4,9 @@ package hu.project.groupproject.resourceserver.repositories;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 
 
@@ -18,6 +20,7 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     // Optional<Long> isAdmin(@Param("adminId") Long adminId, @Param("orgId") Long orgId);
     Optional<MyUser> findByOrgsIdAndId(String orgId, String adminId);
     
-    Optional<MyUser> findByUserName(String username);
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial(u.id, u.userName, u.firstName, u.lastName) from users u where u.userName=:username")
+    Optional<UserDtoPublicPartial> findByUserName(String username);
 
 }

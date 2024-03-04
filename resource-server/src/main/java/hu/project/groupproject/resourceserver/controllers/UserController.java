@@ -36,6 +36,10 @@ public class UserController {
     public Optional<UserDtoPublic> getUser(@PathVariable String id) {
         return userService.getUser(id);
     }
+    @GetMapping("/{userName}")
+    public Optional<UserDtoPublic> getUserByName(@PathVariable String userName) {
+        return userService.getUserByUserName(userName);
+    }
     
     @DeleteMapping("/del/{id}")
     public void deleteUser(@PathVariable String id) {
