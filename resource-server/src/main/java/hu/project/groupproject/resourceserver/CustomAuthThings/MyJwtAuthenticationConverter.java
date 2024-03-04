@@ -1,4 +1,4 @@
-package hu.project.groupproject.authorizationserver.CustomAuthThings;
+package hu.project.groupproject.resourceserver.CustomAuthThings;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
