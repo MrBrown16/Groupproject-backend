@@ -38,7 +38,7 @@ public class OrgService {
             newOrg.addUser(admin);
             newOrg.setName(org.name());
         }
-        return new ImageUploadDetailsDto("images/"+newOrg.getPath(), false) ;
+        return new ImageUploadDetailsDto("images/"+newOrg.getPath(), false);
     }
     public ImageUploadDetailsDto saveOrg(String orgId,OrgDtoCreate org) throws InvalidAttributeValueException{
         MyOrg oldOrg = manager.find(MyOrg.class, orgId);

@@ -22,24 +22,29 @@ import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.util.Assert;
 
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.services.UserService;
+
 
 public class MyJwtAuthenticationConverter implements Converter<Jwt, MyJwtAuthenticationToken> {
     
-    private Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
     // private JwtTimestampValidator timeValidator = new JwtTimestampValidator();
 	// private JwtIssuerValidator issvalidator = new JwtIssuerValidator("http://localhost:8083");
-    private final JwtToPrincipalConverter jwtToPrincipalConverter = new JwtToPrincipalConverter();
+    private JwtToPrincipalConverter jwtToPrincipalConverter;
     
-    private String principalClaimName = JwtClaimNames.SUB;
+    // private String principalClaimName = JwtClaimNames.SUB;
 
     private final Log logger = LogFactory.getLog(getClass());
 
     public MyJwtAuthenticationConverter(){}
     
     public MyJwtAuthenticationConverter(
-        Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter) {
-            
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,UserService userService) {
+            jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+            jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
             setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+            this.jwtToPrincipalConverter.setUserService(userService);
     }
 	// public MyJwtAuthenticationConverter(JwtToPrincipalConverter jwtToPrincipalConverter) {
 	// 	Assert.notNull(jwtToPrincipalConverter, "jwtToPrincipalConverter cannot be null");
@@ -53,28 +58,35 @@ public class MyJwtAuthenticationConverter implements Converter<Jwt, MyJwtAuthent
         //     throw new BadCredentialsException(OAuth2ErrorCodes.INVALID_TOKEN);
         // }
         logger.debug("MyJwtAuthenticationConverter.convert() jwt:  "+jwt);
-        User principal = jwtToPrincipalConverter.convert(jwt);
+        MyUser principal = jwtToPrincipalConverter.convert(jwt);
         Collection<GrantedAuthority> jwtAuthorities = jwtGrantedAuthoritiesConverter.convert(jwt);
-        Collection<GrantedAuthority> authorities = Stream.of(jwtAuthorities, principal.getAuthorities())
-                .filter(Objects::nonNull)
-                .flatMap(Collection::stream)
-                .distinct()
-                .collect(Collectors.toUnmodifiableList());
+        // Collection<GrantedAuthority> authorities = Stream.of(jwtAuthorities, principal.getAuthorities())
+        //         .filter(Objects::nonNull)
+        //         .flatMap(Collection::stream)
+        //         .distinct()
+        //         .collect(Collectors.toUnmodifiableList());
 
-        return new MyJwtAuthenticationToken(jwt, principal, authorities);
+        return new MyJwtAuthenticationToken(jwt, principal, jwtAuthorities);
     }
 
 
     public void setJwtGrantedAuthoritiesConverter(
-        Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter) {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter) {
         Assert.notNull(jwtGrantedAuthoritiesConverter, "jwtGrantedAuthoritiesConverter cannot be null");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
         this.jwtGrantedAuthoritiesConverter = jwtGrantedAuthoritiesConverter;
     }
-
-    public void setPrincipalClaimName(String principalClaimName) {
-        Assert.hasText(principalClaimName, "principalClaimName cannot be empty");
-        this.principalClaimName = principalClaimName;
+    public void setJwtToPrincipalConverter(
+        JwtToPrincipalConverter converter) {
+        Assert.notNull(converter, "userService cannot be null");
+        this.jwtToPrincipalConverter = converter;
     }
+
+    // public void setPrincipalClaimName(String principalClaimName) {
+    //     Assert.hasText(principalClaimName, "principalClaimName cannot be empty");
+    //     this.principalClaimName = principalClaimName;
+    // }
 
     // private boolean validate(Jwt jwt){
     //     if (issvalidator.validate(jwt)==OAuth2TokenValidatorResult.success()) {

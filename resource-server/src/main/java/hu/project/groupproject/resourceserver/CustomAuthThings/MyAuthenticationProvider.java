@@ -33,7 +33,7 @@ import org.springframework.util.Assert;
 // import hu.project.groupproject.authorizationserver.config.UtilBeansThingy;
 import jakarta.annotation.PostConstruct;
 
-@Component
+// @Component
 public class MyAuthenticationProvider implements AuthenticationProvider {
     // @Autowired
     // private AuthorizationServerConfig authorizationServerConfig;

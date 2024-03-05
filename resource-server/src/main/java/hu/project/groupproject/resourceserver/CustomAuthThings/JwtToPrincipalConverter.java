@@ -1,31 +1,58 @@
 package hu.project.groupproject.resourceserver.CustomAuthThings;
 
+import java.util.Optional;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.stereotype.Component;
 
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.services.UserService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
-public class JwtToPrincipalConverter implements Converter<Jwt, User> {
+public class JwtToPrincipalConverter implements Converter<Jwt, MyUser> {
 
-    @Autowired
-    JdbcUserDetailsManager manager;
+    @PersistenceContext
+    EntityManager manager;
+
+    UserService userService;
+
+    public JwtToPrincipalConverter(){
+        
+    }
+    public void setUserService(UserService userService){
+        this.userService=userService;
+    }
+    public void setManager(EntityManager manager){
+        this.manager=manager;
+    }
 
     protected final Log logger = LogFactory.getLog(getClass());
 
     @Override
-    @Nullable
-    public User convert(@NonNull Jwt source) {
-        String sub = source.getSubject();
-        User user = (User) manager.loadUserByUsername(sub);
-        this.logger.debug("_____________________________________ "+user.toString()+" _________________________________________");
-        // user.getAuthorities();
-        return user;
+    @Nullable//TODO:use entityManager to get user details like id and orgs...
+    public MyUser convert(@NonNull Jwt source) {
+        String userName = source.getSubject();
+        Optional<UserDtoPublic> preUser = userService.getUserByUserName(userName);
+        if (preUser.isPresent()) {
+            MyUser user = manager.find(MyUser.class, preUser.get().id());
+            if (user != null) {
+                return user;
+            }
+        }
+        throw new UsernameNotFoundException("There is no corresponding entity in this application");
+        // User user = (User) manager.loadUserByUsername(sub);
+        // this.logger.debug("_____________________________________ "+user.toString()+" _________________________________________");
+        // // user.getAuthorities();
+        // return user;
         
         // return new User("","",null);
     }

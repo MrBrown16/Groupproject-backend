@@ -2,15 +2,16 @@ package hu.project.groupproject.resourceserver.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoCreate;
-import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoUpdate;
-import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicNoImages;
+import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicWithImages;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyPost;
 import hu.project.groupproject.resourceserver.services.PostService;
 
 import java.util.Optional;
 
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,17 +33,17 @@ public class PostController {
     }
 
     @PostMapping("/new")
-    public boolean savePost(@RequestBody PostDtoCreate post){
+    public ImageUploadDetailsDto savePost(@RequestBody PostDtoCreate post){
         return postService.savePost(post);
     }
 
-    @PutMapping("/{id}") //TODO:new dto to get user id, org id, post contents, image...  
-    public boolean updatePost(@PathVariable String id,@RequestBody PostDtoUpdate post){
+    @PutMapping("/{id}") 
+    public ImageUploadDetailsDto updatePost(@PathVariable String id,@RequestBody PostDtoCreate post) throws NotFoundException{
         return postService.updatePost(id,post);
     }
 
     @GetMapping("/{id}/short")
-    public Optional<PostDtoPublic> getPostShort(@PathVariable String id) {
+    public Optional<PostDtoPublicWithImages> getPostShort(@PathVariable String id) {
         return postService.getPostShort(id);
     }
 
@@ -51,9 +52,9 @@ public class PostController {
         return postService.getPostExtended(id);
     }
     
-    @DeleteMapping("/del/id")
+    @DeleteMapping("/del/id")//TODO: get userId from authentication
     public void deletePost(@PathVariable String postId) {
-        postService.deletePost(postId);
+        postService.deletePost(null, postId);
     }
     
 }

@@ -1,5 +1,5 @@
-package hu.project.groupproject.resourceserver.dtos.En.posts.in;
+// package hu.project.groupproject.resourceserver.dtos.En.posts.in;
 
-import org.springframework.lang.NonNull;
+// import org.springframework.lang.NonNull;
 
-public record PostDtoUpdate( String id, @NonNull PostDtoCreate post) {}
+// public record PostDtoUpdate( String id, @NonNull PostDtoCreate post) {}

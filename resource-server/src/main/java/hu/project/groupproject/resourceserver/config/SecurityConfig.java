@@ -1,5 +1,6 @@
 package hu.project.groupproject.resourceserver.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -15,10 +16,24 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import hu.project.groupproject.resourceserver.CustomAuthThings.JwtToPrincipalConverter;
+import hu.project.groupproject.resourceserver.CustomAuthThings.MyJwtAuthenticationConverter;
+import hu.project.groupproject.resourceserver.services.UserService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
+
+    @PersistenceContext
+    EntityManager manager;
+
+
+    @Autowired
+    UserService userService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz ->
@@ -29,8 +44,8 @@ public class SecurityConfig {
                                 
                                 ).oauth2ResourceServer(
                                     oauth2 -> oauth2
-                                    .jwt(
-                                        Customizer.withDefaults()
+                                    .jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
+                                        // Customizer.withDefaults()
                                     )
                                 )                
                 .csrf(
@@ -47,12 +62,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter(){
-        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthorityPrefix("");
-        converter.setAuthoritiesClaimName("authorities");
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(converter);
+    public MyJwtAuthenticationConverter jwtAuthenticationConverter(){
+        JwtGrantedAuthoritiesConverter gConverter = new JwtGrantedAuthoritiesConverter();
+        JwtToPrincipalConverter pConverter = new JwtToPrincipalConverter();
+        pConverter.setUserService(userService);
+        pConverter.setManager(manager);
+        // converter.setAuthorityPrefix("");
+        // converter.setAuthoritiesClaimName("authorities");
+        MyJwtAuthenticationConverter jwtAuthenticationConverter = new MyJwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(gConverter);
+        jwtAuthenticationConverter.setJwtToPrincipalConverter(pConverter);
         return jwtAuthenticationConverter;
     }
 

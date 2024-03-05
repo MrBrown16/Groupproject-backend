@@ -4,11 +4,14 @@ import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoCreate;
-import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoUpdate;
-import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicNoImages;
+import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicWithImages;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.votes.VoteDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyPost;
@@ -25,7 +28,7 @@ import jakarta.persistence.PersistenceContext;
 public class PostService {
     
     @PersistenceContext
-    EntityManager entityManager;
+    EntityManager manager;
 
     PostRepository postRepository;
     VoteService voteService;
@@ -35,28 +38,118 @@ public class PostService {
         this.voteService=voteService;
     }
    
-    public boolean updatePost(String id, PostDtoUpdate postUpdate){
-        if (id == postUpdate.id()) {
+    public ImageUploadDetailsDto updatePost(String id, PostDtoCreate postUpdate) throws NotFoundException{
             Optional<MyPost> oldPost = postRepository.findById(id);
             if (oldPost.isPresent()) {
                 MyPost post = oldPost.get();
-                if (postUpdate.post().userId()==post.getUser().getId() && postUpdate.post().orgId()==post.getOrg().getId()) {
-                    post.setContent(postUpdate.post().content());
+                if (canEditPost(id, postUpdate)) {
+                    post.setContent(postUpdate.content());
                     if (post.getVote() != null ) {
-                        MyVote vote = updateVoteInPost(postUpdate.post());
+                        MyVote vote = updateVoteInPost(postUpdate);
                         post.setVote(vote);
                     }
                     post = postRepository.save(post);
-                    return true;
+                    return new ImageUploadDetailsDto(post.getPath(), true);
+                }
+                throw new AccessDeniedException("You don't have the right to change this post");
+            }
+        throw new NotFoundException();
+    }
+
+    
+    public ImageUploadDetailsDto savePost(PostDtoCreate postCreate){
+        MyPost post = new MyPost();
+        if (canEditPost(null, postCreate)) {
+            
+            post.setUser(manager.find(MyUser.class, postCreate.userId()));
+            post.setOrg(manager.find(MyOrg.class, postCreate.orgId()));
+            post.setContent(postCreate.content());
+            MyVote vote = updateVoteInPost(postCreate);
+            if (vote != null) {
+                
+                post.setVote(vote);
+            }
+            post = postRepository.save(post);
+            return new ImageUploadDetailsDto("images/"+post.getPath(), true);
+        }
+        throw new AccessDeniedException("You don't have the right to change this post");
+    }
+    
+    public Optional<PostDtoPublicWithImages> getPostShort(String id){
+
+        return addImages(postRepository.findPostDtoById(id));
+    }
+    
+    public Optional<PostDtoPublicExtended> getPostExtended(String id){
+        Optional<PostDtoPublicWithImages> post = addImages(postRepository.findPostDtoById(id));
+        if (post.isPresent()) {
+            Optional<VoteDtoPublic> vote = voteService.getVote(id);
+            if (vote.isPresent()) {
+                return Optional.of(new PostDtoPublicExtended(post.get(), vote.get()));
+            }
+        }
+        return Optional.empty();
+    }
+    
+    public void deletePost(String userId, String postId){
+        if (canDeletePost(userId, postId)) {
+            postRepository.deleteById(postId);
+        }
+    }
+
+    private boolean canEditPost(String postId, PostDtoCreate post){
+        if (post.userId() != null && post.orgId() != null) {
+            MyUser user =manager.find(MyUser.class, post.userId());
+            if (user != null) {
+                MyOrg org = manager.find(MyOrg.class, post.orgId());
+                if (org != null && user.getOrgs().contains(org) && org.getUsers().contains(user)) {
+                    if (postId != null) {
+                        MyPost myPost = manager.find(MyPost.class, postId);
+                        if (myPost.getOrg().getId() == post.orgId()) {
+                            return true;
+                        }
+                        return false;
+                    }else{
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
 
-    public MyVote updateVoteInPost(PostDtoCreate postCreate){
+    private boolean canDeletePost(String userId, String postId){
+        if (postId != null && userId != null) {
+            MyUser user =manager.find(MyUser.class, userId);
+            if (user != null) {
+                MyPost myPost = manager.find(MyPost.class, postId);
+                if (myPost != null && user.getOrgs().contains(myPost.getOrg())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    
+    private Optional<PostDtoPublicWithImages> addImages(Optional<PostDtoPublicNoImages> optNoImages){
+        PostDtoPublicWithImages withImages;
+        if (!optNoImages.isPresent()) {
+            return Optional.empty();
+        }
+        PostDtoPublicNoImages noImages = optNoImages.get();
+        MyPost post = manager.find(MyPost.class, noImages.id());
+        if (post != null) {
+            withImages = new PostDtoPublicWithImages(noImages.id(), noImages.userId(), noImages.userName(), noImages.orgId(), noImages.orgname(), noImages.content(), post.getUrls(), noImages.likes(), noImages.dislikes(), noImages.voteId());
+        }
+        withImages = new PostDtoPublicWithImages(noImages.id(), noImages.userId(), noImages.userName(), noImages.orgId(), noImages.orgname(), noImages.content(), new String[0], noImages.likes(), noImages.dislikes(), noImages.voteId());
+        
+        return Optional.of(withImages);
+    }
+
+
+    private MyVote updateVoteInPost(PostDtoCreate postCreate){
         if (postCreate.optionTexts() != null && postCreate.voteDescription() != null && postCreate.voteDescription() != "" && postCreate.optionTexts()!=new String[]{"",""}&& postCreate.optionTexts().length>=2 && postCreate.content()!="") {
-            System.out.println("------------------------------------------------------------------  updateVoteInPost inside if  -----------------------------------------------------------------------------");
             MyVote vote = new MyVote();
             List<MyVoteOption> options = new ArrayList<MyVoteOption>();
             int n = postCreate.optionTexts().length;
@@ -73,46 +166,6 @@ public class PostService {
         }
         return null;
     }
-
-    public boolean savePost(PostDtoCreate postCreate){
-        MyPost post = new MyPost();
-        if (postCreate.orgId() != null && postCreate.userId() != null) {
-            
-            post.setUser(entityManager.find(MyUser.class, postCreate.userId()));
-            post.setOrg(entityManager.find(MyOrg.class, postCreate.orgId()));
-            post.setContent(postCreate.content());
-            MyVote vote = updateVoteInPost(postCreate);
-            if (vote != null) {
-                
-                post.setVote(vote);
-                post = postRepository.save(post);
-            }
-            
-            return true;
-        }
-        return false;
-    }
-    
-    public Optional<PostDtoPublic> getPostShort(String id){
-        return postRepository.findPostDtoById(id);
-    }
-    
-    public Optional<PostDtoPublicExtended> getPostExtended(String id){
-        Optional<PostDtoPublic> post = postRepository.findPostDtoById(id);
-        if (post.isPresent()) {
-            Optional<VoteDtoPublic> vote = voteService.getVote(id);
-            if (vote.isPresent()) {
-                return Optional.of(new PostDtoPublicExtended(post.get(), vote.get()));
-            }
-        }
-        return Optional.empty();
-    }
-
-    public void deletePost(String postId){
-        postRepository.deleteById(postId);
-    }
-
-
 
 
 }

@@ -39,7 +39,6 @@ public class MyPost extends LoadableImages{
     MyOrg org;
 
     String content;
-    String url;
 
     @ColumnDefault("0")
     Long likes;
