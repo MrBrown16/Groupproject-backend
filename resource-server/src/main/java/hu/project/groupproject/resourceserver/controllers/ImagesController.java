@@ -45,7 +45,6 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
     @PersistenceContext
     EntityManager manager;
 
-
     //tmp method for testing 
     //TODO: replace with separate post methods for the different entity types and return "images/"+entity.getpath()
     @PostMapping("data")
@@ -104,8 +103,6 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
         logger.debug(uri);
         serveStaticFile(uri, response);
     }
-
-
 
     @SuppressWarnings("null")
     private void serveStaticFile(String filePath, HttpServletResponse response) throws IOException {

@@ -3,6 +3,7 @@ package hu.project.groupproject.resourceserver.services;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
@@ -52,7 +53,7 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean newUser(UserDtoNew newUser){
+    public Optional<MyUser> newUser(UserDtoNew newUser){
         if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
@@ -64,10 +65,32 @@ public class UserService {
             if (newUser.lastName() != null && newUser.lastName().length() > 2) {
                 user.setLastName(newUser.lastName());
             }
-            userRepository.save(user);
-            return true;
+            user = userRepository.save(user);
+            return Optional.of(user);
         }else {
-            return false;
+            return Optional.empty();
+        }
+    }
+    @Transactional
+    public Optional<MyUser> updateUser(String id, UserDtoNew newUser){
+        if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
+            MyUser user = manager.find(MyUser.class, id);
+            if (user == null) {
+                return Optional.empty();
+            }
+            user.setEmail(newUser.email());
+            user.setPhone(newUser.phone());
+            user.setUserName(newUser.userName());
+            if (newUser.firstName() != null && newUser.firstName().length() > 2) {
+                user.setFirstName(newUser.firstName());
+            }
+            if (newUser.lastName() != null && newUser.lastName().length() > 2) {
+                user.setLastName(newUser.lastName());
+            }
+            user = userRepository.save(user);
+            return Optional.of(user);
+        }else {
+            return Optional.empty();
         }
     }
 

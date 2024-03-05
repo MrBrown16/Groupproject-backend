@@ -31,7 +31,6 @@ public class PostController {
         this.postService=postService;
     }
 
-    
     @PostMapping("/new")
     public boolean savePost(@RequestBody PostDtoCreate post){
         return postService.savePost(post);
@@ -46,6 +45,7 @@ public class PostController {
     public Optional<PostDtoPublic> getPostShort(@PathVariable String id) {
         return postService.getPostShort(id);
     }
+
     @GetMapping("/{id}/ex")
     public Optional<PostDtoPublicExtended> getPostEx(@PathVariable String id) {
         return postService.getPostExtended(id);

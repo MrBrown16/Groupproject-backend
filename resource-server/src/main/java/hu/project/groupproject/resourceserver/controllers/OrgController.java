@@ -38,14 +38,13 @@ public class OrgController {
     public OrgController(OrgService orgService){
         this.orgService=orgService;
     }
-
     
     @PostMapping("/addAdmin")
     @PreAuthorize("hasRole('ADMIN')")
     public void addUserToOrg(@RequestBody Map<String, String> body){
-        String adminId =body.get("adminId");
-        String userId =body.get("userId");
-        String orgId =body.get("orgId");
+        String adminId = body.get("adminId");
+        String userId = body.get("userId");
+        String orgId = body.get("orgId");
         
         orgService.addUser(orgId,adminId,userId);
     }
