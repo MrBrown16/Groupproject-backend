@@ -26,7 +26,7 @@ public class DemoController {
         Authentication authentication, Principal principal
         ) {
             // String username = authentication.getName();
-            return "Authentication:  "+authentication+" Principal:  "+principal;
+            return "Authentication:  "+authentication.toString()+" Principal:  "+principal.getName()+" Principal: "+authentication.getPrincipal();
             // return Collections.singletonMap("get_text", "Hello " + username);
         }
         

@@ -45,9 +45,12 @@ public class JwtToPrincipalConverter implements Converter<Jwt, MyUser> {
         if (preUser.isPresent()) {
             MyUser user = manager.find(MyUser.class, preUser.get().id());
             if (user != null) {
+                logger.debug("User not Null user: "+ user.toString()+" Username: "+ userName);
                 return user;
             }
+            logger.debug("User Null user: "+ user+" Username: "+ userName);
         }
+        logger.debug("User Null user: "+userName);
         throw new UsernameNotFoundException("There is no corresponding entity in this application");
         // User user = (User) manager.loadUserByUsername(sub);
         // this.logger.debug("_____________________________________ "+user.toString()+" _________________________________________");

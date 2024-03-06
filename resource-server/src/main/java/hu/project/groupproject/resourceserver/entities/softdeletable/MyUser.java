@@ -134,5 +134,10 @@ public class MyUser extends LoadableImages{
         // return "users/"+this.id+"/profile/current";
     }
 
+	@Override
+	public String toString() {
+		return "Id: "+id+" username: "+userName+" firstName: "+firstName+" lastName: "+lastName+" phone: "+phone+" email: "+email;
+	}
+
     
 }
