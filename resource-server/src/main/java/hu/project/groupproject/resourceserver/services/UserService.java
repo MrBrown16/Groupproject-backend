@@ -31,9 +31,9 @@ public class UserService {
     public MyUser saveUser(MyUser myUser){
         return userRepository.save(myUser);
     }
-    // public Optional<UserDtoPublic> getUser(String id){
-    //     return userRepository.findById(id, UserDtoPublic.class);
-    // }
+    public Optional<UserDtoPublic> getUser(String id){
+        return userRepository.findById(id, UserDtoPublic.class);
+    }
     public Optional<UserDtoPublic> getUserByUserName(String username){
         Optional<UserDtoPublicPartial> optDtoPartial = userRepository.findByUserName(username);
         if (optDtoPartial.isPresent()) {

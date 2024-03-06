@@ -35,9 +35,8 @@ public class UtilBeansThingy {
         @Autowired
         DataSource dataSource;
 
-        // TODO:extend JdbcUserDetailsManager and migrate user details from the resource
-        // server to here(email,phone,names...)
-        // TODO:build a central authority/role database where users, clients, and in
+        
+        // TODO:build a central authority/role database in auth server where users, clients, and in
         // this particular instance organisations(from the resource server orgs)
         // are all taken into account and a user can have "common roles" (USER, ADMIN,
         // AUDITOR...) and "org roles" (ORG_STAFF, ORG_AUDITOR, ORG_ADMIN...)
