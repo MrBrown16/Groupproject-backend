@@ -51,6 +51,10 @@ public class PostController {
     public Optional<PostDtoPublicExtended> getPostEx(@PathVariable String id) {
         return postService.getPostExtended(id);
     }
+    @GetMapping("/{id}/exs")
+    public Optional<PostDtoPublicExtended> getPostsEx(@PathVariable String id) {
+        return postService.getPostExtended(id);
+    }
     
     @DeleteMapping("/del/id")//TODO: get userId from authentication
     public void deletePost(@PathVariable String postId) {

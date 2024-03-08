@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.services.OrgService;
 
 import java.util.Map;
@@ -16,7 +15,6 @@ import javax.management.InvalidAttributeValueException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
