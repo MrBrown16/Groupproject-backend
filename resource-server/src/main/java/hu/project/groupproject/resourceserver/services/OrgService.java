@@ -15,7 +15,6 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import lombok.val;
 
 
 @Service

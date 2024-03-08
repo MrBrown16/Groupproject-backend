@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.NaturalId;
-import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

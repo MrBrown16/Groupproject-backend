@@ -11,13 +11,13 @@ import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 public abstract class LoadableImages {
     protected final Log logger = LogFactory.getLog(getClass());
-    @Value("${filesystem.images.root}")//TODO: move it to external configuration
-    private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
+    // @Value("${filesystem.images.root}")//TODO: move it to external configuration
+    private Path root= Path.of("C:\\Users\\diak\\Mora-Barna\\project");
+    // private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
 
     public abstract String getPath();//return the path with no trailing /
 

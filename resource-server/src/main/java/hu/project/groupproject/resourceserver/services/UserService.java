@@ -1,9 +1,11 @@
 package hu.project.groupproject.resourceserver.services;
 
 import java.util.Optional;
+import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
@@ -19,6 +21,8 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
     
+    protected final Log logger = LogFactory.getLog(getClass());
+
     UserRepository userRepository;
 
     @PersistenceContext
@@ -113,5 +117,10 @@ public class UserService {
         return false;
     }
 
+    public Set<String> getOrgsIdsForUser(String id){
+        Set<String> orgIds = userRepository.findOrgIdByUserId(id);
+        logger.debug(orgIds);
+        return orgIds;
+    }
     
 }

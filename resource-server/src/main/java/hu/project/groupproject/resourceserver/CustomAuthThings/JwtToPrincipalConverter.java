@@ -4,13 +4,11 @@ import java.util.Optional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Component;
 
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
@@ -38,7 +36,7 @@ public class JwtToPrincipalConverter implements Converter<Jwt, MyUser> {
     protected final Log logger = LogFactory.getLog(getClass());
 
     @Override
-    @Nullable//TODO:use entityManager to get user details like id and orgs...
+    @Nullable
     public MyUser convert(@NonNull Jwt source) {
         String userName = source.getSubject();
         Optional<UserDtoPublic> preUser = userService.getUserByUserName(userName);
@@ -52,12 +50,6 @@ public class JwtToPrincipalConverter implements Converter<Jwt, MyUser> {
         }
         logger.debug("User Null user: "+userName);
         throw new UsernameNotFoundException("There is no corresponding entity in this application");
-        // User user = (User) manager.loadUserByUsername(sub);
-        // this.logger.debug("_____________________________________ "+user.toString()+" _________________________________________");
-        // // user.getAuthorities();
-        // return user;
-        
-        // return new User("","",null);
     }
     
 }
