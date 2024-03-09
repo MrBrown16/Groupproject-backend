@@ -16,5 +16,8 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
     <T> Optional<T> findById(String id, Class<T> type);
 
     @Query("SELECT event.id FROM MyOrg o JOIN o.events event WHERE o.id = :orgId")
-    Set<String> findEventIdByOrgId(@Param("orgId") String orgId);
+    Set<String> findEventIdsByOrgId(@Param("orgId") String orgId);
+
+    @Query("SELECT reservation.id FROM MyOrg o JOIN o.reservations reservation WHERE o.id = :orgId")
+    Set<String> findReservationIdsByOrgId(@Param("orgId") String orgId);
 }

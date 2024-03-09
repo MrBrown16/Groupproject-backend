@@ -1,14 +1,19 @@
 package hu.project.groupproject.resourceserver.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
+import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.services.NoticeService;
 import hu.project.groupproject.resourceserver.services.PostService;
+import hu.project.groupproject.resourceserver.services.ReservationService;
 import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.HashSet;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,33 +36,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user") //hasrole('USER') is set in SecurityConfig
 public class UserController {
 
     UserService userService;
     PostService postService;
+    NoticeService noticeService;
+    ReservationService reservationService;
 
     @PersistenceContext
     EntityManager manager;
-
-    public UserController(UserService userService, PostService postService){
+    
+    public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService){
         this.userService=userService;
         this.postService=postService;
+        this.noticeService = noticeService;
+        this.reservationService = reservationService;
     }
-
-    @PostMapping
-    public ImageUploadDetailsDto newUser(@RequestBody UserDtoNew user){
-        Optional<MyUser> myUser = userService.newUser(user);
-        String url= myUser.get().getPath();
-        return new ImageUploadDetailsDto(url, false);
-    }
-    @PutMapping("/{id}")
-    public ImageUploadDetailsDto updateUser(@PathVariable("id") String id, @RequestBody UserDtoNew user){
-        Optional<MyUser> myUser = userService.updateUser(id, user);
-        String url= myUser.get().getPath();
-        return new ImageUploadDetailsDto(url, false);
-    }
-
 
     @GetMapping("/{id}")
     public Optional<UserDtoPublic> getUser(@PathVariable String id) {
@@ -67,30 +63,61 @@ public class UserController {
         return userService.getUserByUserName(userName);
     }
     
-    @DeleteMapping("/del/{id}")
-    public void deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
-    }
-    
     @GetMapping("/myUserInfo")
     public UserInfoDto getUserInfo(Authentication authentication) {
-        // userService.getUserByUserName()
         MyUser user = (MyUser)authentication.getPrincipal();
         Set<String> orgIds = new HashSet<String>();
-        // user.getOrgs().forEach(i->orgIds.add(i.getId()));
         orgIds = userService.getOrgsIdsForUser(user.getId());
         Set<String> roles = new HashSet<String>();
         authentication.getAuthorities().forEach(i->roles.add(i.getAuthority()));
         return new UserInfoDto(user.getId(), user.getEmail(), user.getUserName(), user.getPhone(), roles, "", orgIds);
-        // return Collections.singletonMap("UserName", user.getUserName());
-        // return Collections.singletonMap("UserId", user.getId());
     }
     
     @GetMapping("/{userId}/posts")
-    public Set<PostDtoPublicExtended> getPostsForUser(@PathVariable String userId) {
-        return postService.getPostsForUser(userId);
+    public Set<PostDtoPublicExtended> getPostsForUser(@PathVariable String userId, Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
+        if (user != null && user.getId() == userId) {
+            return postService.getPostsForUser(userId);
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/{userId}/notices")
+    public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId, Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
+        if (user != null && user.getId() == userId) {
+            return noticeService.getNoticesForUser(userId);
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/{userId}/reservations")
+    public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
+        if (user != null && user.getId() == userId) {
+            return reservationService.getReservationsForUser(userId);
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+
+    
+    @PostMapping
+    public ImageUploadDetailsDto newUser(@RequestBody UserDtoNew user){
+        Optional<MyUser> myUser = userService.newUser(user);
+        String url= myUser.get().getPath();
+        return new ImageUploadDetailsDto(url, false);
     }
 
 
+    @PutMapping("/{id}")
+    public ImageUploadDetailsDto updateUser(@PathVariable("id") String id, @RequestBody UserDtoNew user){
+        Optional<MyUser> myUser = userService.updateUser(id, user);
+        String url= myUser.get().getPath();
+        return new ImageUploadDetailsDto(url, false);
+    }
+
+
+    @DeleteMapping("/del/{id}")
+    public void deleteUser(@PathVariable String id) {
+        userService.deleteUser(id);
+    }
 
 }

@@ -76,12 +76,6 @@ public class EventService {
 
 
 
-
-
-
-
-
-
     private boolean canEditEvent(String userId,String eventId, EventDto eventDto){
         if (userId != null && eventDto.userId() != null && userId == eventDto.userId() && eventDto.orgId() != null) {
             MyUser user = manager.find(MyUser.class, userId);

@@ -38,6 +38,11 @@ public class EventController {
     public EventController(EventService eventService){
         this.eventService=eventService;
     }
+    
+    @GetMapping("/{eventId}")
+    public Optional<EventDtoPublic> getEvent(@PathVariable String eventId) {
+        return eventService.getEvent(eventId);
+    }
 
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
@@ -54,10 +59,6 @@ public class EventController {
             eventService.updateEvent(user.getId(),eventId,event);
         }
         throw new AccessDeniedException("You don't have the right to change this event");
-    }
-    @GetMapping("/{eventId}")
-    public Optional<EventDtoPublic> getEvent(@PathVariable String eventId) {
-        return eventService.getEvent(eventId);
     }
     
     @DeleteMapping("/del/{eventId}")

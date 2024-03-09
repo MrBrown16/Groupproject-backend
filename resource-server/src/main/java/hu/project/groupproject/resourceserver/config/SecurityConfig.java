@@ -38,6 +38,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz ->
                         authz
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).hasRole("USER")
                                 // .anyRequest().permitAll()
                                 .anyRequest().authenticated()
                                 

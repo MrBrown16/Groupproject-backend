@@ -117,14 +117,29 @@ public class UserService {
     // }
 
     public Set<String> getOrgsIdsForUser(String id){
-        Set<String> orgIds = userRepository.findOrgIdByUserId(id);
+        Set<String> orgIds = userRepository.findOrgIdsByUserId(id);
         logger.debug(orgIds);
         return orgIds;
     }
     public Set<String> getPostsIdsForUser(String id){
-        Set<String> postIds = userRepository.findPostIdByUserId(id);
+        Set<String> postIds = userRepository.findPostIdsByUserId(id);
         logger.debug(postIds);
         return postIds;
+    }
+    public Set<String> getNoticesIdsForUser(String id){
+        Set<String> noticeIds = userRepository.findNoticeIdsByUserId(id);
+        logger.debug(noticeIds);
+        return noticeIds;
+    }
+    public Set<String> getReservationIdsForUser(String id){
+        Set<String> reservationIds = userRepository.findReservationIdsByUserId(id);
+        logger.debug(reservationIds);
+        return reservationIds;
+    }
+    public Set<String> getItemIdsForUser(String id){
+        Set<String> itemIds = userRepository.findItemIdsByUserId(id);
+        logger.debug(itemIds);
+        return itemIds;
     }
     
 }

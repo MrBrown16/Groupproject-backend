@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoCreate;
-import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicWithImages;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.services.PostService;
@@ -31,13 +30,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PostController {
 
     protected final Log logger = LogFactory.getLog(getClass());
-
+    
     PostService postService;
-
+    
     public PostController(PostService postService){
         this.postService=postService;
     }
+    
+    // use /{id} getPostEx instead
+    // @GetMapping("/{id}/short")
+    // public Optional<PostDtoPublicWithImages> getPostShort(@PathVariable String id) {
+    //     return postService.getPostShort(id);
+    // }
 
+    @GetMapping("/{id}")
+    public Optional<PostDtoPublicExtended> getPostEx(@PathVariable String id) {
+        return postService.getPostExtended(id);
+    }
+    
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public ImageUploadDetailsDto savePost(@RequestBody PostDtoCreate post){
@@ -52,16 +62,6 @@ public class PostController {
             return postService.updatePost(id,post);
         }
         throw new AccessDeniedException("You don't have the right to change this post");
-    }
-    // use /{id} getPostEx instead
-    @GetMapping("/{id}/short")
-    public Optional<PostDtoPublicWithImages> getPostShort(@PathVariable String id) {
-        return postService.getPostShort(id);
-    }
-
-    @GetMapping("/{id}")
-    public Optional<PostDtoPublicExtended> getPostEx(@PathVariable String id) {
-        return postService.getPostExtended(id);
     }
 
     

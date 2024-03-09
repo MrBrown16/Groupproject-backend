@@ -84,9 +84,14 @@ public class OrgService {
     }
 
     public Set<String> getEventsIdsForOrg(String id){
-        Set<String> eventIds = orgRepository.findEventIdByOrgId(id);
+        Set<String> eventIds = orgRepository.findEventIdsByOrgId(id);
         logger.debug(eventIds);
         return eventIds;
+    }
+    public Set<String> getReservationsIdsForOrg(String id){
+        Set<String> reservationId = orgRepository.findReservationIdsByOrgId(id);
+        logger.debug(reservationId);
+        return reservationId;
     }
 
 

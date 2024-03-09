@@ -4,11 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.services.EventService;
 import hu.project.groupproject.resourceserver.services.OrgService;
+import hu.project.groupproject.resourceserver.services.ReservationService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -39,10 +41,27 @@ public class OrgController {
 
     OrgService orgService;
     EventService eventService;
-
-    public OrgController(OrgService orgService, EventService eventService){
+    ReservationService reservationService;
+    
+    public OrgController(OrgService orgService, EventService eventService, ReservationService reservationService){
         this.orgService=orgService;
         this.eventService=eventService;
+        this.reservationService =reservationService;
+    }
+    
+    @GetMapping("/{id}")
+    public Optional<OrgDtoPublic> getOrg(@PathVariable String id) {
+        return orgService.getOrg(id);
+    }
+    
+    @GetMapping("/{orgId}/events")
+    public Set<EventDtoPublic> getEventsForOrg(@PathVariable String orgId) {
+        return eventService.getEventsForOrg(orgId);
+    }
+    @GetMapping("/{orgId}/reservations")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
+    public Set<ReservationDtoPublic> getReservationsForOrg(@PathVariable String orgId) {
+        return reservationService.getReservationsForOrg(orgId);
     }
     
     @PostMapping("/addAdmin")
@@ -85,10 +104,6 @@ public class OrgController {
         throw new AccessDeniedException("You don't have the right to change this organisation");
     }
     
-    @GetMapping("/{id}")
-    public Optional<OrgDtoPublic> getOrg(@PathVariable String id) {
-        return orgService.getOrg(id);
-    }
     
     @DeleteMapping("/del/{id}")
     @PreAuthorize("hasRole('ORG_ADMIN')")
@@ -98,9 +113,5 @@ public class OrgController {
         orgService.deleteOrg(user.getId(),orgId);
     }
 
-    @GetMapping("/{orgId}/events")
-    public Set<EventDtoPublic> getPostsForUser(@PathVariable String orgId) {
-        return eventService.getEventsForOrg(orgId);
-    }
     
 }

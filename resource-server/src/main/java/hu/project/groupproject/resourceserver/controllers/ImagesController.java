@@ -72,8 +72,8 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
         return user.getUrls();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     @PostMapping("images/**")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void postImageFile(@RequestParam("images") MultipartFile[] images, HttpServletRequest request) throws IOException{
         String uri = request.getRequestURI();
         String[] parts = uri.split("/"); //parts[2]= type parts[3]=id 
@@ -91,8 +91,8 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
         
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     @GetMapping("images/**")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void getImageFile(HttpServletRequest request,HttpServletResponse response) throws IOException{
         String uri = request.getRequestURI();
         logger.debug(uri);

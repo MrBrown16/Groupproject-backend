@@ -31,7 +31,8 @@ public class MyReservation {
     Long phone;//in case it differs from the registration phoneNum
 
     Timestamp startDate;
-    Integer minutes;
+    Timestamp endDate;
+    // Integer minutes; in an ideal world...
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id") 
