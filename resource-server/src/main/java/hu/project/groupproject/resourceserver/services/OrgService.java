@@ -11,6 +11,7 @@ import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyPost;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
 import jakarta.persistence.EntityManager;
@@ -84,8 +85,22 @@ public class OrgService {
         return orgRepository.findById(id, OrgDtoPublic.class);
     }
 
-    public void deleteOrg(String orgId){
-        orgRepository.deleteById(orgId);
+    public void deleteOrg(String userId, String orgId){
+        if (canDeleteOrg(userId, orgId)) {
+            orgRepository.deleteById(orgId);
+        }
     }
 
+       private boolean canDeleteOrg(String userId, String orgId){
+        if (orgId != null && userId != null) {
+            MyUser user =manager.find(MyUser.class, userId);
+            if (user != null) {
+                MyOrg myOrg = manager.find(MyOrg.class, orgId);
+                if (myOrg != null && user.getOrgs().contains(myOrg)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

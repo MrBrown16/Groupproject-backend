@@ -122,5 +122,10 @@ public class UserService {
         logger.debug(orgIds);
         return orgIds;
     }
+    public Set<String> getPostsIdsForUser(String id){
+        Set<String> postIds = userRepository.findPostIdByUserId(id);
+        logger.debug(postIds);
+        return postIds;
+    }
     
 }

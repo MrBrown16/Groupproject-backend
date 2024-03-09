@@ -25,5 +25,7 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     @Query("SELECT org.id FROM MyUser u JOIN u.orgs org WHERE u.id = :userId")
     Set<String> findOrgIdByUserId(@Param("userId") String userId);
 
+    @Query("SELECT post.id FROM MyUser u JOIN u.posts post WHERE u.id = :userId")
+    Set<String> findPostIdByUserId(@Param("userId") String userId);
 
 }

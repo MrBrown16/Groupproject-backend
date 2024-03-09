@@ -4,10 +4,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
+import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.Hu.UserInfoDtoHu;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.services.PostService;
 import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -36,12 +38,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     UserService userService;
+    PostService postService;
 
     @PersistenceContext
     EntityManager manager;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, PostService postService){
         this.userService=userService;
+        this.postService=postService;
     }
 
     @PostMapping
@@ -86,4 +90,11 @@ public class UserController {
         // return Collections.singletonMap("UserId", user.getId());
     }
     
+    @GetMapping("/{id}/posts")
+    public Set<PostDtoPublicExtended> getPostsForUser(@PathVariable String userId) {
+        return postService.getPostsForUser(userId);
+    }
+
+
+
 }

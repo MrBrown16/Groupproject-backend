@@ -1,8 +1,10 @@
 package hu.project.groupproject.resourceserver.services;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,10 +34,12 @@ public class PostService {
 
     PostRepository postRepository;
     VoteService voteService;
+    UserService userService;
     
-    public PostService(PostRepository postRepository, VoteService voteService){
+    public PostService(PostRepository postRepository, VoteService voteService, UserService userService){
         this.postRepository=postRepository;
         this.voteService=voteService;
+        this.userService=userService;
     }
    
     public ImageUploadDetailsDto updatePost(String id, PostDtoCreate postUpdate) throws NotFoundException{
@@ -78,6 +82,18 @@ public class PostService {
     public Optional<PostDtoPublicWithImages> getPostShort(String id){
 
         return addImages(postRepository.findPostDtoById(id));
+    }
+    public Set<PostDtoPublicExtended> getPostsForUser(String userId){
+        Set<String> postIds = userService.getPostsIdsForUser(userId);
+        Set<PostDtoPublicExtended> posts = new HashSet<>();
+        for (String postId : postIds) {
+            Optional<PostDtoPublicExtended> post = getPostExtended(postId);
+            if (post.isPresent()) {
+                posts.add(post.get());
+            }
+        }
+        return posts;
+        
     }
     
     public Optional<PostDtoPublicExtended> getPostExtended(String id){
