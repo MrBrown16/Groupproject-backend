@@ -55,9 +55,9 @@ public class EventController {
         }
         throw new AccessDeniedException("You don't have the right to change this event");
     }
-    @GetMapping("/{event}")
-    public Optional<EventDtoPublic> getEvent(@PathVariable String event) {
-        return eventService.getEvent(event);
+    @GetMapping("/{eventId}")
+    public Optional<EventDtoPublic> getEvent(@PathVariable String eventId) {
+        return eventService.getEvent(eventId);
     }
     
     @DeleteMapping("/del/{eventId}")

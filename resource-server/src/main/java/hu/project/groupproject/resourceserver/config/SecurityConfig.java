@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -67,8 +66,6 @@ public class SecurityConfig {
         JwtToPrincipalConverter pConverter = new JwtToPrincipalConverter();
         pConverter.setUserService(userService);
         pConverter.setManager(manager);
-        // converter.setAuthorityPrefix("");
-        // converter.setAuthoritiesClaimName("authorities");
         MyJwtAuthenticationConverter jwtAuthenticationConverter = new MyJwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(gConverter);
         jwtAuthenticationConverter.setJwtToPrincipalConverter(pConverter);

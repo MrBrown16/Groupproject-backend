@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import hu.project.groupproject.resourceserver.dtos.En.EventDto;
 import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
-import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
