@@ -7,7 +7,6 @@ import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
-import hu.project.groupproject.resourceserver.dtos.Hu.UserInfoDtoHu;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.services.PostService;
 import hu.project.groupproject.resourceserver.services.UserService;
@@ -90,7 +89,7 @@ public class UserController {
         // return Collections.singletonMap("UserId", user.getId());
     }
     
-    @GetMapping("/{id}/posts")
+    @GetMapping("/{userId}/posts")
     public Set<PostDtoPublicExtended> getPostsForUser(@PathVariable String userId) {
         return postService.getPostsForUser(userId);
     }

@@ -42,11 +42,11 @@ public class PostService {
         this.userService=userService;
     }
    
-    public ImageUploadDetailsDto updatePost(String id, PostDtoCreate postUpdate) throws NotFoundException{
-            Optional<MyPost> oldPost = postRepository.findById(id);
+    public ImageUploadDetailsDto updatePost(String postId, PostDtoCreate postUpdate) throws NotFoundException{
+            Optional<MyPost> oldPost = postRepository.findById(postId);
             if (oldPost.isPresent()) {
                 MyPost post = oldPost.get();
-                if (canEditPost(id, postUpdate)) {
+                if (canEditPost(postId, postUpdate)) {
                     post.setContent(postUpdate.content());
                     if (post.getVote() != null ) {
                         MyVote vote = updateVoteInPost(postUpdate);
@@ -61,7 +61,7 @@ public class PostService {
     }
 
     
-    public ImageUploadDetailsDto savePost(PostDtoCreate postCreate){
+    public ImageUploadDetailsDto createPost(PostDtoCreate postCreate){
         MyPost post = new MyPost();
         if (canEditPost(null, postCreate)) {
             
@@ -83,6 +83,7 @@ public class PostService {
 
         return addImages(postRepository.findPostDtoById(id));
     }
+    
     public Set<PostDtoPublicExtended> getPostsForUser(String userId){
         Set<String> postIds = userService.getPostsIdsForUser(userId);
         Set<PostDtoPublicExtended> posts = new HashSet<>();
@@ -128,6 +129,18 @@ public class PostService {
                     }else{
                         return true;
                     }
+                }
+            }
+        }else if (post.userId() != null) {
+            MyUser user =manager.find(MyUser.class, post.userId());
+            if (user != null) {
+                if (postId != null) {
+                    MyPost myPost = manager.find(MyPost.class, postId);
+                    if (myPost != null && myPost.getUser().getId()==user.getId()) {
+                        return true;
+                    }
+                }else{
+                    return true;
                 }
             }
         }

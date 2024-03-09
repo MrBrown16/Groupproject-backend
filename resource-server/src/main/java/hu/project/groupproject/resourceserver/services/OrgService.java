@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.management.InvalidAttributeValueException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
@@ -21,6 +23,8 @@ import jakarta.persistence.PersistenceContext;
 @Service
 public class OrgService {
     
+    protected final Log logger = LogFactory.getLog(getClass());
+
     OrgRepository orgRepository;
 
     @PersistenceContext
@@ -80,18 +84,25 @@ public class OrgService {
         }
     }
 
+    public Set<String> getEventsIdsForOrg(String id){
+        Set<String> eventIds = orgRepository.findEventIdByOrgId(id);
+        logger.debug(eventIds);
+        return eventIds;
+    }
+
+
 
     public Optional<OrgDtoPublic> getOrg(String id){
         return orgRepository.findById(id, OrgDtoPublic.class);
     }
 
     public void deleteOrg(String userId, String orgId){
-        if (canDeleteOrg(userId, orgId)) {
+        if (canDeleteOrEditOrg(userId, orgId)) {
             orgRepository.deleteById(orgId);
         }
     }
 
-       private boolean canDeleteOrg(String userId, String orgId){
+    private boolean canDeleteOrEditOrg(String userId, String orgId){
         if (orgId != null && userId != null) {
             MyUser user =manager.find(MyUser.class, userId);
             if (user != null) {

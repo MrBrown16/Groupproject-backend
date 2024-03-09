@@ -97,25 +97,25 @@ public class UserService {
             return Optional.empty();
         }
     }
-
-    @Transactional
-    public Boolean addUserToOrg(String adminId, String userId, String orgId){
-        if (adminId != null && userId != null && orgId != null) {
-            MyUser admin = manager.find(MyUser.class, adminId);
-            MyUser user = manager.find(MyUser.class, userId);
-            MyOrg org = manager.find(MyOrg.class, orgId);
-            if (admin != null && user != null && org != null) {
-                Optional<MyUser> foundUser = userRepository.findByOrgsIdAndId(orgId, adminId);
-                if (foundUser.isPresent() && foundUser.get().getId() == adminId) {
-                    org.addUser(user);
-                    user.addOrg(org);
-                    manager.flush();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    //OrgService has this 
+    // @Transactional
+    // public Boolean addUserToOrg(String adminId, String userId, String orgId){
+    //     if (adminId != null && userId != null && orgId != null) {
+    //         MyUser admin = manager.find(MyUser.class, adminId);
+    //         MyUser user = manager.find(MyUser.class, userId);
+    //         MyOrg org = manager.find(MyOrg.class, orgId);
+    //         if (admin != null && user != null && org != null) {
+    //             Optional<MyUser> foundUser = userRepository.findByOrgsIdAndId(orgId, adminId);
+    //             if (foundUser.isPresent() && foundUser.get().getId() == adminId) {
+    //                 org.addUser(user);
+    //                 user.addOrg(org);
+    //                 manager.flush();
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
 
     public Set<String> getOrgsIdsForUser(String id){
         Set<String> orgIds = userRepository.findOrgIdByUserId(id);

@@ -46,15 +46,4 @@ public class MyEvent {
     @JsonIgnoreProperties("events")
     MyUser organiserUser;
 
-// "nev": string
-// "leiras": string
-// "helyszin": string
-// "userid": number
-// "orgid": number
-// "orgnev": string
-// "idopont": {"startDate": string, "endDate": string}
-// "telefonszam":Array<number> 
-// "email": Array<string> 
-
-
 }

@@ -3,7 +3,7 @@ package hu.project.groupproject.resourceserver.dtos.En;
 import java.util.List;
 import java.sql.Timestamp;
 
-public record EventDto(String name, String description, String location, Long userId, Long orgId, List<Long> publicPhones, List<String> publicEmails, Timestamp startDate, Timestamp endDate) {}
+public record EventDto(String name, String description, String location, String userId, String orgId, List<Long> publicPhones, List<String> publicEmails, Timestamp startDate, Timestamp endDate) {}
 // "nev": string //rendezvény neve
 // "leiras": string
 // "helyszin": string

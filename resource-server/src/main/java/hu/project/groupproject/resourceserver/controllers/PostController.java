@@ -16,6 +16,8 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,13 +42,19 @@ public class PostController {
     }
 
     @PostMapping("/new")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public ImageUploadDetailsDto savePost(@RequestBody PostDtoCreate post){
-        return postService.savePost(post);
+        return postService.createPost(post);
     }
 
     @PutMapping("/{id}") 
-    public ImageUploadDetailsDto updatePost(@PathVariable String id,@RequestBody PostDtoCreate post) throws NotFoundException{
-        return postService.updatePost(id,post);
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
+    public ImageUploadDetailsDto updatePost(@PathVariable String id,@RequestBody PostDtoCreate post, Authentication auth) throws NotFoundException{
+        MyUser user = (MyUser)auth.getPrincipal();
+        if (user.getId()==post.userId()) {
+            return postService.updatePost(id,post);
+        }
+        throw new AccessDeniedException("You don't have the right to change this post");
     }
     // use /{id} getPostEx instead
     @GetMapping("/{id}/short")
@@ -60,7 +68,8 @@ public class PostController {
     }
 
     
-    @DeleteMapping("/del/{postId}")//TODO: get userId from authentication
+    @DeleteMapping("/del/{postId}")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void deletePost(@PathVariable String postId, Authentication auth) {
         MyUser user = (MyUser)auth.getPrincipal();
         logger.debug(user.getId());
