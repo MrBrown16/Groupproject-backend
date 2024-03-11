@@ -63,7 +63,7 @@ public class UserService {
 
     @Transactional
     public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser){
-        if (newUser.PW() != null && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
+        if (newUser.password1() != null && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());
@@ -75,7 +75,7 @@ public class UserService {
                 user.setLastName(newUser.lastName());
             }
             user = userRepository.save(user);
-            UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.PW()).build();
+            UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.password1()).build();
             
             //TODO:save user in auth server (webClient http request to createNewUser) 
             String url= user.getPath();
