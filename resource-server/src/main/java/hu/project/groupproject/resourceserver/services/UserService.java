@@ -5,9 +5,15 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
@@ -43,8 +49,8 @@ public class UserService {
             UserDtoPublicPartial part = optDtoPartial.get();
             MyUser user = manager.find(MyUser.class, part.id());
             if (user!=null) {
-                String profile = user.getPath();
-                UserDtoPublic pub = new UserDtoPublic(part.id(), part.userName(), part.firstName(), part.lastName(), profile);
+                String profileImage = user.getPath();
+                UserDtoPublic pub = new UserDtoPublic(part.id(), part.userName(), part.firstName(), part.lastName(), profileImage);
                 return Optional.of(pub);
             }
         }
@@ -56,8 +62,8 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<MyUser> newUser(UserDtoNew newUser){
-        if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
+    public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser){
+        if (newUser.PW() != null && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());
@@ -69,17 +75,21 @@ public class UserService {
                 user.setLastName(newUser.lastName());
             }
             user = userRepository.save(user);
-            return Optional.of(user);
+            UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.PW()).build();
+            
+            //TODO:save user in auth server (webClient http request to createNewUser) 
+            String url= user.getPath();
+            return new ImageUploadDetailsDto(url, false);
         }else {
-            return Optional.empty();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
     @Transactional
-    public Optional<MyUser> updateUser(String id, UserDtoNew newUser){
+    public ImageUploadDetailsDto updateUser(String id, UserDtoNew newUser){
         if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
             MyUser user = manager.find(MyUser.class, id);
             if (user == null) {
-                return Optional.empty();
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());
@@ -91,9 +101,10 @@ public class UserService {
                 user.setLastName(newUser.lastName());
             }
             user = userRepository.save(user);
-            return Optional.of(user);
+            String url= user.getPath();
+            return new ImageUploadDetailsDto(url, false);
         }else {
-            return Optional.empty();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
     //OrgService has this 

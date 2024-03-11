@@ -41,6 +41,10 @@ public class MyItemForSale extends LoadableImages{
     public String getPath() {
         return "users/"+this.user.getId()+"/items/"+this.id;
     }
+    public static String getPath(String userId, String id){
+        return "users/"+userId+"/items/"+id;
+    }
+
 
     // "nev": string
     // "leiras": string

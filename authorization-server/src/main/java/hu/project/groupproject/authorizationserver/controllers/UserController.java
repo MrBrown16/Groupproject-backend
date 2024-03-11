@@ -9,6 +9,8 @@ import hu.project.groupproject.authorizationserver.dtos.UserDTOPublic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +25,25 @@ public class UserController {
     @Autowired
     UserDetailsManager manager;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    @GetMapping
-    public UserDTOPublic getCurrentUser(@AuthenticationPrincipal User user){
-        // System.out.println("---------------------------------------------"+user.toString()+"---------------------------------------------");
-        return new UserDTOPublic(user.getUsername(), user.isEnabled(), user.getAuthorities());
+
+    // @GetMapping
+    // public UserDTOPublic getCurrentUser(@AuthenticationPrincipal User user){
+    //     // System.out.println("---------------------------------------------"+user.toString()+"---------------------------------------------");
+    //     return new UserDTOPublic(user.getUsername(), user.isEnabled(), user.getAuthorities());
+    // }
+
+    @PostMapping("/newUser")
+    public String createUser(@RequestBody UserDetails user) {
+        UserDetails newUser = User.builder().username(user.getUsername())
+                .authorities(user.getAuthorities()).password(passwordEncoder.encode(user.getPassword())).build();
+        manager.createUser(newUser);        
+        return "user";
     }
+    
+
 
 
     //requestbody:[password:"oldPassword",password1:"newPassword",password2:"newPassword"]

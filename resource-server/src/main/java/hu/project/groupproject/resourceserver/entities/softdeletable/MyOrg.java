@@ -106,4 +106,8 @@ public class MyOrg extends LoadableImages{
     public String getPath() {
         return "orgs/"+this.id+"/logo/current";
     }
+    public static String getPath(String id) {
+        return "orgs/"+id+"/logo/current";
+    }
+    
 }

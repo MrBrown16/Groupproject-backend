@@ -84,6 +84,13 @@ public class MyPost extends LoadableImages{
             return "orgs/"+this.org.getId()+"/posts/"+this.id;
         }
     }
+    public static String getPath(String entityId, String postId, boolean isOrg) {
+        if (!isOrg) {
+            return "users/"+entityId+"/posts/"+postId;
+        }else{
+            return "orgs/"+entityId+"/posts/"+postId;
+        }
+    }
 
 
 }

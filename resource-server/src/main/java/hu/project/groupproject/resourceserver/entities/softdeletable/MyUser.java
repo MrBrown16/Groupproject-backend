@@ -132,6 +132,13 @@ public class MyUser extends LoadableImages{
         return "users/"+1+"/profile/current";
         // return "users/"+this.id+"/profile/current";
     }
+    
+    public static String getPath(String id) {
+        return "users/"+id+"/profile/current";
+    }
+
+    
+
 
 	@Override
 	public String toString() {

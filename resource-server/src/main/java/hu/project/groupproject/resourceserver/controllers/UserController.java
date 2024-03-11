@@ -9,6 +9,7 @@ import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.services.NoticeService;
@@ -100,18 +101,14 @@ public class UserController {
 
     
     @PostMapping
-    public ImageUploadDetailsDto newUser(@RequestBody UserDtoNew user){
-        Optional<MyUser> myUser = userService.newUser(user);
-        String url= myUser.get().getPath();
-        return new ImageUploadDetailsDto(url, false);
+    public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user){
+        return userService.newUser(user);
     }
 
 
     @PutMapping("/{id}")
     public ImageUploadDetailsDto updateUser(@PathVariable("id") String id, @RequestBody UserDtoNew user){
-        Optional<MyUser> myUser = userService.updateUser(id, user);
-        String url= myUser.get().getPath();
-        return new ImageUploadDetailsDto(url, false);
+        return userService.updateUser(id, user);
     }
 
 
