@@ -53,7 +53,7 @@ public class PostService {
                         post.setVote(vote);
                     }
                     post = postRepository.save(post);
-                    return new ImageUploadDetailsDto(post.getPath(), true);
+                    return new ImageUploadDetailsDto("images/"+post.getPath(), true);
                 }
                 throw new AccessDeniedException("You don't have the right to change this post");
             }

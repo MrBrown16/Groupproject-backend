@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicWithImages;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
@@ -47,17 +48,17 @@ public class ItemController {
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")
-    public void saveItem(@RequestBody ItemDto item, Authentication authentication){
+    public ImageUploadDetailsDto saveItem(@RequestBody ItemDto item, Authentication authentication){
         MyUser user = (MyUser)authentication.getPrincipal();
-        itemService.createItem(user.getId(),item);
+        return itemService.createItem(user.getId(),item);
     }
 
     @PutMapping("/{itemId}") 
     @PreAuthorize("hasRole('USER')")
-    public void updateItem(@PathVariable String itemId,@RequestBody ItemDto item, Authentication auth) throws NotFoundException{
+    public ImageUploadDetailsDto updateItem(@PathVariable String itemId,@RequestBody ItemDto item, Authentication auth) throws NotFoundException{
         MyUser user = (MyUser)auth.getPrincipal();
         if (user.getId()==item.userId()) {
-            itemService.updateItem(user.getId(),itemId,item);
+            return itemService.updateItem(user.getId(),itemId,item);
         }
         throw new AccessDeniedException("You don't have the right to change this item");
     }

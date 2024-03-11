@@ -4,8 +4,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicWithImages;
@@ -30,20 +32,25 @@ public class ItemService {
         this.userService= userService;
     }
 
-    public void createItem(String userId,ItemDto itemDto){
+    public ImageUploadDetailsDto createItem(String userId,ItemDto itemDto){
         if (canEditItem(userId,null, itemDto)) {
             MyItemForSale item = new MyItemForSale();
             item = mapItemDtoToMyItemForSale(item, itemDto);
             manager.persist(item);
-            
+            return new ImageUploadDetailsDto("images/"+item.getPath(), true);
         }
+        throw new AccessDeniedException("You don't have the right to change this item");
+
     }
-    public void updateItem(String userId,String itemId, ItemDto itemDto){
+    public ImageUploadDetailsDto updateItem(String userId,String itemId, ItemDto itemDto){
         if (canEditItem(userId, itemId, itemDto)) {
             MyItemForSale item = manager.find(MyItemForSale.class, itemId);
             item = mapItemDtoToMyItemForSale(item, itemDto);
             //should save by itself
+            return new ImageUploadDetailsDto("images/"+item.getPath(), true);
         }
+        throw new AccessDeniedException("You don't have the right to change this item");
+
     }
     public void deleteItem(String userId,String itemId){
         if (canDeleteItem(userId, itemId)) {
@@ -52,6 +59,7 @@ public class ItemService {
                 itemRepository.delete(item);
             }
         }
+        throw new AccessDeniedException("You don't have the right to delete this item");
     }
 
     public Optional<ItemDtoPublicWithImages> getItem(String itemId){
