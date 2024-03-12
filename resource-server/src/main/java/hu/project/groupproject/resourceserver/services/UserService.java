@@ -63,7 +63,7 @@ public class UserService {
 
     @Transactional
     public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser){
-        if (newUser.password1() != null && newUser.password2() != null && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
+        if (newUser.password1() != null && newUser.password2() != null && newUser.password1() == newUser.password2() && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());

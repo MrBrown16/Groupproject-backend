@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
@@ -94,7 +95,10 @@ public class OrgService {
         return reservationId;
     }
 
-
+    public OrgDtoPublic addImages(OrgDtoPublicPartial org){
+        MyOrg temp = manager.find(MyOrg.class, org.id());
+        return new OrgDtoPublic(org.id(), org.name(), temp.getUrls());
+    }
 
     public Optional<OrgDtoPublic> getOrg(String id){
         return orgRepository.findById(id, OrgDtoPublic.class);

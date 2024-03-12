@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 
 
@@ -20,7 +21,13 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
 
     @Query("SELECT reservation.id FROM MyOrg o JOIN o.reservations reservation WHERE o.id = :orgId")
     Set<String> findReservationIdsByOrgId(@Param("orgId") String orgId);
-
+    
     //TODO: create search function starting point:
     //"WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))"
+    
+    //name
+    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial(o.id, o.name) "+
+    "FROM MyOrg o JOIN o.reservations reservation "+
+    "WHERE LOWER(o.name) LIKE LOWER(CONCAT('%', :name, '%')) ")
+    Set<OrgDtoPublicPartial> findOrgByNameLike(@Param("name") String name);
 }

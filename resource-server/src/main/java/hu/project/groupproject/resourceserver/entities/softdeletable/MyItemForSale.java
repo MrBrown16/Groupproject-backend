@@ -1,5 +1,11 @@
 package hu.project.groupproject.resourceserver.entities.softdeletable;
 
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
@@ -31,6 +37,8 @@ public class MyItemForSale extends LoadableImages{
     String location;
     Long phone;
     
+
+
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id") //references MyUser.id which has a coloumn name of "user_id"
     @JsonIgnoreProperties("items")
@@ -45,6 +53,10 @@ public class MyItemForSale extends LoadableImages{
         return "users/"+userId+"/items/"+id;
     }
 
+    @CreationTimestamp
+    Timestamp creationTime;
+    @UpdateTimestamp
+    Timestamp updateTime;
 
     // "nev": string
     // "leiras": string

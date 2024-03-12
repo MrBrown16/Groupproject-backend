@@ -1,6 +1,11 @@
 package hu.project.groupproject.resourceserver.entities.softdeletable;
 
+import java.sql.Timestamp;
+
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -49,6 +54,13 @@ public class MyPost extends LoadableImages{
     @JoinColumn(name = "vote_id")
     @JsonIgnoreProperties("post")
     MyVote vote;
+
+
+    @CreationTimestamp
+    Timestamp creationTime;
+    @UpdateTimestamp
+    Timestamp updateTime;
+
 
     @Override
     public int hashCode() {
