@@ -37,4 +37,7 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     @Query("SELECT item.id FROM MyUser u JOIN u.items item WHERE u.id = :userId")
     Set<String> findItemIdsByUserId(@Param("userId") String userId);
 
+
+    //TODO: create search function starting point:
+    //"WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))"
 }

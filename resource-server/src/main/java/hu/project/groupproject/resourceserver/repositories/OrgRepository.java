@@ -20,4 +20,7 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
 
     @Query("SELECT reservation.id FROM MyOrg o JOIN o.reservations reservation WHERE o.id = :orgId")
     Set<String> findReservationIdsByOrgId(@Param("orgId") String orgId);
+
+    //TODO: create search function starting point:
+    //"WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))"
 }

@@ -15,6 +15,7 @@ public interface EventRepository extends JpaRepository<MyEvent, String>{
     @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic( e.id, e.name, e.description, e.location, e.organiserUser.id, e.organiser.id, e.publicPhones, e.publicEmails, e.startDate, e.endDate) FROM MyEvent e LEFT JOIN e.organiserUser LEFT JOIN e.organiser WHERE p.id=:id")
     Optional<EventDtoPublic> findEventDtoById(@Param(value = "id") String id);
 
-
+    //TODO: create search function starting point:
+    //"WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))"
 }
 
