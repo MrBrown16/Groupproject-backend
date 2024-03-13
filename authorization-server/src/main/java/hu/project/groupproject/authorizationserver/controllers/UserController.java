@@ -36,11 +36,13 @@ public class UserController {
     // }
 
     @PostMapping("/newUser")
-    public String createUser(@RequestBody UserDetails user) {
-        UserDetails newUser = User.builder().username(user.getUsername())
-                .authorities(user.getAuthorities()).password(passwordEncoder.encode(user.getPassword())).build();
+    public Boolean createUser(@RequestBody Map<String,String> user) {
+        String userName = user.get("userName");
+        String password = user.get("password");
+        UserDetails newUser = User.builder().username(userName)
+                .roles("USER").password(passwordEncoder.encode(password)).build();
         manager.createUser(newUser);        
-        return "user";
+        return true;
     }
     
 

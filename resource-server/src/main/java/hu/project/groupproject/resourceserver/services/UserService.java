@@ -3,6 +3,8 @@ package hu.project.groupproject.resourceserver.services;
 import java.rmi.UnexpectedException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,7 +70,21 @@ public class UserService {
 
     @Transactional
     public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser) throws UnexpectedException{
-        if (newUser.password1() != null && newUser.password2() != null && newUser.password1() == newUser.password2() && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
+        if (newUser.password1() != null )
+            {System.out.println("newUser.password1() != null");}
+        if ( newUser.password2() != null )
+            {System.out.println(" newUser.password2() != null ");}
+        // if ( newUser.password1() == newUser.password2() )//Don't do this i guess
+        //     {System.out.println("newUser.password1() == newUser.password2()");}
+        if ( newUser.password1().equals(newUser.password2()) )
+            {System.out.println("newUser.password1().equals(newUser.password2())");}
+        if ( newUser.phone() != null )
+            {System.out.println("newUser.phone() != null ");}
+        if ( newUser.email() != null )
+            {System.out.println("newUser.email() != null");}
+        if ( newUser.userName() != null) 
+            {System.out.println("newUser.userName() != null");}
+        if (newUser.password1() != null && newUser.password2() != null && newUser.password1().equals(newUser.password2()) && newUser.phone() != null && newUser.email() != null && newUser.userName() != null) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());
@@ -81,8 +97,11 @@ public class UserService {
             }
             user = userRepository.save(user);
             //TODO: check if it works
-            UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.password1()).build();
-            Boolean success = restClient.post().uri("/newUser").body(userDetails).retrieve().body(Boolean.class);
+            Map<String, String> userMap = new HashMap();
+            userMap.put("userName", newUser.userName());
+            userMap.put("password", newUser.password1());
+            // UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.password1()).build();
+            Boolean success = restClient.post().uri("/newUser").body(userMap).retrieve().body(Boolean.class);
             if (success == null || success == false) {
                 throw new UnexpectedException("User login creation failed");
             }

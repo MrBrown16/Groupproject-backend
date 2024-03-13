@@ -104,6 +104,8 @@ public class UserController {
     @PostMapping
     public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user) throws UnexpectedException{
         return userService.newUser(user);
+        // System.out.println("------------"+user.toString()+"-------------");
+        // return null;
     }
 
 

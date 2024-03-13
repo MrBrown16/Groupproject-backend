@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial(u.id, u.userName, u.firstName, u.lastName) "+
     "from MyUser u "+
     "where u.userName=:username")
-    Optional<UserDtoPublicPartial> findByUserName(String username);
+    Optional<UserDtoPublicPartial> findByUserName(@Param("username") String username);
 
     @Query("SELECT org.id FROM MyUser u JOIN u.orgs org WHERE u.id = :userId")
     Set<String> findOrgIdsByUserId(@Param("userId") String userId);
@@ -64,13 +64,13 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     Set<UserDtoPublicPartial> findEventDtoByLastNameLike(@Param(value = "name") String name);
     
     //phone
-    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName u.phone ) "+
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
     "from MyUser u "+
     "WHERE CAST(u.phone AS string) LIKE LOWER(CONCAT('%', :phone, '%')) ")
     Set<UserDtoPrivatePartial> findEventDtoByPhoneLike(@Param(value = "phone") String phone);
     
     //email
-    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName u.phone ) "+
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
     "from MyUser u "+
     "WHERE LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%')) ")
     Set<UserDtoPrivatePartial> findEventDtoByEmailLike(@Param(value = "email") String email);
