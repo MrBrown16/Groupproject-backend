@@ -21,6 +21,7 @@ import jakarta.persistence.PersistenceContext;
 
 import java.util.Optional;
 import java.util.Set;
+import java.rmi.UnexpectedException;
 import java.util.HashSet;
 
 import org.springframework.http.HttpStatus;
@@ -101,7 +102,7 @@ public class UserController {
 
     
     @PostMapping
-    public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user){
+    public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user) throws UnexpectedException{
         return userService.newUser(user);
     }
 

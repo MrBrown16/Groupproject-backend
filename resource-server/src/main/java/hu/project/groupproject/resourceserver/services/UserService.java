@@ -1,5 +1,6 @@
 package hu.project.groupproject.resourceserver.services;
 
+import java.rmi.UnexpectedException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
@@ -29,12 +31,15 @@ public class UserService {
     protected final Log logger = LogFactory.getLog(getClass());
 
     UserRepository userRepository;
+    RestClient restClient;
 
     @PersistenceContext
     EntityManager manager;
     
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
+        this.restClient = RestClient.builder().baseUrl("http://localhost:8083/user").build();
+        
     }
    
     public MyUser saveUser(MyUser myUser){
@@ -62,7 +67,7 @@ public class UserService {
     }
 
     @Transactional
-    public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser){
+    public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser) throws UnexpectedException{
         if (newUser.password1() != null && newUser.password2() != null && newUser.password1() == newUser.password2() && newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
@@ -75,8 +80,12 @@ public class UserService {
                 user.setLastName(newUser.lastName());
             }
             user = userRepository.save(user);
+            //TODO: check if it works
             UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.password1()).build();
-            
+            Boolean success = restClient.post().uri("/newUser").body(userDetails).retrieve().body(Boolean.class);
+            if (success == null || success == false) {
+                throw new UnexpectedException("User login creation failed");
+            }
             //TODO:save user in auth server (webClient http request to createNewUser) 
             String url= user.getPath();
             return new ImageUploadDetailsDto(url, false);
