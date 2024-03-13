@@ -77,11 +77,13 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
     public void postImageFile(@RequestParam("images") MultipartFile[] images, HttpServletRequest request) throws IOException{
         String uri = request.getRequestURI();
         String[] parts = uri.split("/"); //parts[2]= type parts[3]=id 
-        LoadableImages entity = determineImagePlacement(parts);
+        Boolean[] multiple={true};
+        LoadableImages entity = determineImagePlacement(parts,multiple);
+        logger.debug("Multiple after determineImagePlacement: "+multiple[0]);
         if (entity==null) {
             // new LoadableImages().saveImages(images, uri);
         }else{
-            entity.saveImages(images, null);
+            entity.saveImages(images, null, multiple[0]);
         }
             logger.debug(uri);
         for (String string : parts) {
@@ -167,7 +169,7 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
         }
     }
         
-    private LoadableImages determineImagePlacement(String[] parts){
+    private LoadableImages determineImagePlacement(String[] parts,Boolean[] multiple){
         LoadableImages entity=null;
         switch (parts[2]) {
             case "users":
@@ -182,7 +184,8 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
                     break;   
                     case "profile":
                         entity= manager.find(MyUser.class,parts[3]);
-                        
+                        entity.moveImages();
+                        multiple[0]=false;
                     break;  
                     
                     default:
@@ -196,7 +199,8 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
                     break;  
                     case "logo":
                         entity= manager.find(MyOrg.class,parts[3]);
-                    
+                        entity.moveImages();
+                        multiple[0] = false;
                     break;
 
                     default:
