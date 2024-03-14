@@ -114,7 +114,7 @@ public class UserService {
     }
     @Transactional
     public ImageUploadDetailsDto updateUser(String id, UserDtoNew newUser){
-        if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null && newUser.userName().length()>5) {
+        if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null) {
             MyUser user = manager.find(MyUser.class, id);
             if (user == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
