@@ -5,9 +5,13 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hu.project.groupproject.resourceserver.enums.Category;
 import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -50,6 +54,10 @@ public class MyOrg extends LoadableImages{
     @JsonIgnoreProperties("organiser")
     Set<MyEvent> events;
 
+    @ElementCollection(targetClass = Category.class)
+    @Enumerated(EnumType.STRING)
+    Set<Category> categories;
+
     
     public void setUsers(Set<MyUser> users) {
         if (this.users == null) {
@@ -74,6 +82,20 @@ public class MyOrg extends LoadableImages{
             if (!user.getOrgs().contains(this)) {
                 user.addOrg(this);
             }
+        }
+    }
+    public void addCategory(Category category) {
+        if (this.categories == null) {
+            this.categories = new HashSet<>();
+        }
+    
+        if (!this.categories.contains(category)) {
+            this.categories.add(category);
+        }
+    }
+    public void removeCategory(Category category) {
+        if (this.categories != null && this.categories.contains(category)) {
+            this.categories.remove(category);
         }
     }
 

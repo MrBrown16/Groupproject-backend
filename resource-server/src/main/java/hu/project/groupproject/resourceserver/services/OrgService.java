@@ -1,5 +1,6 @@
 package hu.project.groupproject.resourceserver.services;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -7,6 +8,9 @@ import javax.management.InvalidAttributeValueException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
@@ -15,6 +19,7 @@ import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.Category;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -102,6 +107,36 @@ public class OrgService {
 
     public Optional<OrgDtoPublic> getOrg(String id){
         return orgRepository.findById(id, OrgDtoPublic.class);
+    }
+    public Set<OrgDtoPublic> getOrgs(int pageNum){
+        Page<MyOrg> orgs = orgRepository.findAll(Pageable.ofSize(10).withPage(pageNum));
+        Set<OrgDtoPublic> orgDtos = new HashSet<>();
+        orgs.forEach(this::mapOrgToDto);
+        return orgDtos;
+    }
+
+    public Set<Category> addOrRemoveCategory(String userId,String orgId,Category category){
+        if (canDeleteOrEditOrg(userId, orgId)) {
+            MyOrg org = manager.find(MyOrg.class, orgId);
+            if (org.getCategories() != null && org.getCategories().contains(category)) {
+                org.removeCategory(category);
+            }else{
+                org.addCategory(category);
+            }
+            return org.getCategories();
+        }
+        throw new AccessDeniedException("You don't have the right to change this organisation");
+    } 
+
+    public Set<OrgDtoPublic> getOrgsByCategory(int pageNum, Category category){
+        Page<MyOrg> orgs = orgRepository.findByCategory(category, Pageable.ofSize(10).withPage(pageNum));
+        Set<OrgDtoPublic> orgDtos = new HashSet<>();
+        orgs.forEach(this::mapOrgToDto);
+        return orgDtos;
+    }
+
+    private OrgDtoPublic mapOrgToDto(MyOrg org){
+        return new OrgDtoPublic(org.getId(), org.getName(), org.getUrls());
     }
 
     public void deleteOrg(String userId, String orgId){
