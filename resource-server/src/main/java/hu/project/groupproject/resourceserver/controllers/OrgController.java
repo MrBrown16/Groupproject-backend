@@ -7,7 +7,9 @@ import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.Category;
 import hu.project.groupproject.resourceserver.services.EventService;
 import hu.project.groupproject.resourceserver.services.OrgService;
 import hu.project.groupproject.resourceserver.services.ReservationService;
@@ -52,6 +54,14 @@ public class OrgController {
     @GetMapping("/{id}")
     public Optional<OrgDtoPublic> getOrg(@PathVariable String id) {
         return orgService.getOrg(id);
+    }
+    @GetMapping("/{pageNum}/{category}")
+    public Set<OrgDtoPublic> getOrgsByCategory(@PathVariable("pageNum") int pageNum, @PathVariable("category") Category category) {
+        return orgService.getOrgsByCategory(pageNum, category);
+    }
+    @GetMapping("/")
+    public Set<OrgDtoPublic> getOrgs(int pageNum) {
+        return orgService.getOrgs(pageNum);
     }
     
     @GetMapping("/{orgId}/events")
@@ -102,6 +112,12 @@ public class OrgController {
             return orgService.saveOrg(orgId,org);
         }
         throw new AccessDeniedException("You don't have the right to change this organisation");
+    }
+    @PutMapping("/{orgId}/{category}")
+    @PreAuthorize("hasRole('ORG_ADMIN')")
+    public Set<Category> addOrRemoveCategory(@PathVariable("orgId") String orgId, @PathVariable("category") Category category, Authentication authentication) throws InvalidAttributeValueException{
+        MyUser user = (MyUser)authentication.getPrincipal();
+        return orgService.addOrRemoveCategory(user.getId(), orgId,category);
     }
     
     
