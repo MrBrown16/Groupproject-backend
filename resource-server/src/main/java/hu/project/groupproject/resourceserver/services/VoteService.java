@@ -32,6 +32,7 @@ public class VoteService {
         this.voteOptionRepository=voteOptionRepository;
     }
    
+    @SuppressWarnings("null")
     @Transactional
     public Optional<VoteDtoPublic> updateVote(String id, VoteDtoPublic voteDto){
         if (id != null && id == voteDto.id()) {//&& voteRepository.existsById(id)

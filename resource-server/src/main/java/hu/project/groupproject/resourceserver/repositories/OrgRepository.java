@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.enums.Category;
 
@@ -29,11 +28,11 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
     //"WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))"
     
     //name
-    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial(o.id, o.name) "+
-    "FROM MyOrg o JOIN o.reservations reservation "+
+    @Query("SELECT o "+
+    "FROM MyOrg o "+
     "WHERE LOWER(o.name) LIKE LOWER(CONCAT('%', :name, '%')) ")
-    Set<OrgDtoPublicPartial> findOrgByNameLike(@Param("name") String name);
+    Page<MyOrg> findOrgByNameLike(@Param("name") String name, Pageable pageable);
 
     @Query("SELECT o FROM MyOrg o WHERE :category MEMBER OF o.categories")
-    Page<MyOrg> findByCategory(@Param("category") Category category, Pageable pageable);
+    Page<MyOrg> findOrgsByCategory(@Param("category") Category category, Pageable pageable);
 }

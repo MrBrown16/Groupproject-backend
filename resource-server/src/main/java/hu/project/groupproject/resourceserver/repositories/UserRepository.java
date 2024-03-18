@@ -4,11 +4,12 @@ package hu.project.groupproject.resourceserver.repositories;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
@@ -49,29 +50,47 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial(u.id, u.userName, u.firstName, u.lastName) "+
     "from MyUser u "+
     "WHERE LOWER(u.userName) LIKE LOWER(CONCAT('%', :name, '%')) ")
-    Set<UserDtoPublicPartial> findEventDtoByUserNameLike(@Param(value = "name") String name);
+    Page<UserDtoPublicPartial> findPubUserDtoByUserNameLike(@Param(value = "name") String name, Pageable pageable);
     
     //firstName
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial(u.id, u.userName, u.firstName, u.lastName) "+
     "from MyUser u "+
     "WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%')) ")
-    Set<UserDtoPublicPartial> findEventDtoByFirstNameLike(@Param(value = "name") String name);
+    Page<UserDtoPublicPartial> findPubUserDtoByFirstNameLike(@Param(value = "name") String name, Pageable pageable);
     
     //lastName
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial(u.id, u.userName, u.firstName, u.lastName) "+
     "from MyUser u "+
     "WHERE LOWER(u.lastName) LIKE LOWER(CONCAT('%', :name, '%')) ")
-    Set<UserDtoPublicPartial> findEventDtoByLastNameLike(@Param(value = "name") String name);
+    Page<UserDtoPublicPartial> findPubUserDtoByLastNameLike(@Param(value = "name") String name, Pageable pageable);
     
-    //phone
+    //userName private
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
+    "from MyUser u "+
+    "WHERE LOWER(u.userName) LIKE LOWER(CONCAT('%', :name, '%')) ")
+    Page<UserDtoPrivatePartial> findPrivateUserDtoByUserNameLike(@Param(value = "name") String name, Pageable pageable);
+    
+    //firstName private
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
+    "from MyUser u "+
+    "WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%')) ")
+    Page<UserDtoPrivatePartial> findPrivateUserDtoByFirstNameLike(@Param(value = "name") String name, Pageable pageable);
+    
+    //lastName private
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
+    "from MyUser u "+
+    "WHERE LOWER(u.lastName) LIKE LOWER(CONCAT('%', :name, '%')) ")
+    Page<UserDtoPrivatePartial> findPrivateUserDtoByLastNameLike(@Param(value = "name") String name, Pageable pageable);
+    
+    //phone private
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
     "from MyUser u "+
     "WHERE CAST(u.phone AS string) LIKE LOWER(CONCAT('%', :phone, '%')) ")
-    Set<UserDtoPrivatePartial> findEventDtoByPhoneLike(@Param(value = "phone") String phone);
+    Page<UserDtoPrivatePartial> findPrivateUserDtoByPhoneLike(@Param(value = "phone") String phone, Pageable pageable);
     
-    //email
+    //email private
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
     "from MyUser u "+
     "WHERE LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%')) ")
-    Set<UserDtoPrivatePartial> findEventDtoByEmailLike(@Param(value = "email") String email);
+    Page<UserDtoPrivatePartial> findPrivateUserDtoByEmailLike(@Param(value = "email") String email, Pageable pageable);
 }

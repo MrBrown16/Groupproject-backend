@@ -1,10 +1,11 @@
 package hu.project.groupproject.resourceserver.controllers;
 
+import java.sql.Timestamp;
 import java.util.Optional;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.En.EventDto;
@@ -42,6 +44,16 @@ public class EventController {
     @GetMapping("/{eventId}")
     public Optional<EventDtoPublic> getEvent(@PathVariable String eventId) {
         return eventService.getEvent(eventId);
+    }
+
+    @GetMapping("/search")
+    public Page<EventDtoPublic> getPostsByContentLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category) {
+        return eventService.getEventsByPropertyLike(pageNum,value,category);
+    }
+
+    @GetMapping("/search/time")
+    public Page<EventDtoPublic> getPostsByTime(@RequestParam("time") Timestamp time, @RequestParam("pageNum") int pageNum) {
+        return eventService.getEventsHappeningAtTime(time,pageNum);
     }
 
     @PostMapping("/new")

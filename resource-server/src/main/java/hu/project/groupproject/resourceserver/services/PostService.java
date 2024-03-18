@@ -3,12 +3,17 @@ package hu.project.groupproject.resourceserver.services;
 import java.util.Optional;
 import java.util.Set;
 import java.util.List;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoCreate;
@@ -42,6 +47,7 @@ public class PostService {
         this.userService=userService;
     }
    
+    @SuppressWarnings("null")
     public ImageUploadDetailsDto updatePost(String postId, PostDtoCreate postUpdate) throws NotFoundException{
             Optional<MyPost> oldPost = postRepository.findById(postId);
             if (oldPost.isPresent()) {
@@ -96,6 +102,45 @@ public class PostService {
         return posts;
         
     }
+
+    public Set<PostDtoPublicWithImages> getPostsByContentLike(String value, int pageNum){
+        Page<PostDtoPublicNoImages> posts = postRepository.findPostDtoByContentLike(value, Pageable.ofSize(10).withPage(pageNum));
+        Set<PostDtoPublicWithImages> images = new HashSet<>();
+        for (PostDtoPublicNoImages post : posts) {
+            images.add(addImages(post));
+        }
+        return images;
+    }
+    public Set<PostDtoPublicWithImages> getPostsByTimeLike(Timestamp time, int pageNum, String category){
+        Page<PostDtoPublicNoImages> posts;
+        switch (category) {
+            case "updateBefore":
+                posts = postRepository.findPostDtoByUpdateTimeBefore(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "updateAfter":
+                posts = postRepository.findPostDtoByUpdateTimeAfter(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "createBefore":
+                posts = postRepository.findPostDtoByCreationTimeBefore(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "createAfter":
+                posts = postRepository.findPostDtoByCreationTimeAfter(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+        
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        Set<PostDtoPublicWithImages> images = new HashSet<>();
+        for (PostDtoPublicNoImages post : posts) {
+            images.add(addImages(post));
+        }
+        return images;
+    }
     
     public Optional<PostDtoPublicExtended> getPostExtended(String id){
         Optional<PostDtoPublicWithImages> post = addImages(postRepository.findPostDtoById(id));
@@ -108,6 +153,7 @@ public class PostService {
         return Optional.empty();
     }
     
+    @SuppressWarnings("null")
     public void deletePost(String userId, String postId){
         if (canDeletePost(userId, postId)) {
             postRepository.deleteById(postId);
@@ -174,6 +220,10 @@ public class PostService {
         withImages = new PostDtoPublicWithImages(noImages.id(), noImages.userId(), noImages.userName(), noImages.orgId(), noImages.orgname(), noImages.content(), new String[0], noImages.likes(), noImages.dislikes(), noImages.voteId());
         
         return Optional.of(withImages);
+    }
+    private PostDtoPublicWithImages addImages(PostDtoPublicNoImages noImages){
+        MyPost post = manager.find(MyPost.class, noImages.id());
+        return new PostDtoPublicWithImages(noImages.id(), noImages.userId(), noImages.userName(), noImages.orgId(), noImages.orgname(), noImages.content(), post.getUrls(), noImages.likes(), noImages.dislikes(), noImages.voteId());      
     }
 
 

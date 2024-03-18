@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.*;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -35,8 +36,8 @@ public class ItemService {
         this.userService= userService;
     }
 
-    public Set<ItemDtoPublicWithImages> getItems(int x){
-        Page<MyItemForSale> items =  itemRepository.findAll(Pageable.ofSize(10).withPage(x));
+    public Set<ItemDtoPublicWithImages> getItems(int pageNum){
+        Page<MyItemForSale> items =  itemRepository.findAll(Pageable.ofSize(10).withPage(pageNum));
         Set<ItemDtoPublicWithImages> images = new HashSet<>();
         items.forEach((item)->{
             images.add(addImagesToItem(item));
@@ -73,7 +74,6 @@ public class ItemService {
             }
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to delete this item");
-//        throw new AccessDeniedException("You don't have the right to delete this item");
     }
 
     public ItemDtoPublicWithImages getItem(String itemId){
@@ -100,6 +100,63 @@ public class ItemService {
         return items;
         
     }
+
+    public Set<ItemDtoPublicWithImages> getItemsByTimeLike(Timestamp time, int pageNum, String category){
+        Page<MyItemForSale> items;
+        switch (category) {
+            case "updateBefore":
+                items = itemRepository.findItemDtoByUpdateTimeBefore(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "updateAfter":
+                items = itemRepository.findItemDtoByUpdateTimeAfter(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "createBefore":
+                items = itemRepository.findItemDtoByCreationTimeBefore(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "createAfter":
+                items = itemRepository.findItemDtoByCreationTimeAfter(time, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+        
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        Set<ItemDtoPublicWithImages> images = new HashSet<>();
+        for (MyItemForSale item : items) {
+            images.add(addImagesToItem(item));
+        }
+        return images;
+    }
+
+    public Set<ItemDtoPublicWithImages> getItemsByPropertyLike(int pageNum, String value, String property){
+        Page<MyItemForSale> items;
+        switch (property) {
+            case "name":
+                items = itemRepository.findItemDtoByNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+
+                break;
+            case "description":
+                items = itemRepository.findItemDtoByDescriptionLike(value, Pageable.ofSize(10).withPage(pageNum));
+            
+                break;
+            case "location":
+                items = itemRepository.findItemDtoByLocationLike(value, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                
+        }
+        Set<ItemDtoPublicWithImages> images = new HashSet<>();
+        for (MyItemForSale item : items) {
+            images.add(addImagesToItem(item));
+        }
+        return images;
+    }
+
 
     private Optional<ItemDtoPublicWithImages> addImagesOpt(Optional<ItemDtoPublicPartial> noImageOpt){
         if (noImageOpt.isPresent()) {

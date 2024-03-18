@@ -129,7 +129,13 @@ public class OrgService {
     } 
 
     public Set<OrgDtoPublic> getOrgsByCategory(int pageNum, Category category){
-        Page<MyOrg> orgs = orgRepository.findByCategory(category, Pageable.ofSize(10).withPage(pageNum));
+        Page<MyOrg> orgs = orgRepository.findOrgsByCategory(category, Pageable.ofSize(10).withPage(pageNum));
+        Set<OrgDtoPublic> orgDtos = new HashSet<>();
+        orgs.forEach(this::mapOrgToDto);
+        return orgDtos;
+    }
+    public Set<OrgDtoPublic> getOrgsByNameLike(int pageNum, String name){
+        Page<MyOrg> orgs = orgRepository.findOrgByNameLike(name, Pageable.ofSize(10).withPage(pageNum));
         Set<OrgDtoPublic> orgDtos = new HashSet<>();
         orgs.forEach(this::mapOrgToDto);
         return orgDtos;
@@ -139,6 +145,7 @@ public class OrgService {
         return new OrgDtoPublic(org.getId(), org.getName(), org.getUrls());
     }
 
+    @SuppressWarnings("null")
     public void deleteOrg(String userId, String orgId){
         if (canDeleteOrEditOrg(userId, orgId)) {
             orgRepository.deleteById(orgId);

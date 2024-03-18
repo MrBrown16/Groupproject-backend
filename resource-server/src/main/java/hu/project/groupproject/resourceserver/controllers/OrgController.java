@@ -7,7 +7,6 @@ import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.enums.Category;
 import hu.project.groupproject.resourceserver.services.EventService;
@@ -32,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -55,9 +55,13 @@ public class OrgController {
     public Optional<OrgDtoPublic> getOrg(@PathVariable String id) {
         return orgService.getOrg(id);
     }
-    @GetMapping("/{pageNum}/{category}")
-    public Set<OrgDtoPublic> getOrgsByCategory(@PathVariable("pageNum") int pageNum, @PathVariable("category") Category category) {
+    @GetMapping("/search/category")
+    public Set<OrgDtoPublic> getOrgsByCategory(@RequestParam("pageNum") int pageNum, @RequestParam("category") Category category) {
         return orgService.getOrgsByCategory(pageNum, category);
+    }
+    @GetMapping("/search/name")
+    public Set<OrgDtoPublic> getOrgsByNameLike(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
+        return orgService.getOrgsByNameLike(pageNum, name);
     }
     @GetMapping("/")
     public Set<OrgDtoPublic> getOrgs(int pageNum) {

@@ -6,9 +6,13 @@ import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.posts.in.PostDtoCreate;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
+import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicWithImages;
 import hu.project.groupproject.resourceserver.services.PostService;
 
+import java.sql.Timestamp;
 import java.util.Optional;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -47,6 +52,14 @@ public class PostController {
     public Optional<PostDtoPublicExtended> getPostEx(@PathVariable String id) {
         return postService.getPostExtended(id);
     }
+    @GetMapping("/search/content")
+    public Set<PostDtoPublicWithImages> getPostsByContentLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum) {
+        return postService.getPostsByContentLike(value,pageNum);
+    }
+    @GetMapping("/search/time")
+    public Set<PostDtoPublicWithImages> getPostsByTime(@RequestParam("time") Timestamp time, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+        return postService.getPostsByTimeLike(time,pageNum,category);
+    }
     
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
@@ -56,9 +69,9 @@ public class PostController {
 
     @PutMapping("/{id}") 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public ImageUploadDetailsDto updatePost(@PathVariable String id,@RequestBody PostDtoCreate post, Authentication auth) throws NotFoundException{
+    public ImageUploadDetailsDto updatePost(@PathVariable("id") String id, @RequestBody PostDtoCreate post, Authentication auth) throws NotFoundException{
         MyUser user = (MyUser)auth.getPrincipal();
-        if (user.getId()==post.userId()) {
+        if (user.getId()==post.userId() && id != null) {
             return postService.updatePost(id,post);
         }
         throw new AccessDeniedException("You don't have the right to change this post");

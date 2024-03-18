@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
@@ -70,20 +71,6 @@ public class UserService {
 
     @Transactional
     public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser) throws UnexpectedException{
-        if (newUser.password1() != null )
-            {System.out.println("newUser.password1() != null");}
-        if ( newUser.password2() != null )
-            {System.out.println(" newUser.password2() != null ");}
-        // if ( newUser.password1() == newUser.password2() )//Don't do this i guess
-        //     {System.out.println("newUser.password1() == newUser.password2()");}
-        if ( newUser.password1().equals(newUser.password2()) )
-            {System.out.println("newUser.password1().equals(newUser.password2())");}
-        if ( newUser.phone() != null )
-            {System.out.println("newUser.phone() != null ");}
-        if ( newUser.email() != null )
-            {System.out.println("newUser.email() != null");}
-        if ( newUser.userName() != null) 
-            {System.out.println("newUser.userName() != null");}
         if (newUser.password1() != null && newUser.password2() != null && newUser.password1().equals(newUser.password2()) && newUser.phone() != null && newUser.email() != null && newUser.userName() != null) {
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
@@ -135,25 +122,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
-    //OrgService has this 
-    // @Transactional
-    // public Boolean addUserToOrg(String adminId, String userId, String orgId){
-    //     if (adminId != null && userId != null && orgId != null) {
-    //         MyUser admin = manager.find(MyUser.class, adminId);
-    //         MyUser user = manager.find(MyUser.class, userId);
-    //         MyOrg org = manager.find(MyOrg.class, orgId);
-    //         if (admin != null && user != null && org != null) {
-    //             Optional<MyUser> foundUser = userRepository.findByOrgsIdAndId(orgId, adminId);
-    //             if (foundUser.isPresent() && foundUser.get().getId() == adminId) {
-    //                 org.addUser(user);
-    //                 user.addOrg(org);
-    //                 manager.flush();
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // }
+
 
     public Set<String> getOrgsIdsForUser(String id){
         Set<String> orgIds = userRepository.findOrgIdsByUserId(id);
@@ -181,4 +150,36 @@ public class UserService {
         return itemIds;
     }
     
+    public Page<UserDtoPublicPartial> getUsersByPropertyLikePublic(int pageNum, String value, String property){
+        switch (property) {
+            case "userName":
+                return userRepository.findPubUserDtoByUserNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "firstName":
+                return userRepository.findPubUserDtoByFirstNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "lastName":
+                return userRepository.findPubUserDtoByLastNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                
+        }
+    }
+    public Page<UserDtoPrivatePartial> getUsersByPropertyLikePrivate(int pageNum, String value, String property){
+        switch (property) {
+            case "userName":
+                return userRepository.findPrivateUserDtoByUserNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "firstName":
+                return userRepository.findPrivateUserDtoByFirstNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "lastName":
+                return userRepository.findPrivateUserDtoByLastNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "email":
+                return userRepository.findPrivateUserDtoByEmailLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "phone":
+                return userRepository.findPrivateUserDtoByPhoneLike(value, Pageable.ofSize(10).withPage(pageNum));
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                
+        }
+    }
+
+
 }

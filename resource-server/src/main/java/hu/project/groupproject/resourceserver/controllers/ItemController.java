@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.sql.Timestamp;
 import java.util.Set;
 
 
@@ -23,8 +23,6 @@ public class ItemController {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-//    @PersistenceContext
-//    EntityManager manager;
 
     ItemService itemService;
 
@@ -35,6 +33,15 @@ public class ItemController {
     @GetMapping("/page/{pageNum}")
     public Set<ItemDtoPublicWithImages> getItems(@PathVariable("pageNum") int page) {
         return itemService.getItems(page);
+    }
+
+    @GetMapping("/search/time")
+    public Set<ItemDtoPublicWithImages> getPostsByTime(@RequestParam("time") Timestamp time, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+        return itemService.getItemsByTimeLike(time,pageNum,category);
+    }
+    @GetMapping("/search")
+    public Set<ItemDtoPublicWithImages> searchPubUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+        return itemService.getItemsByPropertyLike(pageNum, value, category);
     }
     
     @GetMapping("/{itemId}")

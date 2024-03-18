@@ -1,10 +1,15 @@
 package hu.project.groupproject.resourceserver.services;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hu.project.groupproject.resourceserver.dtos.En.EventDto;
 import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
@@ -73,6 +78,23 @@ public class EventService {
         
     }
 
+    public Page<EventDtoPublic> getEventsByPropertyLike(int pageNum, String value, String property){
+        switch (property) {
+            case "name":
+                return eventRepository.findEventDtoByNameLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "description":
+                return eventRepository.findEventDtoByDescriptionLike(value, Pageable.ofSize(10).withPage(pageNum));
+            case "location":
+                return eventRepository.findEventDtoByLocationLike(value, Pageable.ofSize(10).withPage(pageNum));
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                
+        }
+    }
+
+    public Page<EventDtoPublic> getEventsHappeningAtTime(Timestamp time, int pageNum){
+        return eventRepository.findEventDtoByDateBetween(time, Pageable.ofSize(10).withPage(pageNum));
+    }
 
 
 
