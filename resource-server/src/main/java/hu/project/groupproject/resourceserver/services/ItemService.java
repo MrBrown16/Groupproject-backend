@@ -1,21 +1,24 @@
 package hu.project.groupproject.resourceserver.services;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-
-import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicWithImages;
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyItemForSale;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.ItemRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.*;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.*;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ItemService {
@@ -32,6 +35,16 @@ public class ItemService {
         this.userService= userService;
     }
 
+    public Set<ItemDtoPublicWithImages> getItems(int x){
+        Page<MyItemForSale> items =  itemRepository.findAll(Pageable.ofSize(10).withPage(x));
+        Set<ItemDtoPublicWithImages> images = new HashSet<>();
+        items.forEach((item)->{
+            images.add(addImagesToItem(item));
+        });
+        return images;
+    }
+    
+    
     public ImageUploadDetailsDto createItem(String userId,ItemDto itemDto){
         if (canEditItem(userId,null, itemDto)) {
             MyItemForSale item = new MyItemForSale();
@@ -59,20 +72,27 @@ public class ItemService {
                 itemRepository.delete(item);
             }
         }
-        throw new AccessDeniedException("You don't have the right to delete this item");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to delete this item");
+//        throw new AccessDeniedException("You don't have the right to delete this item");
     }
 
-    public Optional<ItemDtoPublicWithImages> getItem(String itemId){
-        return addImages(itemRepository.findItemDtoById(itemId));        
+    public ItemDtoPublicWithImages getItem(String itemId){
+        Optional<ItemDtoPublicPartial> item = itemRepository.findItemDtoById(itemId);
+        if(item.isPresent()){
+            return addImagesToItem(item.get());
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No item found by provided id");
     }
-
-
-
+    private Optional<ItemDtoPublicWithImages> getItemOpt(String itemId){
+        return addImagesOpt(itemRepository.findItemDtoById(itemId));
+    }
+    
+    
     public Set<ItemDtoPublicWithImages> getItemsForUser(String userId){
         Set<String> itemIds = userService.getItemIdsForUser(userId);
         Set<ItemDtoPublicWithImages> items = new HashSet<>();
         for (String itemId : itemIds) {
-            Optional<ItemDtoPublicWithImages> item = getItem(itemId);
+            Optional<ItemDtoPublicWithImages> item = getItemOpt(itemId);
             if (item.isPresent()) {
                 items.add(item.get());
             }
@@ -81,7 +101,7 @@ public class ItemService {
         
     }
 
-    private Optional<ItemDtoPublicWithImages> addImages(Optional<ItemDtoPublicPartial> noImageOpt){
+    private Optional<ItemDtoPublicWithImages> addImagesOpt(Optional<ItemDtoPublicPartial> noImageOpt){
         if (noImageOpt.isPresent()) {
             MyItemForSale item = manager.find(MyItemForSale.class, noImageOpt.get().itemId());
             if (item != null) {
@@ -90,6 +110,13 @@ public class ItemService {
             }
         }
         return Optional.empty();
+    }
+    private ItemDtoPublicWithImages addImagesToItem(MyItemForSale noImage){
+        return new ItemDtoPublicWithImages(noImage.getId(), noImage.getUser().getId(), noImage.getName(), noImage.getDescription(), noImage.getCondition(), noImage.getLocation(), noImage.getPhone(), noImage.getUrls());
+    }
+    private ItemDtoPublicWithImages addImagesToItem(ItemDtoPublicPartial noImage){
+        MyItemForSale item = manager.find(MyItemForSale.class,noImage.itemId());
+        return new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(), item.getUrls());
     }
 
 

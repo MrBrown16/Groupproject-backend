@@ -1,27 +1,15 @@
 package hu.project.groupproject.resourceserver.entities.softdeletable;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.hibernate.annotations.NaturalId;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter @Setter @RequiredArgsConstructor
