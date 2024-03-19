@@ -49,7 +49,7 @@ class ItemControllerTest{
 	@WithMockUser
 	void shouldGetItemById1() throws Exception {
 		// Create the item DTO
-		ItemDtoPublicWithImages item = new ItemDtoPublicWithImages("1", "1", "TestItem", "My first test item", "used", "Earth", 12345678901L, new String[]{"first", "second"});
+		ItemDtoPublicWithImages item = new ItemDtoPublicWithImages("1", "1", "TestItem", "My first test item", "used", "Earth", 12345678901L,0L, new String[]{"first", "second"});
 		
 		// Stub the service call
 		when(itemService.getItem("1")).thenReturn(item);
@@ -79,8 +79,8 @@ class ItemControllerTest{
 		// Mocking service response
 		Set<ItemDtoPublicWithImages> items = new HashSet<>();
 		// Add sample items
-		items.add(new ItemDtoPublicWithImages("1", "1", "TestItem1", "Description1", "used", "Earth", 12345678901L, new String[]{"first", "second"}));
-		items.add(new ItemDtoPublicWithImages("2", "1", "TestItem2", "Description2", "new", "Mars", 9876543210L, new String[]{"third", "fourth"}));
+		items.add(new ItemDtoPublicWithImages("1", "1", "TestItem1", "Description1", "used", "Earth", 12345678901L,0L, new String[]{"first", "second"}));
+		items.add(new ItemDtoPublicWithImages("2", "1", "TestItem2", "Description2", "new", "Mars", 9876543210L,0L, new String[]{"third", "fourth"}));
 		when(itemService.getItems(1)).thenReturn(items);
 		
 		// Perform the request
@@ -95,7 +95,7 @@ class ItemControllerTest{
 		// Mocking service response
 		ObjectMapper objectMapper = new ObjectMapper();
 		ImageUploadDetailsDto uploadDetailsDto = new ImageUploadDetailsDto("images/someFolder", true);
-		ItemDto itemDto = new ItemDto("userId", "TestItem1", "Description1", "used", "Earth", 12345678901L);
+		ItemDto itemDto = new ItemDto("userId", "TestItem1", "Description1", "used", "Earth", 12345678901L,0L);
 		when(itemService.createItem("userId", itemDto)).thenReturn(uploadDetailsDto);
 		
 		// Perform the request
@@ -114,7 +114,7 @@ class ItemControllerTest{
 		
 		// Mocking service response
 		ImageUploadDetailsDto uploadDetailsDto = new ImageUploadDetailsDto("images/someFolder", true);
-		ItemDto itemDto = new ItemDto("userId", "TestItem1", "Description1", "used", "Earth", 12345678901L);
+		ItemDto itemDto = new ItemDto("userId", "TestItem1", "Description1", "used", "Earth", 12345678901L,0L);
 		when(itemService.updateItem("userId","itemId", itemDto)).thenReturn(uploadDetailsDto);
 		
 		// Perform the request

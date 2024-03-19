@@ -35,6 +35,7 @@ public class MyItemForSale extends LoadableImages{
     String condition;
     String location;
     Long phone;
+    Long price;
     
 
 

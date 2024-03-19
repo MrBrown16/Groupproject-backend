@@ -39,9 +39,15 @@ public class ItemController {
     public Set<ItemDtoPublicWithImages> getPostsByTime(@RequestParam("time") Timestamp time, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
         return itemService.getItemsByTimeLike(time,pageNum,category);
     }
+    
     @GetMapping("/search")
-    public Set<ItemDtoPublicWithImages> searchPubUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
-        return itemService.getItemsByPropertyLike(pageNum, value, category);
+    public Set<ItemDtoPublicWithImages> searchItemsByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+        return itemService.getItemsByPropertyLike(value, pageNum, category);
+    }
+
+    @GetMapping("/search/price")
+    public Set<ItemDtoPublicWithImages> searchItemsByPrice(@RequestParam("price") Long price, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+        return itemService.getItemsByPriceLike(price, pageNum, category);
     }
     
     @GetMapping("/{itemId}")
@@ -54,6 +60,11 @@ public class ItemController {
     public ImageUploadDetailsDto saveItem(@RequestBody ItemDto item, Authentication authentication){
         MyUser user = (MyUser)authentication.getPrincipal();
         return itemService.createItem(user.getId(),item);
+    }
+    @GetMapping("/demo")
+    public ImageUploadDetailsDto saveItemDemo(){
+        ItemDto item = new ItemDto("1", "bicikli", "Piros Bicikli", "new", "Budapest", 00001234567L, 0L); 
+        return itemService.createItem("1",item);
     }
 
     @PutMapping("/{itemId}") 

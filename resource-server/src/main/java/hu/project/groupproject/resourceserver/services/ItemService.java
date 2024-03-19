@@ -9,6 +9,8 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.ItemRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -45,7 +47,7 @@ public class ItemService {
         return images;
     }
     
-    
+    @Transactional
     public ImageUploadDetailsDto createItem(String userId,ItemDto itemDto){
         if (canEditItem(userId,null, itemDto)) {
             MyItemForSale item = new MyItemForSale();
@@ -130,8 +132,28 @@ public class ItemService {
         }
         return images;
     }
+    public Set<ItemDtoPublicWithImages> getItemsByPriceLike(Long price, int pageNum, String category){
+        Page<MyItemForSale> items;
+        switch (category) {
+            case "lower":
+                items = itemRepository.findItemDtoByPriceLower(price, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;
+            case "higher":
+                items = itemRepository.findItemDtoByPriceHigher(price, Pageable.ofSize(10).withPage(pageNum));
+                
+                break;       
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        Set<ItemDtoPublicWithImages> images = new HashSet<>();
+        for (MyItemForSale item : items) {
+            images.add(addImagesToItem(item));
+        }
+        return images;
+    }
 
-    public Set<ItemDtoPublicWithImages> getItemsByPropertyLike(int pageNum, String value, String property){
+    public Set<ItemDtoPublicWithImages> getItemsByPropertyLike(String value, int pageNum, String property){
         Page<MyItemForSale> items;
         switch (property) {
             case "name":
@@ -163,22 +185,31 @@ public class ItemService {
             MyItemForSale item = manager.find(MyItemForSale.class, noImageOpt.get().itemId());
             if (item != null) {
                 ItemDtoPublicPartial noImage = noImageOpt.get();
-                return Optional.of(new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(), item.getUrls()));
+                return Optional.of(new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(),noImage.price(), item.getUrls()));
             }
         }
         return Optional.empty();
     }
     private ItemDtoPublicWithImages addImagesToItem(MyItemForSale noImage){
-        return new ItemDtoPublicWithImages(noImage.getId(), noImage.getUser().getId(), noImage.getName(), noImage.getDescription(), noImage.getCondition(), noImage.getLocation(), noImage.getPhone(), noImage.getUrls());
+        return new ItemDtoPublicWithImages(noImage.getId(), noImage.getUser().getId(), noImage.getName(), noImage.getDescription(), noImage.getCondition(), noImage.getLocation(), noImage.getPhone(),noImage.getPrice(), noImage.getUrls());
     }
     private ItemDtoPublicWithImages addImagesToItem(ItemDtoPublicPartial noImage){
         MyItemForSale item = manager.find(MyItemForSale.class,noImage.itemId());
-        return new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(), item.getUrls());
+        return new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(),noImage.price(), item.getUrls());
     }
 
 
     private boolean canEditItem(String userId,String itemId, ItemDto itemDto){
-        if (userId != null && itemDto.userId() != null && userId == itemDto.userId()) {
+        if (userId!=null) {
+            System.out.println("userId!=null");
+        }
+        if (itemDto.userId()!=null) {
+            System.out.println("itemDto.userId()!=null");
+        }
+        if (userId.equals(itemDto.userId())) {
+            System.out.println("userId!=itemDto.userId()"+userId+", "+itemDto.userId());
+        }
+        if (userId != null && itemDto.userId() != null && userId.equals(itemDto.userId())) {
             MyUser user = manager.find(MyUser.class, userId);
             if (user != null) {
                 if (itemId != null) {
