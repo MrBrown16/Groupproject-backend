@@ -165,6 +165,8 @@ public class UserService {
     }
     public Page<UserDtoPrivatePartial> getUsersByPropertyLikePrivate(int pageNum, String value, String property){
         switch (property) {
+            case "id":
+                return userRepository.findPrivateUserDtoByIdLike(value, Pageable.ofSize(10).withPage(pageNum));
             case "userName":
                 return userRepository.findPrivateUserDtoByUserNameLike(value, Pageable.ofSize(10).withPage(pageNum));
             case "firstName":

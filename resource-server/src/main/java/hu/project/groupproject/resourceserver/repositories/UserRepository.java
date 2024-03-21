@@ -67,6 +67,11 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     //userName private
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
     "from MyUser u "+
+    "WHERE LOWER(u.id) LIKE LOWER(CONCAT('%', :name, '%')) ")
+    Page<UserDtoPrivatePartial> findPrivateUserDtoByIdLike(@Param(value = "name") String name, Pageable pageable);
+    //userName private
+    @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial(u.id, u.email, u.userName, u.firstName, u.lastName, u.phone ) "+
+    "from MyUser u "+
     "WHERE LOWER(u.userName) LIKE LOWER(CONCAT('%', :name, '%')) ")
     Page<UserDtoPrivatePartial> findPrivateUserDtoByUserNameLike(@Param(value = "name") String name, Pageable pageable);
     
