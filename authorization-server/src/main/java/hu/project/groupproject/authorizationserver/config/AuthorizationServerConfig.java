@@ -83,6 +83,7 @@ public class AuthorizationServerConfig {
             HttpSecurity http) throws Exception {
 // OAuth2AuthorizationCodeAuthenticationProvider
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        // http.
         // OAuth2ClientAuthenticationConfigurer authServerConf = new OAuth2ClientAuthenticationConfigurer();
         // authServerConf.authenticationProvider(myAuthenticationProvider)
                     // ;
