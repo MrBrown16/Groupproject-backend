@@ -35,6 +35,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -83,7 +84,7 @@ public class AuthorizationServerConfig {
             HttpSecurity http) throws Exception {
 // OAuth2AuthorizationCodeAuthenticationProvider
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        // http.
+        
         // OAuth2ClientAuthenticationConfigurer authServerConf = new OAuth2ClientAuthenticationConfigurer();
         // authServerConf.authenticationProvider(myAuthenticationProvider)
                     // ;
@@ -111,6 +112,7 @@ public class AuthorizationServerConfig {
 		);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults())
+                // .tokenEndpoint(t->t.accessTokenResponseHandler())
                 // .oidc(oidc->oidc.userInfoEndpoint(ui->ui.userInfoMapper(null)))
                 
                 // .authorizationEndpoint(e->e
@@ -165,7 +167,9 @@ public class AuthorizationServerConfig {
                 // .securityContext(c->c.disable())
                 
                 // TODO:set the form login to custom page
-                .formLogin(Customizer.withDefaults()).cors(Customizer.withDefaults())
+                // .formLogin(login->login.defaultSuccessUrl("/custom", true))
+                .formLogin(Customizer.withDefaults())
+                .cors(Customizer.withDefaults())
                 // .authenticationProvider(myAuthenticationProvider)
                 .authenticationManager(providerManager())
                 // .passwordManagement(Customizer.withDefaults())
@@ -247,6 +251,7 @@ public class AuthorizationServerConfig {
                 
                 context.getClaims().claim("authorities", authorities);
             }
+            
         };
         
     }

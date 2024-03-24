@@ -83,7 +83,7 @@ public class UserController {
     }
     
     @GetMapping("/myUserInfo")
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public UserInfoDto getUserInfo(Authentication authentication) {
         MyUser user = (MyUser)authentication.getPrincipal();
         Set<String> orgIds = new HashSet<String>();
