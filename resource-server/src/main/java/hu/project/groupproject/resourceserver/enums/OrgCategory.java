@@ -1,6 +1,6 @@
 package hu.project.groupproject.resourceserver.enums;
 
-public enum Category {
+public enum OrgCategory {
     DOCTOR,
     UTILITY,
     GOV,

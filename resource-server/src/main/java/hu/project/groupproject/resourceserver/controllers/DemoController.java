@@ -1,7 +1,13 @@
 package hu.project.groupproject.resourceserver.controllers;
 
 import java.util.Set;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,17 +20,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyNews;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
+import hu.project.groupproject.resourceserver.services.DemoService;
 import hu.project.groupproject.resourceserver.services.UserService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.TransactionScoped;
+import jakarta.transaction.Transactional;
 
 
 @RestController
 public class DemoController {
 
     protected final Log logger = LogFactory.getLog(getClass());
-    
+
+    @PersistenceContext
+    EntityManager manager;
+
 
     @Autowired
     UserService userService;
+    @Autowired
+    DemoService demoService;
 
 
     // GET localhost:8082/hello
@@ -63,6 +82,64 @@ public class DemoController {
         orgIds = userService.getOrgsIdsForUser(id);
         logger.debug("OrgIds for userInfo: "+orgIds);
         return orgIds;
+    }
+
+    @GetMapping("setup")
+    public void setup() throws Exception{
+        saveEvent();
+        saveNews();
+
+    }
+
+    @Transactional
+    private void saveEvent() throws Exception{
+        ArrayList<Long> phones = new ArrayList<>(3);
+        phones.add(12345678901L);
+        phones.add(12345678902L);
+        phones.add(12345678903L);
+        ArrayList<String> emails = new ArrayList<>(3);
+        emails.add("PUBLICEMAIL1@email.bu");
+        emails.add("PUBLICEMAIL2@email.bu");
+        emails.add("PUBLICEMAIL2@email.bu");
+        MyEvent event1 = demoService.createMyEvent("First ever event", "First event ever! How exciting!!", "A planet called Earth", phones, emails, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "5", "7");
+        manager.persist(event1);
+        ArrayList<Long> phones2 = new ArrayList<>(3);
+        phones2.add(12345433901L);
+        phones2.add(12345458902L);
+        phones2.add(12345656903L);
+        ArrayList<String> emails2 = new ArrayList<>(3);
+        emails2.add("PUBLICEMAIL12@email.bu");
+        emails2.add("PUBLICEMAIL22@email.bu");
+        emails2.add("PUBLICEMAIL22@email.bu");
+        MyEvent event2 = demoService.createMyEvent("Not the First ever event", "Second is not so bad...", "A planet called Mars", phones2, emails2, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "4", "6");
+        manager.persist(event2);
+        ArrayList<Long> phones3 = new ArrayList<>(3);
+        phones3.add(12343223901L);
+        phones3.add(12343223902L);
+        phones3.add(12343223903L);
+        ArrayList<String> emails3 = new ArrayList<>(3);
+        emails3.add("PUBLICEMAIL13@email.bu");
+        emails3.add("PUBLICEMAIL23@email.bu");
+        emails3.add("PUBLICEMAIL23@email.bu");
+        MyEvent event3 = demoService.createMyEvent("First ever event! What you say we aren't??", "Ohh we are only third? nevermind will do it", "A planet called Venus", phones3, emails3, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "3", "5");
+        manager.persist(event3);
+    }
+
+    private void saveNews() throws Exception{
+        MyNews news1 = demoService.createMyNews("6", "4", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        manager.persist(news1);
+        MyNews news2 = demoService.createMyNews("7", "5", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        manager.persist(news2);
+        MyNews news3 = demoService.createMyNews("4", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        manager.persist(news3);
+        MyNews news4 = demoService.createMyNews("4", "2", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        manager.persist(news4);
+        MyNews news5 = demoService.createMyNews("6", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        manager.persist(news5);
+    }
+
+    private void saveNotices(){
+        // MyNotice notice = demoService.createMyNotice("IDK", null, null, null, null, null, null)
     }
 
 }

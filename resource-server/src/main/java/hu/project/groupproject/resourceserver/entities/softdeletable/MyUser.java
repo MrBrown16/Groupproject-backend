@@ -35,6 +35,11 @@ public class MyUser extends LoadableImages{
     Set<MyPost> posts;
     
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
+    @Column(name = "news_fk")
+    @JsonIgnoreProperties("user")
+    Set<MyNews> news;
+    
+    @OneToMany(mappedBy = "user", fetch=FetchType.LAZY) // references MyPost.user
     @Column(name = "reservation_fk")
     @JsonIgnoreProperties("user")
     Set<MyReservation> reservations;

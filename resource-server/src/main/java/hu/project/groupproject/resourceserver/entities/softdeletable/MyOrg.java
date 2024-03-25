@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hu.project.groupproject.resourceserver.enums.Category;
+import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -41,12 +41,17 @@ public class MyOrg extends LoadableImages{
 
     @OneToMany(mappedBy = "org", fetch=FetchType.LAZY) 
     @Column(name = "posts_fk")
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties("org")
     Set<MyPost> posts;
+
+    @OneToMany(mappedBy = "org", fetch=FetchType.LAZY) 
+    @Column(name = "news_fk")
+    @JsonIgnoreProperties("org")
+    Set<MyNews> news;
     
     @OneToMany(mappedBy = "org", fetch=FetchType.LAZY) 
     @Column(name = "reservation_fk")
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties("org")
     Set<MyReservation> reservations;
 
     @OneToMany(mappedBy = "organiser", fetch=FetchType.LAZY) 
@@ -54,9 +59,9 @@ public class MyOrg extends LoadableImages{
     @JsonIgnoreProperties("organiser")
     Set<MyEvent> events;
 
-    @ElementCollection(targetClass = Category.class)
+    @ElementCollection(targetClass = OrgCategory.class)
     @Enumerated(EnumType.STRING)
-    Set<Category> categories;
+    Set<OrgCategory> categories;
 
     
     public void setUsers(Set<MyUser> users) {
@@ -84,7 +89,7 @@ public class MyOrg extends LoadableImages{
             }
         }
     }
-    public void addCategory(Category category) {
+    public void addCategory(OrgCategory category) {
         if (this.categories == null) {
             this.categories = new HashSet<>();
         }
@@ -93,7 +98,7 @@ public class MyOrg extends LoadableImages{
             this.categories.add(category);
         }
     }
-    public void removeCategory(Category category) {
+    public void removeCategory(OrgCategory category) {
         if (this.categories != null && this.categories.contains(category)) {
             this.categories.remove(category);
         }

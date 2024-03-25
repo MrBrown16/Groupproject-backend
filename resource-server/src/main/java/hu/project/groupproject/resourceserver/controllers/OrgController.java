@@ -8,7 +8,7 @@ import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
-import hu.project.groupproject.resourceserver.enums.Category;
+import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.services.EventService;
 import hu.project.groupproject.resourceserver.services.OrgService;
 import hu.project.groupproject.resourceserver.services.ReservationService;
@@ -56,7 +56,7 @@ public class OrgController {
         return orgService.getOrg(id);
     }
     @GetMapping("/search/category")
-    public Set<OrgDtoPublic> getOrgsByCategory(@RequestParam("pageNum") int pageNum, @RequestParam("category") Category category) {
+    public Set<OrgDtoPublic> getOrgsByCategory(@RequestParam("pageNum") int pageNum, @RequestParam("category") OrgCategory category) {
         return orgService.getOrgsByCategory(pageNum, category);
     }
     @GetMapping("/search/name")
@@ -119,7 +119,7 @@ public class OrgController {
     }
     @PutMapping("/{orgId}/{category}")
     @PreAuthorize("hasRole('ORG_ADMIN')")
-    public Set<Category> addOrRemoveCategory(@PathVariable("orgId") String orgId, @PathVariable("category") Category category, Authentication authentication) throws InvalidAttributeValueException{
+    public Set<OrgCategory> addOrRemoveCategory(@PathVariable("orgId") String orgId, @PathVariable("category") OrgCategory category, Authentication authentication) throws InvalidAttributeValueException{
         MyUser user = (MyUser)authentication.getPrincipal();
         return orgService.addOrRemoveCategory(user.getId(), orgId,category);
     }

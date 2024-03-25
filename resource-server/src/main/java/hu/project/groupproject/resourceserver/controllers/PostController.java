@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-
+//not in use, news will be a separate thing i guess
 @RestController
 @RequestMapping("/post")
 public class PostController {

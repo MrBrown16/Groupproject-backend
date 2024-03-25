@@ -10,6 +10,7 @@ import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.repositories.NoticeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -78,7 +79,7 @@ public class NoticeService {
     }
 
     private MyNotice mapNoticeDtoToMyNotice(MyNotice notice, NoticeDto noticeDto){
-        notice.setType(noticeDto.type());
+        notice.setType(NoticeTypes.valueOf( noticeDto.type()));
         notice.setUrgency(noticeDto.urgency());
         notice.setDescription(noticeDto.description());
         notice.setLocation(noticeDto.location());

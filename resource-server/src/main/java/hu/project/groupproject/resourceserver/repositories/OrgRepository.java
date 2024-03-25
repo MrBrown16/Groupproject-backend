@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
-import hu.project.groupproject.resourceserver.enums.Category;
+import hu.project.groupproject.resourceserver.enums.OrgCategory;
 
 
 
@@ -34,5 +34,5 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
     Page<MyOrg> findOrgByNameLike(@Param("name") String name, Pageable pageable);
 
     @Query("SELECT o FROM MyOrg o WHERE :category MEMBER OF o.categories")
-    Page<MyOrg> findOrgsByCategory(@Param("category") Category category, Pageable pageable);
+    Page<MyOrg> findOrgsByCategory(@Param("category") OrgCategory category, Pageable pageable);
 }

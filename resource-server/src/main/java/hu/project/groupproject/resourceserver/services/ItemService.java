@@ -200,15 +200,15 @@ public class ItemService {
 
 
     private boolean canEditItem(String userId,String itemId, ItemDto itemDto){
-        if (userId!=null) {
-            System.out.println("userId!=null");
-        }
-        if (itemDto.userId()!=null) {
-            System.out.println("itemDto.userId()!=null");
-        }
-        if (userId.equals(itemDto.userId())) {
-            System.out.println("userId!=itemDto.userId()"+userId+", "+itemDto.userId());
-        }
+        // if (userId!=null) {
+        //     System.out.println("userId!=null");
+        // }
+        // if (itemDto.userId()!=null) {
+        //     System.out.println("itemDto.userId()!=null");
+        // }
+        // if (userId.equals(itemDto.userId())) {
+        //     System.out.println("userId!=itemDto.userId()"+userId+", "+itemDto.userId());
+        // }
         if (userId != null && itemDto.userId() != null && userId.equals(itemDto.userId())) {
             MyUser user = manager.find(MyUser.class, userId);
             if (user != null) {

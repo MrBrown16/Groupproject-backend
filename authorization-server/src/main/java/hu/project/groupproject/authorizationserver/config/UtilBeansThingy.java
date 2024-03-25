@@ -40,9 +40,21 @@ public class UtilBeansThingy {
                                 .password("{bcrypt}$2a$10$rwdYdhJR6lN0AKxOgAHtAeLkwO9qg1thF9NyQPSDeRAfSR3KG1j8y")
                                 .roles("USER", "ADMIN")
                                 .build();
+                UserDetails orgAdmin = User.builder()
+                                .username("orgadmin")
+                                .password("{bcrypt}$2a$10$rwdYdhJR6lN0AKxOgAHtAeLkwO9qg1thF9NyQPSDeRAfSR3KG1j8y")
+                                .roles("USER", "ORG_ADMIN")
+                                .build();
+                UserDetails adminOrgAdmin = User.builder()
+                                .username("adminorgadmin")
+                                .password("{bcrypt}$2a$10$rwdYdhJR6lN0AKxOgAHtAeLkwO9qg1thF9NyQPSDeRAfSR3KG1j8y")
+                                .roles("USER", "ADMIN","ORG_ADMIN")
+                                .build();
                 JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
                 users.createUser(user);
                 users.createUser(admin);
+                users.createUser(orgAdmin);
+                users.createUser(adminOrgAdmin);
                 return users;
         }
 

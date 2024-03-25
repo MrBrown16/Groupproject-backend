@@ -134,6 +134,11 @@ public class UserService {
         logger.debug(postIds);
         return postIds;
     }
+    public Set<String> getNewsIdsForUser(String id){
+        Set<String> newsIds = userRepository.findNewsIdsByUserId(id);
+        logger.debug(newsIds);
+        return newsIds;
+    }
     public Set<String> getNoticesIdsForUser(String id){
         Set<String> noticeIds = userRepository.findNoticeIdsByUserId(id);
         logger.debug(noticeIds);

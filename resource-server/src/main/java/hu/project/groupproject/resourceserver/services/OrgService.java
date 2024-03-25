@@ -19,7 +19,7 @@ import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
-import hu.project.groupproject.resourceserver.enums.Category;
+import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -115,7 +115,7 @@ public class OrgService {
         return orgDtos;
     }
 
-    public Set<Category> addOrRemoveCategory(String userId,String orgId,Category category){
+    public Set<OrgCategory> addOrRemoveCategory(String userId,String orgId,OrgCategory category){
         if (canDeleteOrEditOrg(userId, orgId)) {
             MyOrg org = manager.find(MyOrg.class, orgId);
             if (org.getCategories() != null && org.getCategories().contains(category)) {
@@ -128,7 +128,7 @@ public class OrgService {
         throw new AccessDeniedException("You don't have the right to change this organisation");
     } 
 
-    public Set<OrgDtoPublic> getOrgsByCategory(int pageNum, Category category){
+    public Set<OrgDtoPublic> getOrgsByCategory(int pageNum, OrgCategory category){
         Page<MyOrg> orgs = orgRepository.findOrgsByCategory(category, Pageable.ofSize(10).withPage(pageNum));
         Set<OrgDtoPublic> orgDtos = new HashSet<>();
         orgs.forEach(this::mapOrgToDto);

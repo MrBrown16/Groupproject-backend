@@ -49,8 +49,9 @@ public class SecurityConfig {
                                     )
                                 )                
                 .csrf(
-                    csrf->csrf.disable()
-//                    .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
+                    csrf->csrf
+                    // .disable()
+                   .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
                     // .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/img/**"))
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) //h2-console requires it
