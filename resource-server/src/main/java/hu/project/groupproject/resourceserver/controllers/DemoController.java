@@ -4,11 +4,7 @@ import java.util.Set;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +23,6 @@ import hu.project.groupproject.resourceserver.services.DemoService;
 import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 
 
@@ -88,7 +83,7 @@ public class DemoController {
     public void setup() throws Exception{
         saveEvent();
         saveNews();
-
+        saveNotices();
     }
 
     @Transactional
@@ -138,8 +133,14 @@ public class DemoController {
         manager.persist(news5);
     }
 
-    private void saveNotices(){
-        // MyNotice notice = demoService.createMyNotice("IDK", null, null, null, null, null, null)
+    private void saveNotices() throws Exception{
+        MyNotice notice = demoService.createMyNotice("KOZTERULET", "3", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
+        manager.persist(notice);
+        MyNotice notice2 = demoService.createMyNotice("KOZTERULET", "1", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
+        manager.persist(notice2);
+        MyNotice notice3 = demoService.createMyNotice("KOZTERULET", "1", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
+        manager.persist(notice3);
     }
+    // String type, String urgency, String description, String location, Long phone, Timestamp date, String userId
 
 }
