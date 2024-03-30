@@ -111,7 +111,17 @@ public class OrgService {
     public Set<OrgDtoPublic> getOrgs(int pageNum){
         Page<MyOrg> orgs = orgRepository.findAll(Pageable.ofSize(10).withPage(pageNum));
         Set<OrgDtoPublic> orgDtos = new HashSet<>();
-        orgs.forEach(this::mapOrgToDto);
+        orgs.forEach((e)->{
+            orgDtos.add(mapOrgToDto(e));
+        });
+        return orgDtos;
+    }
+    public Set<OrgDtoPublicPartial> getOrgsByUserId(String userId, int pageNum){
+        Page<MyOrg> orgs = orgRepository.findOrgByUserId(userId, Pageable.ofSize(10).withPage(pageNum));
+        Set<OrgDtoPublicPartial> orgDtos = new HashSet<>();
+        orgs.forEach((e)->{
+            orgDtos.add(mapOrgToDtoPartial(e));
+        });
         return orgDtos;
     }
 
@@ -143,6 +153,9 @@ public class OrgService {
 
     private OrgDtoPublic mapOrgToDto(MyOrg org){
         return new OrgDtoPublic(org.getId(), org.getName(), org.getUrls());
+    }
+    private OrgDtoPublicPartial mapOrgToDtoPartial(MyOrg org){
+        return new OrgDtoPublicPartial(org.getId(), org.getName());
     }
 
     @SuppressWarnings("null")

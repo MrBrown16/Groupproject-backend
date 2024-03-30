@@ -22,9 +22,25 @@ import lombok.Setter;
 @Table(name = "reservations")
 public class MyReservation {
 
+    //just for database filling for the first time (demoController setup)
+    public MyReservation(String preferredName, String email, Long phone, Timestamp startDate, Timestamp endDate,
+            MyUser user, MyOrg org) {
+        this.preferredName = preferredName;
+        this.email = email;
+        this.phone = phone;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user;
+        this.org = org;
+    }
+
+
+    
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "reservation_id")
     String id;
+
+
 
     String preferredName;
     String email;//in case it differs from the registration email

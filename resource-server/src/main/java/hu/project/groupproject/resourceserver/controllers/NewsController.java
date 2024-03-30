@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-//not in use, news will be a separate thing i guess
 @RestController
 @RequestMapping("/news")
 public class NewsController {
@@ -46,11 +45,11 @@ public class NewsController {
     // }
 
     @GetMapping("/{id}")
-    public Optional<NewsDtoPublic> getNewsEx(@PathVariable String id) {
+    public Optional<NewsDtoPublic> getNews(@PathVariable String id) {
         return newsService.getNews(id);
     }
-    @GetMapping("/search/content")
-    public Page<NewsDtoPublic> getNewssByContentLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+    @GetMapping("/search")
+    public Page<NewsDtoPublic> getNewssByPropertyLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
         return newsService.getNewsByPropertyLike(value,pageNum,category);
     }
     @GetMapping("/search/time")

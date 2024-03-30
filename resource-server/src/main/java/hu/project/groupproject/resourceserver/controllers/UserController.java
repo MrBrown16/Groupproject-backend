@@ -7,6 +7,8 @@ import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
+import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
@@ -15,6 +17,7 @@ import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.services.NoticeService;
+import hu.project.groupproject.resourceserver.services.OrgService;
 import hu.project.groupproject.resourceserver.services.PostService;
 import hu.project.groupproject.resourceserver.services.ReservationService;
 import hu.project.groupproject.resourceserver.services.UserService;
@@ -48,17 +51,19 @@ public class UserController {
 
     UserService userService;
     PostService postService;
+    OrgService orgService;
     NoticeService noticeService;
     ReservationService reservationService;
 
     @PersistenceContext
     EntityManager manager;
     
-    public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService){
+    public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService,OrgService orgService){
         this.userService=userService;
         this.postService=postService;
         this.noticeService = noticeService;
         this.reservationService = reservationService;
+        this.orgService=orgService;
     }
 
     @GetMapping("/{id}")
@@ -101,6 +106,15 @@ public class UserController {
             return postService.getPostsForUser(userId);
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/{userId}/orgs")
+    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
+    public Set<OrgDtoPublicPartial> getOrgsForUser(@PathVariable String userId, @RequestParam("pageNum") int pageNum, Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
+        // if (user != null && user.getId() == userId) {
+            return orgService.getOrgsByUserId(userId,pageNum);
+        // }
+        // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
     @GetMapping("/{userId}/notices")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")

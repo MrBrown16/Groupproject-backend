@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNews;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservation;
 import hu.project.groupproject.resourceserver.services.DemoService;
 import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
@@ -96,8 +97,7 @@ public class DemoController {
         emails.add("PUBLICEMAIL1@email.bu");
         emails.add("PUBLICEMAIL2@email.bu");
         emails.add("PUBLICEMAIL2@email.bu");
-        MyEvent event1 = demoService.createMyEvent("First ever event", "First event ever! How exciting!!", "A planet called Earth", phones, emails, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "5", "7");
-        manager.persist(event1);
+        demoService.createMyEvent("First ever event", "First event ever! How exciting!!", "A planet called Earth", phones, emails, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "5", "7");
         ArrayList<Long> phones2 = new ArrayList<>(3);
         phones2.add(12345433901L);
         phones2.add(12345458902L);
@@ -106,8 +106,7 @@ public class DemoController {
         emails2.add("PUBLICEMAIL12@email.bu");
         emails2.add("PUBLICEMAIL22@email.bu");
         emails2.add("PUBLICEMAIL22@email.bu");
-        MyEvent event2 = demoService.createMyEvent("Not the First ever event", "Second is not so bad...", "A planet called Mars", phones2, emails2, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "4", "6");
-        manager.persist(event2);
+        demoService.createMyEvent("Not the First ever event", "Second is not so bad...", "A planet called Mars", phones2, emails2, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "4", "6");
         ArrayList<Long> phones3 = new ArrayList<>(3);
         phones3.add(12343223901L);
         phones3.add(12343223902L);
@@ -116,31 +115,29 @@ public class DemoController {
         emails3.add("PUBLICEMAIL13@email.bu");
         emails3.add("PUBLICEMAIL23@email.bu");
         emails3.add("PUBLICEMAIL23@email.bu");
-        MyEvent event3 = demoService.createMyEvent("First ever event! What you say we aren't??", "Ohh we are only third? nevermind will do it", "A planet called Venus", phones3, emails3, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "3", "5");
-        manager.persist(event3);
+        demoService.createMyEvent("First ever event! What you say we aren't??", "Ohh we are only third? nevermind will do it", "A planet called Venus", phones3, emails3, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()), "3", "5");
     }
 
     private void saveNews() throws Exception{
-        MyNews news1 = demoService.createMyNews("6", "4", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        manager.persist(news1);
-        MyNews news2 = demoService.createMyNews("7", "5", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        manager.persist(news2);
-        MyNews news3 = demoService.createMyNews("4", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        manager.persist(news3);
-        MyNews news4 = demoService.createMyNews("4", "2", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        manager.persist(news4);
-        MyNews news5 = demoService.createMyNews("6", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        manager.persist(news5);
+        demoService.createMyNews("6", "4", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("7", "5", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("4", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("4", "2", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("6", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
     }
 
     private void saveNotices() throws Exception{
-        MyNotice notice = demoService.createMyNotice("KOZTERULET", "3", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
-        manager.persist(notice);
-        MyNotice notice2 = demoService.createMyNotice("KOZTERULET", "1", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
-        manager.persist(notice2);
-        MyNotice notice3 = demoService.createMyNotice("KOZTERULET", "1", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
-        manager.persist(notice3);
+        demoService.createMyNotice("KOZTERULET", "3", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "5");
+        demoService.createMyNotice("KOZTERULET", "3", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "2");
+        demoService.createMyNotice("KOZTERULET", "2", "There is an alien SpaceShip parked in front of our house illegaly", "our address", 12345678901L, Timestamp.from(Instant.now()), "3");
     }
     // String type, String urgency, String description, String location, Long phone, Timestamp date, String userId
+
+    private void saveReservations() throws Exception{
+        demoService.createMyReservation("Bill","billspublicemail@email.bu",123456780L,Timestamp.from(Instant.now()),Timestamp.from(Instant.now()),"1","6");
+        demoService.createMyReservation("Mari","marispublicemail@email.bu",123456780L,Timestamp.from(Instant.now()),Timestamp.from(Instant.now()),"3","5");
+        demoService.createMyReservation("Bálint","balintspublicemail@email.bu",123456780L,Timestamp.from(Instant.now()),Timestamp.from(Instant.now()),"2","4");
+    }
+
 
 }

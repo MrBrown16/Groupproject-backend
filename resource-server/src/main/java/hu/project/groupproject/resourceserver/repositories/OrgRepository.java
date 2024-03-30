@@ -32,7 +32,13 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
     "FROM MyOrg o "+
     "WHERE LOWER(o.name) LIKE LOWER(CONCAT('%', :name, '%')) ")
     Page<MyOrg> findOrgByNameLike(@Param("name") String name, Pageable pageable);
-
+    
     @Query("SELECT o FROM MyOrg o WHERE :category MEMBER OF o.categories")
     Page<MyOrg> findOrgsByCategory(@Param("category") OrgCategory category, Pageable pageable);
+
+
+    @Query("SELECT o "+
+    "FROM MyOrg o LEFT JOIN o.users users "+
+    "WHERE users.id = :userId")
+    Page<MyOrg> findOrgByUserId(@Param("userId") String userId, Pageable pageable);
 }

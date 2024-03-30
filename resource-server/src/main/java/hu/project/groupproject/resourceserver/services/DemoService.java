@@ -9,11 +9,13 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNews;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservation;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.enums.NewsTypes;
 import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Service
 public class DemoService {
@@ -22,7 +24,8 @@ public class DemoService {
     EntityManager manager;
 
     //just for database filling for the first time (demoController setup)
-    public MyEvent createMyEvent(String name, String description, String location, List<Long> publicPhones,
+    @Transactional
+    public void createMyEvent(String name, String description, String location, List<Long> publicPhones,
             List<String> publicEmails, Timestamp startDate, Timestamp endDate, String organiser, String organiserUser) throws Exception {
                 MyOrg org = manager.find(MyOrg.class, organiser);
                 MyUser user = manager.find(MyUser.class, organiserUser);
@@ -30,27 +33,41 @@ public class DemoService {
                     System.err.println("org or user not found MyEvent Constructor");
                     throw new Exception("org or user not found MyEvent Constructor");
                 }
-                return new MyEvent(name, description, location, publicPhones, publicEmails, startDate, endDate,org,user);
+                manager.persist(new MyEvent(name, description, location, publicPhones, publicEmails, startDate, endDate,org,user));
                 
     }
-    public MyNews createMyNews(String userId,String orgId, String title, String content, String typeString) throws Exception{
+    @Transactional
+    public void createMyNews(String userId,String orgId, String title, String content, String typeString) throws Exception{
         MyOrg org = manager.find(MyOrg.class, orgId);
         MyUser user = manager.find(MyUser.class, userId);
         if (org == null || user == null) {
             System.err.println("org or user not found MyNews Creator method");
             throw new Exception("org or user not found MyNews Creator method");
         }
-        return new MyNews(user,org,title,content,NewsTypes.valueOf(typeString));
+        manager.persist(new MyNews(user,org,title,content,NewsTypes.valueOf(typeString)));
     }
-    
-    public MyNotice createMyNotice(String type, String urgency, String description, String location, Long phone, Timestamp date, String userId) throws Exception{
+    @Transactional
+    public void createMyNotice(String type, String urgency, String description, String location, Long phone, Timestamp date, String userId) throws Exception{
         MyUser user = manager.find(MyUser.class, userId);
         if (user == null) {
             System.err.println("user not found MyNotice Creator method");
             throw new Exception("user not found MyNotice Creator method");
         }
-        return new MyNotice(NoticeTypes.valueOf( type ), urgency, description, location, phone, date, user);
+        manager.persist(new MyNotice(NoticeTypes.valueOf( type ), urgency, description, location, phone, date, user));
     }
+    @Transactional
+    public void createMyReservation(String preferredName, String email, Long phone, Timestamp startDate, Timestamp endDate,
+    String userId, String orgId) throws Exception{
+        MyOrg org = manager.find(MyOrg.class, orgId);
+        MyUser user = manager.find(MyUser.class, userId);
+        if (org == null || user == null) {
+            System.err.println("org or user not found MyReservation Creator method");
+            throw new Exception("org or user not found MyReservation Creator method");
+        }
+        manager.persist(new MyReservation(preferredName, email, phone, startDate, endDate, user, org));
+    }
+
+
 
 
 }
