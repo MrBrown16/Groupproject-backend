@@ -3,6 +3,7 @@ package hu.project.groupproject.resourceserver.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,6 +41,9 @@ public class SecurityConfig {
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                                 // .requestMatchers(AntPathRequestMatcher.antMatcher("/user/myUserInfo/**")).permitAll()
                                 // .anyRequest().permitAll()
+                                .requestMatchers(HttpMethod.GET, "/news/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/items/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
                                 .anyRequest().authenticated()
                                 
                                 ).oauth2ResourceServer(
