@@ -4,6 +4,7 @@ import java.rmi.UnexpectedException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Map;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
@@ -11,6 +12,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,7 +44,7 @@ public class UserService {
     
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
-        this.restClient = RestClient.builder().baseUrl("http://localhost:8083/user").build();
+        this.restClient = RestClient.builder().baseUrl("http://localhost:8083/").build();
         
     }
    
@@ -88,7 +91,7 @@ public class UserService {
             userMap.put("userName", newUser.userName());
             userMap.put("password", newUser.password1());
             // UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.password1()).build();
-            Boolean success = restClient.post().uri("/newUser").body(userMap).retrieve().body(Boolean.class);
+            Boolean success = restClient.post().uri("/user/newUser").body(userMap).retrieve().body(Boolean.class);
             if (success == null || success == false) {
                 throw new UnexpectedException("User login creation failed");
             }
@@ -99,6 +102,13 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
+
+    public void logout(Authentication auth){
+        
+        restClient.post().uri("/connect/logout").body(Collections.singletonMap("token", ((Jwt) auth.getCredentials()).getTokenValue()));
+
+    }
+
     @Transactional
     public ImageUploadDetailsDto updateUser(String id, UserDtoNew newUser){
         if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null) {

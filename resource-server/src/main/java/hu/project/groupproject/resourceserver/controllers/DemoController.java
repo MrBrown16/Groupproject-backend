@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNews;
@@ -86,6 +87,7 @@ public class DemoController {
         saveNews();
         saveNotices();
     }
+
 
     @Transactional
     private void saveEvent() throws Exception{

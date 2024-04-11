@@ -156,4 +156,13 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+
+    @GetMapping("logout")
+    public void logout(Authentication auth){
+        // return auth.getCredentials();
+        
+        userService.logout(auth);
+    }
+
+
 }

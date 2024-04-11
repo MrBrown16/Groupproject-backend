@@ -173,6 +173,7 @@ public class AuthorizationServerConfig {
                 // .authenticationProvider(myAuthenticationProvider)
                 .authenticationManager(providerManager())
                 // .passwordManagement(Customizer.withDefaults())
+                .oidcLogout()
                 ;
         return http.build();
     }
