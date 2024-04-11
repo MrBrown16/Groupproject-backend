@@ -94,7 +94,7 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
     }
     
     @GetMapping("images/**")
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void getImageFile(HttpServletRequest request,HttpServletResponse response) throws IOException{
         String uri = request.getRequestURI();
         logger.debug(uri);
