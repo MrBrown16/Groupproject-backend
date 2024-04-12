@@ -44,7 +44,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/news/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/items/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
                                 .anyRequest().authenticated()
+                                // .anyRequest().permitAll()
                                 
                                 ).oauth2ResourceServer(
                                     oauth2 -> oauth2
@@ -56,7 +59,8 @@ public class SecurityConfig {
                     csrf->csrf
                     // .disable()
                    .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
-                    // .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/img/**"))
+                    .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/img/**"))
+                    .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/user"))
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) //h2-console requires it
                 .sessionManagement(session -> {
