@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +25,7 @@ import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -135,6 +137,15 @@ public class UserService {
         }
     }
 
+    public Set<UserDtoPublic> getUsersForOrg(String orgId){
+        MyOrg org = manager.find(MyOrg.class, orgId);
+        Set<UserDtoPublic> users = new HashSet();
+        org.getUsers().forEach(
+            (e)-> users.add(mapMyUserToUserDtoPublic(e))
+            );
+        return users;
+    }
+
 
     public Set<String> getOrgsIdsForUser(String id){
         Set<String> orgIds = userRepository.findOrgIdsByUserId(id);
@@ -200,5 +211,8 @@ public class UserService {
         }
     }
 
+    private UserDtoPublic mapMyUserToUserDtoPublic(MyUser user){
+        return new UserDtoPublic(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(),user.getPath());
+    }
 
 }

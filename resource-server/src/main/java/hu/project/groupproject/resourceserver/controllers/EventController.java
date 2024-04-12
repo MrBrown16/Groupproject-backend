@@ -2,6 +2,8 @@ package hu.project.groupproject.resourceserver.controllers;
 
 import java.sql.Timestamp;
 import java.util.Optional;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -54,6 +56,10 @@ public class EventController {
     @GetMapping("/search/time")
     public Page<EventDtoPublic> getPostsByTime(@RequestParam("time") Timestamp time, @RequestParam("pageNum") int pageNum) {
         return eventService.getEventsHappeningAtTime(time,pageNum);
+    }
+    @GetMapping("/sajat/{orgId}")
+    public Set<EventDtoPublic> getEventsForOrg(@PathVariable String orgId) {
+        return eventService.getEventsForOrg(orgId);
     }
 
     @PostMapping("/new")
