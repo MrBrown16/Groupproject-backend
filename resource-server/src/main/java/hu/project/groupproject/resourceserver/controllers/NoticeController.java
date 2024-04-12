@@ -42,9 +42,10 @@ protected final Log logger = LogFactory.getLog(getClass());
     }
 
     @PostMapping("/new")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void saveNotice(@RequestBody NoticeDto notice, Authentication authentication){
         MyUser user = (MyUser)authentication.getPrincipal();
+        logger.debug(user.getId());
         noticeService.createNotice(user.getId(),notice);
     }
 

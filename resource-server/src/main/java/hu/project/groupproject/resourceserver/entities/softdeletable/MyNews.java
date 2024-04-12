@@ -16,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -49,8 +50,11 @@ public class MyNews{
     @JoinColumn(name = "org_id") //references MyOrg.id which has a coloumn name of "org_id"
     @JsonIgnoreProperties("news")
     MyOrg org;
-
+    // @Lob
+    // @Column(name = "title", columnDefinition = "TEXT")
     String title;
+    // @Lob
+    // @Column(name = "content", columnDefinition = "TEXT")
     String content;
 
     @Enumerated(EnumType.STRING)

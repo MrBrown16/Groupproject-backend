@@ -122,11 +122,11 @@ public class DemoController {
     }
 
     private void saveNews() throws Exception{
-        demoService.createMyNews("6", "4", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("7", "5", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("4", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("4", "2", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("6", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("6", "4", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("7", "5", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("4", "3", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("4", "2", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("6", "3", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
         demoService.createMyNews("6", "3", "Ismét összeült a Könyvek klubja olvasókör a könyvtárban", "Ismét összeült a Könyvek klubja olvasókör a Kiskunfélegyházi Petőfi Sándor Városi Könyvtárban dr. Szabó Imre filozófus vezetésével. A március 5-ei eseményen Oliver Sacks: A férfi, aki kalapnak nézte a feleségét című művét elemezték.", "LOCAL");
         demoService.createMyNews("7", "5", "Szakmai kirándulások a Nemzeti Együttműködési Alap támogatásával", "Alapítványi támogatással vitte szakmai kirándulásokra 11-12. évfolyamos diákjait a Közgé.", "LOCAL");
         demoService.createMyNews("7", "3", "Zenei élmények a Betűbölcsiben", "Kis-Fekete Vilmos, a Kiskunfélegyházi Balázs Árpád Alapfokú Művészeti Iskola intézményvezetője tartott előadást március 5-én, kedden a városi könyvtár baba-mama klubjában. A Betűbölcsiben ezúttal a korai hangélményekről és a zenei nevelés fontosságáról hallhattak az érdeklődők.", "LOCAL");

@@ -4,7 +4,11 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
@@ -14,10 +18,12 @@ import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.repositories.NoticeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Service
 public class NoticeService {
     
+    private final Log logger = LogFactory.getLog(getClass());
 
 
     @PersistenceContext
@@ -33,11 +39,29 @@ public class NoticeService {
         this.userService=userService;
     }
 
+    @Transactional
     public void createNotice(String userId, NoticeDto noticeDto){
-        if (userId != null && noticeDto.userId() != null && userId == noticeDto.userId()) {    
+        this.logger.debug("createNotice userId: "+userId+" noticeDto: "+noticeDto.toString());
+        if (userId != null) {
+            this.logger.debug("userId != null");
+            
+        }
+        if (userId.equals(noticeDto.userId())) {
+            this.logger.debug("userId == noticeDto.userId()");
+            
+        }
+        if (noticeDto.userId() != null) {
+            this.logger.debug("noticeDto.userId() != null");
+            
+        }
+        if (userId != null && noticeDto.userId() != null && userId.equals(noticeDto.userId())) {    
+            logger.debug("inside if userId != null && noticeDto.userId() != null && userId.equals(noticeDto.userId())");
             MyNotice notice = new MyNotice();
             notice = mapNoticeDtoToMyNotice(notice, noticeDto);
             manager.persist(notice);
+        }else{
+        
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to create this notice");
         }
     }
 

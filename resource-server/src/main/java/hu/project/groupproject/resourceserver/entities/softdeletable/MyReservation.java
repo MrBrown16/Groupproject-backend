@@ -55,7 +55,7 @@ public class MyReservation {
     @JsonIgnoreProperties("reservations")
     MyUser user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "org_id") 
     @JsonIgnoreProperties("reservations")
     MyOrg org;

@@ -57,6 +57,7 @@ public class ReservationControllerUser {
     public void saveReservation(@RequestBody ReservationDto reservation, Authentication auth){
         MyUser user = (MyUser)auth.getPrincipal();
             try {
+                logger.debug("Reservation: "+reservation.toString()+" User: "+user.toString());
                 reservationService.createReservationByUser(user.getId(),reservation);
             } catch (InvalidAttributeValueException e) {
                 e.printStackTrace();
