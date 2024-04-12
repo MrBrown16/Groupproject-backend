@@ -54,6 +54,10 @@ public class ItemController {
     public ItemDtoPublicWithImages getItem(@PathVariable String itemId) {
         return itemService.getItem(itemId);
     }
+    @GetMapping("/sajat/{userId}")
+    public Set<ItemDtoPublicWithImages> getItemsForUser(@PathVariable String userId) {
+        return itemService.getItemsForUser(userId);
+    }
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")

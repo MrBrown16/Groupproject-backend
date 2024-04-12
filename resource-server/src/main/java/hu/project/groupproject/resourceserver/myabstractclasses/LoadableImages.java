@@ -21,9 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 public abstract class LoadableImages {
     protected final Log logger = LogFactory.getLog(getClass());
     // @Value("${filesystem.images.root}")//TODO: move it to external configuration
-    private Path root= Path.of("C:\\Users\\diak\\Mora-Barna\\project");
+    // private Path root= Path.of("C:\\Users\\diak\\Mora-Barna\\project");
     // private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
-    // private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
+    private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
 
     public abstract String getPath();//return the path with no trailing /
 

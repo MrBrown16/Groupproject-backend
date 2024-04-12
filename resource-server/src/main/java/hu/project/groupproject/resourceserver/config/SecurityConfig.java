@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .csrf(
                     csrf->csrf
                     // .disable()
-                   .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
+                    .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
                     .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/img/**"))
                     .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/user"))
                 )
