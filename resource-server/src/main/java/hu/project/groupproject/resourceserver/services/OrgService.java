@@ -152,11 +152,19 @@ public class OrgService {
         orgs.forEach(this::mapOrgToDto);
         return orgDtos;
     }
+    public Set<OrgDtoPublicPartial> getOrgsByNameLikePart(int pageNum, String name){
+        Page<MyOrg> orgs = orgRepository.findOrgByNameLike(name, Pageable.ofSize(10).withPage(pageNum));
+        Set<OrgDtoPublicPartial> orgDtos = new HashSet<>();
+        orgs.forEach(o->{orgDtos.add(mapOrgToDtoPartial(o));});
+        return orgDtos;
+    }
 
     private OrgDtoPublic mapOrgToDto(MyOrg org){
+        logger.debug("mapOrgToDto org: "+org.getName());
         return new OrgDtoPublic(org.getId(), org.getName(), org.getUrls());
     }
     private OrgDtoPublicPartial mapOrgToDtoPartial(MyOrg org){
+        logger.debug("mapOrgToDtoPartial org: "+org.getName());
         return new OrgDtoPublicPartial(org.getId(), org.getName());
     }
 
