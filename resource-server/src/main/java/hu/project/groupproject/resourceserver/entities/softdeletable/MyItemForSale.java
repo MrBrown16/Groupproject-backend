@@ -34,6 +34,7 @@ public class MyItemForSale extends LoadableImages{
     String description;
     String condition;
     String location;
+    String email;
     Long phone;
     Long price;
     

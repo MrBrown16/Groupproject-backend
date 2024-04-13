@@ -185,17 +185,17 @@ public class ItemService {
             MyItemForSale item = manager.find(MyItemForSale.class, noImageOpt.get().itemId());
             if (item != null) {
                 ItemDtoPublicPartial noImage = noImageOpt.get();
-                return Optional.of(new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(),noImage.price(), item.getUrls()));
+                return Optional.of(new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.email(), noImage.phone(), noImage.price(), item.getUrls()));
             }
         }
         return Optional.empty();
     }
     private ItemDtoPublicWithImages addImagesToItem(MyItemForSale noImage){
-        return new ItemDtoPublicWithImages(noImage.getId(), noImage.getUser().getId(), noImage.getName(), noImage.getDescription(), noImage.getCondition(), noImage.getLocation(), noImage.getPhone(),noImage.getPrice(), noImage.getUrls());
+        return new ItemDtoPublicWithImages(noImage.getId(), noImage.getUser().getId(), noImage.getName(), noImage.getDescription(), noImage.getCondition(), noImage.getLocation(),noImage.getEmail(), noImage.getPhone(),noImage.getPrice(), noImage.getUrls());
     }
     private ItemDtoPublicWithImages addImagesToItem(ItemDtoPublicPartial noImage){
         MyItemForSale item = manager.find(MyItemForSale.class,noImage.itemId());
-        return new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.phone(),noImage.price(), item.getUrls());
+        return new ItemDtoPublicWithImages(noImage.itemId(), noImage.userId(), noImage.name(), noImage.description(), noImage.condition(), noImage.location(), noImage.email(), noImage.phone(),noImage.price(), item.getUrls());
     }
 
 
@@ -242,6 +242,8 @@ public class ItemService {
         item.setLocation(itemDto.location());
         item.setName(itemDto.name());
         item.setPhone(itemDto.phone());
+        item.setEmail(itemDto.email());
+        item.setPrice(itemDto.price());
         MyUser user = manager.find(MyUser.class, itemDto.userId());
         item.setUser(user);
         return item;
