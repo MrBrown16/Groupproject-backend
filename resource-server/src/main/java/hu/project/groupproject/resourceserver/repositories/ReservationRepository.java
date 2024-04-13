@@ -11,7 +11,7 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservati
 
 public interface ReservationRepository extends JpaRepository<MyReservation, String> {
  
-    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic(r.id, r.user.id, r.org.id, r.preferredName, r.email, r.phone, r.startDate, r.endDate) FROM MyReservation r LEFT JOIN r.user LEFT JOIN r.org WHERE p.id=:id")
+    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic(r.id, r.user.id, r.org.id, r.preferredName, r.email, r.phone, r.startDate, r.endDate) FROM MyReservation r LEFT JOIN r.user LEFT JOIN r.org WHERE r.id=:id")
     Optional<ReservationDtoPublic> findReservationDtoById(@Param(value = "id") String id);
     
 

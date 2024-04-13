@@ -68,6 +68,10 @@ public class OrgController {
     public Set<OrgDtoPublic> getOrgsByCategory(@RequestParam("pageNum") int pageNum, @RequestParam("category") OrgCategory category) {
         return orgService.getOrgsByCategory(pageNum, category);
     }
+    @GetMapping("/search/category/part")
+    public Set<OrgDtoPublicPartial> getOrgsByCategoryPart(@RequestParam("pageNum") int pageNum, @RequestParam("category") OrgCategory category) {
+        return orgService.getOrgsByCategoryPart(pageNum, category);
+    }
     @GetMapping("/search/name/full")
     public Set<OrgDtoPublic> getOrgsByNameLikeFull(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
         return orgService.getOrgsByNameLike(pageNum, name);

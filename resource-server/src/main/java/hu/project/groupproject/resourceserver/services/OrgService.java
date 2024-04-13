@@ -143,13 +143,19 @@ public class OrgService {
     public Set<OrgDtoPublic> getOrgsByCategory(int pageNum, OrgCategory category){
         Page<MyOrg> orgs = orgRepository.findOrgsByCategory(category, Pageable.ofSize(10).withPage(pageNum));
         Set<OrgDtoPublic> orgDtos = new HashSet<>();
-        orgs.forEach(this::mapOrgToDto);
+        orgs.forEach(o-> orgDtos.add(mapOrgToDto(o)));
+        return orgDtos;
+    }
+    public Set<OrgDtoPublicPartial> getOrgsByCategoryPart(int pageNum, OrgCategory category){
+        Page<MyOrg> orgs = orgRepository.findOrgsByCategory(category, Pageable.ofSize(10).withPage(pageNum));
+        Set<OrgDtoPublicPartial> orgDtos = new HashSet<>();
+        orgs.forEach(o-> orgDtos.add(mapOrgToDtoPartial(o)));
         return orgDtos;
     }
     public Set<OrgDtoPublic> getOrgsByNameLike(int pageNum, String name){
         Page<MyOrg> orgs = orgRepository.findOrgByNameLike(name, Pageable.ofSize(10).withPage(pageNum));
         Set<OrgDtoPublic> orgDtos = new HashSet<>();
-        orgs.forEach(this::mapOrgToDto);
+        orgs.forEach(o-> orgDtos.add(mapOrgToDto(o)));
         return orgDtos;
     }
     public Set<OrgDtoPublicPartial> getOrgsByNameLikePart(int pageNum, String name){
