@@ -61,8 +61,8 @@ public class ItemController {
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")
-    public ImageUploadDetailsDto saveItem(@RequestBody ItemDto item, Authentication authentication){
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public ImageUploadDetailsDto saveItem(@RequestBody ItemDto item, Authentication auth){
+        MyUser user = (MyUser)auth.getPrincipal();
         return itemService.createItem(user.getId(),item);
     }
     @GetMapping("/demo")

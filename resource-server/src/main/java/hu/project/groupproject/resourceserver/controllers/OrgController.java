@@ -97,8 +97,8 @@ public class OrgController {
     
     @PostMapping("/addAdmin")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
-    public void addUserToOrg(@RequestBody Map<String, String> body, Authentication authentication){
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public void addUserToOrg(@RequestBody Map<String, String> body, Authentication auth){
+        MyUser user = (MyUser)auth.getPrincipal();
         String adminId = body.get("adminId");
         if(user.getId()==adminId){
             String userId = body.get("userId");
@@ -109,8 +109,8 @@ public class OrgController {
     //should be more sophisticated so not any admin can remove any and all other admins...
     @PostMapping("/removeAdmin")
     @PreAuthorize("hasRole('ORG_ADMIN')")
-    public void removeUserFromOrg(@RequestBody Map<String, String> body, Authentication authentication){
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public void removeUserFromOrg(@RequestBody Map<String, String> body, Authentication auth){
+        MyUser user = (MyUser)auth.getPrincipal();
         String adminId = body.get("adminId");
         if(user.getId()==adminId){
             String userId = body.get("userId");
@@ -127,8 +127,8 @@ public class OrgController {
     
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ORG_ADMIN')")
-    public ImageUploadDetailsDto updateOrg(@PathVariable String orgId, @RequestBody OrgDtoCreate org, Authentication authentication) throws InvalidAttributeValueException{
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public ImageUploadDetailsDto updateOrg(@PathVariable String orgId, @RequestBody OrgDtoCreate org, Authentication auth) throws InvalidAttributeValueException{
+        MyUser user = (MyUser)auth.getPrincipal();
         if (org.adminId()==user.getId()) {
             return orgService.saveOrg(orgId,org);
         }
@@ -136,8 +136,8 @@ public class OrgController {
     }
     @PutMapping("/{orgId}/{category}")
     @PreAuthorize("hasRole('ORG_ADMIN')")
-    public Set<OrgCategory> addOrRemoveCategory(@PathVariable("orgId") String orgId, @PathVariable("category") OrgCategory category, Authentication authentication) throws InvalidAttributeValueException{
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public Set<OrgCategory> addOrRemoveCategory(@PathVariable("orgId") String orgId, @PathVariable("category") OrgCategory category, Authentication auth) throws InvalidAttributeValueException{
+        MyUser user = (MyUser)auth.getPrincipal();
         return orgService.addOrRemoveCategory(user.getId(), orgId,category);
     }
     

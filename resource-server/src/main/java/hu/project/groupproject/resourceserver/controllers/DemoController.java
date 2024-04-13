@@ -47,30 +47,30 @@ public class DemoController {
     @GetMapping("hello")
     // @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public String getHello(
-        Authentication authentication
+        Authentication auth
         ) {
-            // String username = authentication.getName();
-            return "Authentication:  "+authentication.toString()+" Principal: "+authentication.getPrincipal();
+            // String username = auth.getName();
+            return "Authentication:  "+auth.toString()+" Principal: "+auth.getPrincipal();
             // return Collections.singletonMap("get_text", "Hello " + username);
         }
         
     @PostMapping("hello")
     @PreAuthorize("hasRole('ADMIN')")
     public String postHello(
-            Authentication authentication,
+            Authentication auth,
             @RequestBody String ize
     ) {
-        String username = authentication.getName();
-        return "post_text Hello " + username + authentication+ ize;
+        String username = auth.getName();
+        return "post_text Hello " + username + auth+ ize;
     }
     //     @PostMapping("hello")
     //     @PreAuthorize("hasRole('ADMIN')")
     // public Map<String, String> postHello(
-    //         Authentication authentication,
+    //         Authentication auth,
     //         @RequestBody String ize
     // ) {
-    //     String username = authentication.getName();
-    //     return Collections.singletonMap("post_text", "Hello " + username + authentication+ ize);
+    //     String username = auth.getName();
+    //     return Collections.singletonMap("post_text", "Hello " + username + auth+ ize);
     // }
     @GetMapping("orgIds/{id}")
     public Set<String> getOrgsForUserInfo(@PathVariable("id") String id){

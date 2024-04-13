@@ -50,15 +50,15 @@ protected final Log logger = LogFactory.getLog(getClass());
 
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public void saveNotice(@RequestBody NoticeDto notice, Authentication authentication){
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public void saveNotice(@RequestBody NoticeDto notice, Authentication auth){
+        MyUser user = (MyUser)auth.getPrincipal();
         logger.debug(user.getId());
         noticeService.createNotice(user.getId(),notice);
     }
     @PutMapping("/{noticeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public void updateNotice(@PathVariable String noticeId, @RequestBody NoticeDtoPublic notice, Authentication authentication){
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public void updateNotice(@PathVariable String noticeId, @RequestBody NoticeDtoPublic notice, Authentication auth){
+        MyUser user = (MyUser)auth.getPrincipal();
         logger.debug(user.getId());
         if (noticeId != null && notice.noticeId() != null && notice.noticeId().equals(noticeId)) {
             noticeService.updateNotice(user.getId(),notice);

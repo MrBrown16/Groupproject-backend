@@ -97,12 +97,12 @@ public class UserController {
     
     @GetMapping("/myUserInfo")
     // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public UserInfoDto getUserInfo(Authentication authentication) {
-        MyUser user = (MyUser)authentication.getPrincipal();
+    public UserInfoDto getUserInfo(Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
         Set<String> orgIds = new HashSet<String>();
         orgIds = userService.getOrgsIdsForUser(user.getId());
         Set<String> roles = new HashSet<String>();
-        authentication.getAuthorities().forEach(i->roles.add(i.getAuthority()));
+        auth.getAuthorities().forEach(i->roles.add(i.getAuthority()));
         return new UserInfoDto(user.getId(), user.getEmail(), user.getUserName(), user.getPhone(), roles, "", orgIds);
     }
     

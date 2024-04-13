@@ -45,7 +45,7 @@ public class NewsService {
             Optional<MyNews> oldNews = newsRepository.findById(newsId);
             if (oldNews.isPresent()) {
                 MyNews news = oldNews.get();
-                if (canEditNews(newsId, newsUpdate)) {
+                if (canEditNews(newsId, newsUpdate)) {//TODO: fix it
                     news.setTitle(newsUpdate.title());
                     news.setContent(newsUpdate.content());
                     news.setType(NewsTypes.valueOf(newsUpdate.type()));
