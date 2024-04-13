@@ -1,6 +1,7 @@
 package hu.project.groupproject.resourceserver.controllers;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.management.InvalidAttributeValueException;
 
@@ -51,12 +52,22 @@ public class ReservationControllerUser {
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
+    @GetMapping("/sajat/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
+        if (user != null && userId != null) {
+            return reservationService.getReservationsForUser(user.getId());
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")
     public void saveReservation(@RequestBody ReservationDto reservation, Authentication auth){
         MyUser user = (MyUser)auth.getPrincipal();
             try {
+                logger.debug("Reservation: "+reservation.toString()+" User: "+user.toString());
                 reservationService.createReservationByUser(user.getId(),reservation);
             } catch (InvalidAttributeValueException e) {
                 e.printStackTrace();

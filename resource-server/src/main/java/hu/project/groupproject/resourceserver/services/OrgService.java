@@ -17,6 +17,7 @@ import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
@@ -116,6 +117,7 @@ public class OrgService {
         });
         return orgDtos;
     }
+
     public Set<OrgDtoPublicPartial> getOrgsByUserId(String userId, int pageNum){
         Page<MyOrg> orgs = orgRepository.findOrgByUserId(userId, Pageable.ofSize(10).withPage(pageNum));
         Set<OrgDtoPublicPartial> orgDtos = new HashSet<>();

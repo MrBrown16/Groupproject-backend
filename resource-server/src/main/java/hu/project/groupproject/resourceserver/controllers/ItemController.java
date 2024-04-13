@@ -54,6 +54,10 @@ public class ItemController {
     public ItemDtoPublicWithImages getItem(@PathVariable String itemId) {
         return itemService.getItem(itemId);
     }
+    @GetMapping("/sajat/{userId}")
+    public Set<ItemDtoPublicWithImages> getItemsForUser(@PathVariable String userId) {
+        return itemService.getItemsForUser(userId);
+    }
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")
@@ -63,7 +67,7 @@ public class ItemController {
     }
     @GetMapping("/demo")
     public ImageUploadDetailsDto saveItemDemo(){
-        ItemDto item = new ItemDto("1", "bicikli", "Piros Bicikli", "new", "Budapest", 00001234567L, 0L); 
+        ItemDto item = new ItemDto("","1", "bicikli", "Piros Bicikli", "new", "Budapest", "email@mail.bu", 00001234567L, 0L); 
         return itemService.createItem("1",item);
     }
 

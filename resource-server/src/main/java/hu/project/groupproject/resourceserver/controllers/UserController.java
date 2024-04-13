@@ -20,6 +20,7 @@ import hu.project.groupproject.resourceserver.services.NoticeService;
 import hu.project.groupproject.resourceserver.services.OrgService;
 import hu.project.groupproject.resourceserver.services.PostService;
 import hu.project.groupproject.resourceserver.services.ReservationService;
+import hu.project.groupproject.resourceserver.services.RoleService;
 import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,6 +30,8 @@ import java.util.Set;
 import java.rmi.UnexpectedException;
 import java.util.HashSet;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,21 +52,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/user") //hasrole('USER') is set in SecurityConfig
 public class UserController {
 
+    protected final Log logger = LogFactory.getLog(getClass());
+
+
     UserService userService;
     PostService postService;
     OrgService orgService;
     NoticeService noticeService;
     ReservationService reservationService;
+    RoleService roleService;
 
     @PersistenceContext
     EntityManager manager;
     
-    public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService,OrgService orgService){
+    public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService,OrgService orgService, RoleService roleService) {
         this.userService=userService;
         this.postService=postService;
         this.noticeService = noticeService;
         this.reservationService = reservationService;
         this.orgService=orgService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/{id}")
@@ -137,8 +145,8 @@ public class UserController {
     
     
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user) throws UnexpectedException{
+        logger.debug("register......");
         return userService.newUser(user);
     }
     
@@ -155,5 +163,16 @@ public class UserController {
     public void deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
     }
+
+    //doesn't work
+    @GetMapping("logout")
+    public void logout(Authentication auth){
+        // return auth.getCredentials();
+        
+        userService.logout(auth);
+    }
+
+    //TODO: role management 
+
 
 }

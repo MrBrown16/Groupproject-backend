@@ -7,11 +7,13 @@ import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.services.EventService;
 import hu.project.groupproject.resourceserver.services.OrgService;
 import hu.project.groupproject.resourceserver.services.ReservationService;
+import hu.project.groupproject.resourceserver.services.UserService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -44,16 +46,22 @@ public class OrgController {
     OrgService orgService;
     EventService eventService;
     ReservationService reservationService;
+    UserService userService;
     
-    public OrgController(OrgService orgService, EventService eventService, ReservationService reservationService){
+    public OrgController(OrgService orgService, EventService eventService, ReservationService reservationService,UserService userService){
         this.orgService=orgService;
         this.eventService=eventService;
         this.reservationService =reservationService;
+        this.userService=userService;
     }
     
     @GetMapping("/{id}")
     public Optional<OrgDtoPublic> getOrg(@PathVariable String id) {
         return orgService.getOrg(id);
+    }
+    @GetMapping("/users/{orgId}")
+    public Set<UserDtoPublic> getOrgUsers(@PathVariable String orgId) {
+        return userService.getUsersForOrg(orgId);
     }
     @GetMapping("/search/category")
     public Set<OrgDtoPublic> getOrgsByCategory(@RequestParam("pageNum") int pageNum, @RequestParam("category") OrgCategory category) {
@@ -67,11 +75,11 @@ public class OrgController {
     public Set<OrgDtoPublic> getOrgs(int pageNum) {
         return orgService.getOrgs(pageNum);
     }
-    
-    @GetMapping("/{orgId}/events")
-    public Set<EventDtoPublic> getEventsForOrg(@PathVariable String orgId) {
-        return eventService.getEventsForOrg(orgId);
-    }
+    //EventController has it
+    // @GetMapping("/{orgId}/events")
+    // public Set<EventDtoPublic> getEventsForOrg(@PathVariable String orgId) {
+    //     return eventService.getEventsForOrg(orgId);
+    // }
     @GetMapping("/{orgId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public Set<ReservationDtoPublic> getReservationsForOrg(@PathVariable String orgId) {

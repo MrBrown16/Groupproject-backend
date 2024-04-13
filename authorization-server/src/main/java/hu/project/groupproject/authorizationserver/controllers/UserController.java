@@ -34,7 +34,7 @@ public class UserController {
     //     // System.out.println("---------------------------------------------"+user.toString()+"---------------------------------------------");
     //     return new UserDTOPublic(user.getUsername(), user.isEnabled(), user.getAuthorities());
     // }
-
+    // resource server calls this
     @PostMapping("/newUser")
     public Boolean createUser(@RequestBody Map<String,String> user) {
         String userName = user.get("userName");

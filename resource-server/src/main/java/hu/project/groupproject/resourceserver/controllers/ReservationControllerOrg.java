@@ -1,6 +1,7 @@
 package hu.project.groupproject.resourceserver.controllers;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.management.InvalidAttributeValueException;
 
@@ -54,6 +55,16 @@ public class ReservationControllerOrg {
             if (user != null && org != null && user.getOrgs().contains(org)) {
                 return reservationService.getReservation(reservationId);
             }
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+    @GetMapping("/sajat/{orgId}")
+    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
+    public Set<ReservationDtoPublic> getReservationsForOrg(@PathVariable String orgId, Authentication auth) {
+        MyUser user = (MyUser)auth.getPrincipal();
+        MyOrg org = manager.find(MyOrg.class, orgId);
+        if (user != null && org != null && org.getUsers().contains(user)) {
+            return reservationService.getReservationsForOrg(orgId);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }

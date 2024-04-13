@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNews;
@@ -85,7 +86,9 @@ public class DemoController {
         saveEvent();
         saveNews();
         saveNotices();
+        saveReservations();
     }
+
 
     @Transactional
     private void saveEvent() throws Exception{
@@ -119,11 +122,20 @@ public class DemoController {
     }
 
     private void saveNews() throws Exception{
-        demoService.createMyNews("6", "4", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("7", "5", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("4", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("4", "2", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
-        demoService.createMyNews("6", "3", "First ever article!!", "What could i write that's worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("6", "4", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("7", "5", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("4", "3", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("4", "2", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("6", "3", "First ever article!!", "What could i write thats worthy to be the first? Im not worthy", "INTERNATIONAL");
+        demoService.createMyNews("6", "3", "Ismét összeült a Könyvek klubja olvasókör a könyvtárban", "Ismét összeült a Könyvek klubja olvasókör a Kiskunfélegyházi Petőfi Sándor Városi Könyvtárban dr. Szabó Imre filozófus vezetésével. A március 5-ei eseményen Oliver Sacks: A férfi, aki kalapnak nézte a feleségét című művét elemezték.", "LOCAL");
+        demoService.createMyNews("7", "5", "Szakmai kirándulások a Nemzeti Együttműködési Alap támogatásával", "Alapítványi támogatással vitte szakmai kirándulásokra 11-12. évfolyamos diákjait a Közgé.", "LOCAL");
+        demoService.createMyNews("7", "3", "Zenei élmények a Betűbölcsiben", "Kis-Fekete Vilmos, a Kiskunfélegyházi Balázs Árpád Alapfokú Művészeti Iskola intézményvezetője tartott előadást március 5-én, kedden a városi könyvtár baba-mama klubjában. A Betűbölcsiben ezúttal a korai hangélményekről és a zenei nevelés fontosságáról hallhattak az érdeklődők.", "LOCAL");
+        demoService.createMyNews("4", "1", "Éremeső a XI. Csikós József emléktornán", "Március első hétvégéjén rendezték meg Kiskunfélegyházán a XI. Csikós József emléktornát. A sok versenyző csapatnak köszönhetően 2 helyszínen zajlottak a teremlabdarúgó-mérkőzések. A Félegyházi Térségi Sportiskola U11 korosztálya 3 csapatot indított a megmérettetésen. Az FTSI „A” és FTSI „B” csapat a Kiskunfélegyházi Városi Sportcsarnokban, a harmadik csapat a Mezgé sportcsarnokában ontotta a gólokat.", "LOCAL");
+        demoService.createMyNews("6", "3", "(országos) Ismét összeült a Könyvek klubja olvasókör a könyvtárban", "Ismét összeült a Könyvek klubja olvasókör a Kiskunfélegyházi Petőfi Sándor Városi Könyvtárban dr. Szabó Imre filozófus vezetésével. A március 5-ei eseményen Oliver Sacks: A férfi, aki kalapnak nézte a feleségét című művét elemezték.", "NATIONAL");
+        demoService.createMyNews("7", "5", "(országos) Szakmai kirándulások a Nemzeti Együttműködési Alap támogatásával", "Alapítványi támogatással vitte szakmai kirándulásokra 11-12. évfolyamos diákjait a Közgé.", "NATIONAL");
+        demoService.createMyNews("7", "3", "(országos) Zenei élmények a Betűbölcsiben", "Kis-Fekete Vilmos, a Kiskunfélegyházi Balázs Árpád Alapfokú Művészeti Iskola intézményvezetője tartott előadást március 5-én, kedden a városi könyvtár baba-mama klubjában. A Betűbölcsiben ezúttal a korai hangélményekről és a zenei nevelés fontosságáról hallhattak az érdeklődők.", "NATIONAL");
+        demoService.createMyNews("4", "1", "(országos) Éremeső a XI. Csikós József emléktornán", "Március első hétvégéjén rendezték meg Kiskunfélegyházán a XI. Csikós József emléktornát. A sok versenyző csapatnak köszönhetően 2 helyszínen zajlottak a teremlabdarúgó-mérkőzések. A Félegyházi Térségi Sportiskola U11 korosztálya 3 csapatot indított a megmérettetésen. Az FTSI „A” és FTSI „B” csapat a Kiskunfélegyházi Városi Sportcsarnokban, a harmadik csapat a Mezgé sportcsarnokában ontotta a gólokat.", "NATIONAL");
+        
     }
 
     private void saveNotices() throws Exception{

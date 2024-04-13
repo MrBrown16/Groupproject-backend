@@ -9,6 +9,8 @@ import hu.project.groupproject.resourceserver.services.NewsService;
 
 import java.sql.Timestamp;
 import java.util.Optional;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -47,6 +49,10 @@ public class NewsController {
     @GetMapping("/{id}")
     public Optional<NewsDtoPublic> getNews(@PathVariable String id) {
         return newsService.getNews(id);
+    }
+    @GetMapping("/sajat/{id}")
+    public Set<NewsDtoPublic> getNewsForUser(@PathVariable String id) {
+        return newsService.getNewsForUser(id);
     }
     @GetMapping("/search")
     public Page<NewsDtoPublic> getNewssByPropertyLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {

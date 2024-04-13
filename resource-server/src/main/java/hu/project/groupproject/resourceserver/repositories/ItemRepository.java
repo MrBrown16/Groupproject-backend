@@ -13,8 +13,9 @@ import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyItemForSale;
 
 public interface ItemRepository extends JpaRepository<MyItemForSale, String> {
-    
-    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial(i.id, i.user.id, i.name, i.description, i.condition, i.location, i.phone) FROM MyItemForSale i LEFT JOIN i.user WHERE i.id=:id")
+    // public record ItemDtoPublicPartial(String itemId, String userId, String name, String description, String condition, String location, Long phone, Long price) {}
+
+    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial(i.id, i.user.id, i.name, i.description, i.condition, i.location, i.email, i.phone, i.price) FROM MyItemForSale i LEFT JOIN i.user WHERE i.id=:id")
     Optional<ItemDtoPublicPartial> findItemDtoById(@Param(value = "id") String id);
 
     //Done create search function starting point:

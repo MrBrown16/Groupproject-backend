@@ -4,13 +4,17 @@ import java.rmi.UnexpectedException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Map;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +25,7 @@ import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -41,7 +46,7 @@ public class UserService {
     
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
-        this.restClient = RestClient.builder().baseUrl("http://localhost:8083/user").build();
+        this.restClient = RestClient.builder().baseUrl("http://localhost:8083/").build();
         
     }
    
@@ -71,7 +76,9 @@ public class UserService {
 
     @Transactional
     public ImageUploadDetailsDto newUser(UserDtoNewWithPW newUser) throws UnexpectedException{
+        logger.debug("newUser inside method");
         if (newUser.password1() != null && newUser.password2() != null && newUser.password1().equals(newUser.password2()) && newUser.phone() != null && newUser.email() != null && newUser.userName() != null) {
+            logger.debug("newUser inside if");
             MyUser user = new MyUser();
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());
@@ -88,7 +95,7 @@ public class UserService {
             userMap.put("userName", newUser.userName());
             userMap.put("password", newUser.password1());
             // UserDetails userDetails = User.builder().username(user.getUserName()).roles("USER").password(newUser.password1()).build();
-            Boolean success = restClient.post().uri("/newUser").body(userMap).retrieve().body(Boolean.class);
+            Boolean success = restClient.post().uri("/user/newUser").body(userMap).retrieve().body(Boolean.class);
             if (success == null || success == false) {
                 throw new UnexpectedException("User login creation failed");
             }
@@ -99,6 +106,13 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
+
+    public void logout(Authentication auth){
+        
+        restClient.post().uri("/connect/logout").body(Collections.singletonMap("token", ((Jwt) auth.getCredentials()).getTokenValue()));
+
+    }
+
     @Transactional
     public ImageUploadDetailsDto updateUser(String id, UserDtoNew newUser){
         if (newUser.phone() != null && newUser.email() != null && newUser.userName() != null) {
@@ -121,6 +135,15 @@ public class UserService {
         }else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public Set<UserDtoPublic> getUsersForOrg(String orgId){
+        MyOrg org = manager.find(MyOrg.class, orgId);
+        Set<UserDtoPublic> users = new HashSet();
+        org.getUsers().forEach(
+            (e)-> users.add(mapMyUserToUserDtoPublic(e))
+            );
+        return users;
     }
 
 
@@ -188,5 +211,8 @@ public class UserService {
         }
     }
 
+    private UserDtoPublic mapMyUserToUserDtoPublic(MyUser user){
+        return new UserDtoPublic(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(),user.getPath());
+    }
 
 }

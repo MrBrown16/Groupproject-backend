@@ -8,6 +8,8 @@ import javax.management.InvalidAttributeValueException;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDto;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservation;
@@ -16,10 +18,12 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.ReservationRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReservationService {
-    
+    protected final Log logger = LogFactory.getLog(getClass());
+
 
     @PersistenceContext
     EntityManager manager;
@@ -34,8 +38,11 @@ public class ReservationService {
         this.userService = userService;
     }
     
+    @Transactional
     public void createReservationByUser(String userId,ReservationDto reservationDto) throws InvalidAttributeValueException{
+        logger.debug("outside if canEditReservation(userId,null,null, reservationDto)");
         if (canEditReservation(userId,null,null, reservationDto)) {
+            logger.debug("inside if canEditReservation(userId,null,null, reservationDto)");
             MyReservation reservation = new MyReservation();
             reservation = mapReservationDtoToMyReservation(reservation, reservationDto);
             manager.persist(reservation);
@@ -123,26 +130,26 @@ public class ReservationService {
     private boolean canEditReservation(String userId,String orgId, String reservationId, ReservationDto reservationDto){
         if (reservationId != null) {
             MyReservation reservation = manager.find(MyReservation.class, reservationId);
-            if (userId != null && reservation != null && reservationDto.userId() != null && reservationDto.userId() == userId) {
+            if (userId != null && reservation != null && reservationDto.userId() != null && reservationDto.userId().equals(userId)) {
                 MyUser user = manager.find(MyUser.class, userId);
                 if (user != null && reservation.getUser()==user) {
                     return true;
                 }
             }
-            if (orgId != null && reservation != null && reservationDto.orgId() != null && reservationDto.orgId() == orgId) {
+            if (orgId != null && reservation != null && reservationDto.orgId() != null && reservationDto.orgId().equals(orgId)) {
                 MyOrg org = manager.find(MyOrg.class, orgId);
                 if (org != null && reservation.getOrg()==org) {
                     return true;
                 }
             }
         }else{
-            if (userId != null && reservationDto.userId() != null && reservationDto.userId() == userId) {
+            if (userId != null && reservationDto.userId() != null && reservationDto.userId().equals(userId)) {
                 MyUser user = manager.find(MyUser.class, userId);
                 if (user != null) {
                     return true;
                 }
             }
-            if (orgId != null && reservationDto.orgId() != null && reservationDto.orgId() == orgId) {
+            if (orgId != null && reservationDto.orgId() != null && reservationDto.orgId().equals(orgId)) {
                 MyOrg org = manager.find(MyOrg.class, orgId);
                 if (org != null) {
                     return true;
