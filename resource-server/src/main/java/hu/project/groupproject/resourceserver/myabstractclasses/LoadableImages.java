@@ -26,11 +26,17 @@ public abstract class LoadableImages {
     private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
 
     public abstract String getPath();//return the path with no trailing /
+    public abstract String getId();//return the path with no trailing /
 
     public String[] getUrls() {
         Path dir = Paths.get(getPath());
+        logger.debug("dir: "+dir);
         Path fullDir =this.root.resolve(dir);
+        logger.debug("fullDir: "+fullDir);
         String[] urls=new String[getFilesNumber(fullDir)];
+        if (urls.length>0) {
+            logger.debug("urls[0]: "+urls[0]);
+        }
         
         try(DirectoryStream<Path> stream =Files.newDirectoryStream(fullDir)){
 
@@ -87,8 +93,11 @@ public abstract class LoadableImages {
     
     @SuppressWarnings("null")
     public void saveImages(MultipartFile[] images,String path,Boolean multiple) throws IOException{
+        logger.debug("saveImages Path: "+path);
         Path dir = Paths.get(getPath());
+        logger.debug("saveImages dir: "+dir);
         Path fullDir =this.root.resolve(dir);
+        logger.debug("saveImages fullDir: "+fullDir);
         if (getFilesNumber(fullDir)>=1 && multiple == false) {
             Set<String> files = Stream.of(new File(fullDir.toString()).listFiles())
             .filter(file -> !file.isDirectory())

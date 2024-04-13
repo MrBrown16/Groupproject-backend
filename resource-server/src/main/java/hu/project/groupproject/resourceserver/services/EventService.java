@@ -58,11 +58,10 @@ public class EventService {
         }
     }
     public void deleteEvent(String userId,String eventId, Authentication auth){
-        if (canDeleteEvent(userId, eventId, auth)) {
-            MyEvent event = manager.find(MyEvent.class, eventId);
-            if (event != null) {
-                eventRepository.delete(event);
-            }
+        MyUser user = manager.find(MyUser.class, userId);
+        MyEvent event = manager.find(MyEvent.class, eventId);
+        if (canDeleteEvent(user, event, auth)) {
+            eventRepository.delete(event);
         }
     }
 
@@ -136,6 +135,16 @@ public class EventService {
             if (event != null && user != null && user.getOrgs().contains(event.getOrganiser())) {
                 return true;
             }
+        }
+        return false;
+    }
+    private boolean canDeleteEvent(MyUser user,MyEvent event, Authentication auth){
+        if (auth.getAuthorities().contains("ROLE_ADMIN")) {//TODO: check if this checks admin role correctly
+            logger.debug("canDeleteEvent auth.getAuthorities().contains(\"ROLE_ADMIN\")");
+            return true;
+        }
+        if (event != null && user != null && user.getOrgs().contains(event.getOrganiser())) {
+            return true;
         }
         return false;
     }
