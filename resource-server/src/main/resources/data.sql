@@ -14,9 +14,17 @@ INSERT INTO ORGANISATIONS (ORG_ID,NAME,DELETED) VALUES
 ('3','ThirdOrg',0),
 ('4','OrgAdmins org',0),
 ('5','adminOrgAdmins org',0),
-('6','just some org',0);
+('6','just some org',0),
+('7','Dr. Baka Károly: Kardiológus',0),
+('8','Dr. Osbáth László: Háziorvos',0),
+('9','Dr. Kun Béla: Sebész',0),
+('10','Dr. Madár Katalin: Háziorvos',0);
 
--- INSERT INTO MYORG_CATEGORIES (DELETED, MYORG_ORG_ID, CATEGORIES) VALUES
+INSERT INTO MYORG_CATEGORIES (DELETED, MYORG_ORG_ID, CATEGORIES) VALUES
+(0,'7','DOCTOR'),
+(0,'8','DOCTOR'),
+(0,'9','DOCTOR'),
+(0,'10','DOCTOR');
 
 INSERT INTO users (USER_ID,EMAIL,FIRSTNAME,LASTNAME,PHONE,USERNAME,DELETED) VALUES
 ('1','bbb@ccc.bu','Ákos','Kovács',00303345677,'moba',0),

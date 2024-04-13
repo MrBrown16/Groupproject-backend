@@ -7,6 +7,7 @@ import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
+import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
@@ -67,9 +68,17 @@ public class OrgController {
     public Set<OrgDtoPublic> getOrgsByCategory(@RequestParam("pageNum") int pageNum, @RequestParam("category") OrgCategory category) {
         return orgService.getOrgsByCategory(pageNum, category);
     }
-    @GetMapping("/search/name")
-    public Set<OrgDtoPublic> getOrgsByNameLike(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
+    @GetMapping("/search/category/part")
+    public Set<OrgDtoPublicPartial> getOrgsByCategoryPart(@RequestParam("pageNum") int pageNum, @RequestParam("category") OrgCategory category) {
+        return orgService.getOrgsByCategoryPart(pageNum, category);
+    }
+    @GetMapping("/search/name/full")
+    public Set<OrgDtoPublic> getOrgsByNameLikeFull(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
         return orgService.getOrgsByNameLike(pageNum, name);
+    }
+    @GetMapping("/search/name")
+    public Set<OrgDtoPublicPartial> getOrgsByNameLike(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
+        return orgService.getOrgsByNameLikePart(pageNum, name);
     }
     @GetMapping("/")
     public Set<OrgDtoPublic> getOrgs(int pageNum) {
