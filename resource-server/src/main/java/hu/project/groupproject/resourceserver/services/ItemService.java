@@ -11,10 +11,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.*;
 
@@ -26,6 +31,8 @@ import java.util.Set;
 @Service
 public class ItemService {
     
+    protected final Log logger = LogFactory.getLog(getClass());
+
 
     @PersistenceContext
     EntityManager manager;
@@ -61,6 +68,16 @@ public class ItemService {
     public ImageUploadDetailsDto updateItem(String userId,String itemId, ItemDto itemDto){
         if (canEditItem(userId, itemId, itemDto)) {
             MyItemForSale item = manager.find(MyItemForSale.class, itemId);
+            item = mapItemDtoToMyItemForSale(item, itemDto);
+            //should save by itself
+            return new ImageUploadDetailsDto("images/"+item.getPath(), true);
+        }
+        throw new AccessDeniedException("You don't have the right to change this item");
+
+    }
+    public ImageUploadDetailsDto updateItem(Authentication auth,String itemId, ItemDto itemDto){
+        MyItemForSale item = manager.find(MyItemForSale.class, itemId);
+        if (canEditItem(auth, item, itemDto)) {
             item = mapItemDtoToMyItemForSale(item, itemDto);
             //should save by itself
             return new ImageUploadDetailsDto("images/"+item.getPath(), true);
@@ -222,6 +239,20 @@ public class ItemService {
                 }
             }
         }
+        return false;
+    }
+    private boolean canEditItem(Authentication auth,MyItemForSale item, ItemDto itemDto){
+        // if (auth.getAuthorities().contains("ROLE_ADMIN")) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            //TODO:check if it works
+            logger.debug("admin so allowed");
+            return true;
+        }
+        MyUser user = (MyUser)auth;
+            if (user != null && item != null && itemDto != null 
+                    && item.getUser().getId()==user.getId() && itemDto.itemId() == item.getId()) {
+                        return true;
+            }
         return false;
     }
 

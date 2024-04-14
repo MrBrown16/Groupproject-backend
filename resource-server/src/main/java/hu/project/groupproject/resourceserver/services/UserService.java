@@ -27,6 +27,7 @@ import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.UserFields;
 import hu.project.groupproject.resourceserver.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -54,7 +55,12 @@ public class UserService {
         return userRepository.save(myUser);
     }
     public Optional<UserDtoPublic> getUser(String id){
-        return userRepository.findById(id, UserDtoPublic.class);
+        MyUser user = manager.find(MyUser.class, id);
+        if (user != null) {
+            return Optional.of(mapMyUserToUserDtoPublic(user));
+        }
+        return Optional.empty();
+        // return userRepository.findById(id, UserDtoPublic.class);
     }
     public Optional<UserDtoPublic> getUserByUserName(String username){
         Optional<UserDtoPublicPartial> optDtoPartial = userRepository.findByUserName(username);
@@ -178,32 +184,32 @@ public class UserService {
         return itemIds;
     }
     
-    public Page<UserDtoPublicPartial> getUsersByPropertyLikePublic(int pageNum, String value, String property){
+    public Page<UserDtoPublicPartial> getUsersByPropertyLikePublic(int pageNum, String value, UserFields property){
         switch (property) {
-            case "userName":
+            case USERNAME:
                 return userRepository.findPubUserDtoByUserNameLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "firstName":
+            case FIRSTNAME:
                 return userRepository.findPubUserDtoByFirstNameLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "lastName":
+            case LASTNAME:
                 return userRepository.findPubUserDtoByLastNameLike(value, Pageable.ofSize(10).withPage(pageNum));
             default:
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 
         }
     }
-    public Page<UserDtoPrivatePartial> getUsersByPropertyLikePrivate(int pageNum, String value, String property){
+    public Page<UserDtoPrivatePartial> getUsersByPropertyLikePrivate(int pageNum, String value, UserFields property){
         switch (property) {
-            case "id":
+            case ID:
                 return userRepository.findPrivateUserDtoByIdLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "userName":
+            case USERNAME:
                 return userRepository.findPrivateUserDtoByUserNameLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "firstName":
+            case FIRSTNAME:
                 return userRepository.findPrivateUserDtoByFirstNameLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "lastName":
+            case LASTNAME:
                 return userRepository.findPrivateUserDtoByLastNameLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "email":
+            case EMAIL:
                 return userRepository.findPrivateUserDtoByEmailLike(value, Pageable.ofSize(10).withPage(pageNum));
-            case "phone":
+            case PHONE:
                 return userRepository.findPrivateUserDtoByPhoneLike(value, Pageable.ofSize(10).withPage(pageNum));
             default:
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

@@ -74,11 +74,11 @@ public class ItemController {
     @PutMapping("/{itemId}") 
     @PreAuthorize("hasRole('USER')")
     public ImageUploadDetailsDto updateItem(@PathVariable String itemId,@RequestBody ItemDto item, Authentication auth) throws NotFoundException{
-        MyUser user = (MyUser)auth.getPrincipal();
-        if (user.getId()==item.userId()) {
-            return itemService.updateItem(user.getId(),itemId,item);
-        }
-        throw new AccessDeniedException("You don't have the right to change this item");
+        // MyUser user = (MyUser)auth.getPrincipal();
+        // if (user.getId()==item.userId()) {
+            return itemService.updateItem(auth,itemId,item);
+        // }
+        // throw new AccessDeniedException("You don't have the right to change this item");
     }
     
     @DeleteMapping("/del/{itemId}")

@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,8 +50,18 @@ public class DemoController {
     public String getHello(
         Authentication auth
         ) {
+            logger.debug("before if");
+            if (auth.getAuthorities().contains("ROLE_ADMIN")) {
+                //TODO:check if it works
+                logger.debug("auth.getAuthorities().contains('ROLE_ADMIN')");
+            }
+            var arr = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));            
+                logger.debug("auth.getAuthorities().getClass();"+arr);
+            logger.debug("after if");
+            // logger.debug(auth);
             // String username = auth.getName();
-            return "Authentication:  "+auth.toString()+" Principal: "+auth.getPrincipal();
+            return "Authentication:  "+auth.toString()+" Principal: "+auth.getPrincipal()+" Authorities: "+auth.getAuthorities().toString()+" Authorities: "+auth.getAuthorities();
+
             // return Collections.singletonMap("get_text", "Hello " + username);
         }
         

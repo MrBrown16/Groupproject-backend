@@ -34,6 +34,7 @@ import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartia
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.UserFields;
 import hu.project.groupproject.resourceserver.services.NoticeService;
 import hu.project.groupproject.resourceserver.services.OrgService;
 import hu.project.groupproject.resourceserver.services.PostService;
@@ -84,12 +85,12 @@ public class UserController {
     }
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public Page<UserDtoPublicPartial> searchPubUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+    public Page<UserDtoPublicPartial> searchPubUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") UserFields category ) {
         return userService.getUsersByPropertyLikePublic(pageNum, value, category);
     }
     @GetMapping("/admin/search")
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<UserDtoPrivatePartial> searchPrivateUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+    public Page<UserDtoPrivatePartial> searchPrivateUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") UserFields category ) {
         return userService.getUsersByPropertyLikePrivate(pageNum, value, category);
     }
     
@@ -116,7 +117,7 @@ public class UserController {
     @GetMapping("/{userId}/orgs")
     // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<OrgDtoPublicPartial> getOrgsForUser(@PathVariable String userId, @RequestParam("pageNum") int pageNum, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
+        // MyUser user = (MyUser)auth.getPrincipal();
         // if (user != null && user.getId() == userId) {
             return orgService.getOrgsByUserId(userId,pageNum);
         // }
@@ -125,20 +126,20 @@ public class UserController {
     @GetMapping("/{userId}/notices")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
-        if (user != null && user.getId() == userId) {
+        // MyUser user = (MyUser)auth.getPrincipal();
+        // if (user != null && user.getId() == userId) {
             return noticeService.getNoticesForUser(userId);
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        // }
+        // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
     @GetMapping("/{userId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
-        if (user != null && user.getId() == userId) {
+        // MyUser user = (MyUser)auth.getPrincipal();
+        // if (user != null && user.getId() == userId) {
             return reservationService.getReservationsForUser(userId);
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        // }
+        // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
     
     
