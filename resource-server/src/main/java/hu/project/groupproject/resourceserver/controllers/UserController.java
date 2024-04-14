@@ -74,7 +74,7 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Optional<UserDtoPublic> getUser(@PathVariable String id) {
         return userService.getUser(id);

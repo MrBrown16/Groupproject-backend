@@ -35,12 +35,12 @@ INSERT INTO users (USER_ID,EMAIL,FIRSTNAME,LASTNAME,PHONE,USERNAME,DELETED) VALU
 ('6','orgadmin@email.bu','OrgAdmin','OrgAdmin',00303345677,'orgadmin',0),
 ('7','adminorgadmin@email.bu','adminOrgAdmin','adminOrgAdmin',00303345677,'adminorgadmin',0);
 
-INSERT INTO ITEMS ( ITEM_ID, CONDITION, CREATIONTIME, DESCRIPTION, LOCATION, NAME, PHONE, PRICE, UPDATETIME, DELETED, USER_ID ) VALUES
-('1','new','2024-03-19 13:57:35.259333','Piros Bicikli','Budapest','bicikli',342391,0,'2024-03-19 13:57:35.259333',0,'1'),
-('2','newish','2024-03-19 13:57:35.259333','Sárga Bicikli','Budapest','bicikli',342391,71000,'2024-03-19 13:57:35.259333',0,'2'),
-('3','new','2024-03-19 13:57:35.259333','Éjjeli Szekrény','Budapest','Szekrény',342391,23099,'2024-03-19 13:57:35.259333',0,'3'),
-('4','newish','2024-03-19 13:57:35.259333','Ágy','Budapest','Ágy',342391,10000,'2024-03-19 13:57:35.259333',0,'2'),
-('5','used','2024-03-19 13:57:35.259333','Szinglik a környékeden','Budapest','Szinglik',342391213424,0,'2024-03-19 13:57:35.259333',0,'1');
+INSERT INTO ITEMS ( ITEM_ID, CONDITION, CREATIONTIME, DESCRIPTION, LOCATION, NAME, PHONE,EMAIL, PRICE, UPDATETIME, DELETED, USER_ID ) VALUES
+('1','new','2024-03-19 13:57:35.259333','Piros Bicikli','Budapest','bicikli',342391,'email1@mail.bu',0,'2024-03-19 13:57:35.259333',0,'1'),
+('2','newish','2024-03-19 13:57:35.259333','Sárga Bicikli','Budapest','bicikli',342391,'email2@mail.bu',71000,'2024-03-19 13:57:35.259333',0,'2'),
+('3','new','2024-03-19 13:57:35.259333','Éjjeli Szekrény','Budapest','Szekrény',342391,'email3@mail.bu',23099,'2024-03-19 13:57:35.259333',0,'3'),
+('4','newish','2024-03-19 13:57:35.259333','Ágy','Budapest','Ágy',342391,'email4@mail.bu',10000,'2024-03-19 13:57:35.259333',0,'2'),
+('5','used','2024-03-19 13:57:35.259333','Szinglik a környékeden','Budapest','Szinglik',342391213424,'email5@mail.bu',0,'2024-03-19 13:57:35.259333',0,'1');
 
 INSERT INTO ORGS_ADMINS (USER_ID,ORG_ID,DELETED) VALUES
 ('4','1',0),--wouldn't be possible because user not ORG_ADMIN
