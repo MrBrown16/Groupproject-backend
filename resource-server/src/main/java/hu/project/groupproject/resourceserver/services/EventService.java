@@ -99,7 +99,7 @@ public class EventService {
     }
 
     public Page<EventDtoPublic> getEventsHappeningAtTime(Timestamp time, int pageNum){
-        return eventRepository.findEventDtoByDateBetween(time, Pageable.ofSize(10).withPage(pageNum));
+        return eventRepository.findEventDtoByDateBetweenTruncatedToDay(time, Pageable.ofSize(10).withPage(pageNum));
     }
 
 
