@@ -48,6 +48,8 @@ public class MyItemForSale extends LoadableImages{
     
     @Override
     public String getPath() {
+        logger.debug("MyItemForSale getPath() user.getId(): "+user.getId());
+        logger.debug("MyItemForSale getPath() this.user.getId(): "+this.user.getId());
         return "users/"+this.user.getId()+"/items/"+this.id;
     }
     public static String getPath(String userId, String id){

@@ -65,18 +65,18 @@ public class NewsController {
     
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public NewsDtoPublic saveNews(@RequestBody NewsDtoCreate news){
+    public NewsDtoPublic saveNews(@RequestBody NewsDtoCreate news, Authentication auth){
         return newsService.createNews(news);
     }
 
     @PutMapping("/{id}") 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public NewsDtoPublic updateNews(@PathVariable("id") String id, @RequestBody NewsDtoCreate news, Authentication auth) throws NotFoundException{
-        MyUser user = (MyUser)auth.getPrincipal();
-        if (user.getId()==news.userId() && id != null) {
+        // MyUser user = (MyUser)auth.getPrincipal();
+        // if (user.getId()==news.userId() && id != null) {
             return newsService.updateNews(id,news);
-        }
-        throw new AccessDeniedException("You don't have the right to change this news");
+        // }
+        // throw new AccessDeniedException("You don't have the right to change this news");
     }
 
     

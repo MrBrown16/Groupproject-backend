@@ -50,10 +50,10 @@ public class MyNews{
     @JoinColumn(name = "org_id") //references MyOrg.id which has a coloumn name of "org_id"
     @JsonIgnoreProperties("news")
     MyOrg org;
-    // @Lob
+    @Lob
     // @Column(name = "title", columnDefinition = "TEXT")
     String title;
-    // @Lob
+    @Lob
     // @Column(name = "content", columnDefinition = "TEXT")
     String content;
 

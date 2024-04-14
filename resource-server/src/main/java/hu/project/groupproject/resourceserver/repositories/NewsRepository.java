@@ -31,19 +31,19 @@ public interface NewsRepository extends JpaRepository<MyNews, String>{
     //title
     @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.news.NewsDtoPublic(p.id, p.user.id, p.user.userName, p.org.id, p.org.name, p.title, p.content, p.type) "+
     "FROM MyNews p LEFT JOIN p.user LEFT JOIN p.org "+
-    "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :search, '%')) ")
+    "WHERE p.title LIKE UPPER(CONCAT('%', :search, '%')) ")    
     Page<NewsDtoPublic> findNewsDtoByTitleLike(@Param(value = "search") String search, Pageable pageable);
 
     //content
     @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.news.NewsDtoPublic(p.id, p.user.id, p.user.userName, p.org.id, p.org.name, p.title, p.content, p.type) "+
     "FROM MyNews p LEFT JOIN p.user LEFT JOIN p.org "+
-    "WHERE LOWER(p.content) LIKE LOWER(CONCAT('%', :search, '%')) ")
+    "WHERE p.content LIKE UPPER(CONCAT('%', :search, '%')) ")    
     Page<NewsDtoPublic> findNewsDtoByContentLike(@Param(value = "search") String search, Pageable pageable);
 
     //type
     @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.news.NewsDtoPublic(p.id, p.user.id, p.user.userName, p.org.id, p.org.name, p.title, p.content, p.type) "+
     "FROM MyNews p LEFT JOIN p.user LEFT JOIN p.org "+
-    "WHERE LOWER(p.type) LIKE LOWER(CONCAT('%', :search, '%')) ")
+    "WHERE p.type LIKE UPPER(CONCAT('%', :search, '%')) ")    
     Page<NewsDtoPublic> findNewsDtoByTypeLike(@Param(value = "search") String search, Pageable pageable);
 
     //date Update Before

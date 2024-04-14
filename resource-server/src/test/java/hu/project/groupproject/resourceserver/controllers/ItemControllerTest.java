@@ -129,15 +129,15 @@ class ItemControllerTest{
 //	@Test
 //	@WithMockUser(setupBefore = userSetup)
 //	void testDeleteItem() throws Exception {
-//		// Mock the authentication object
-//		Authentication authentication = mock(Authentication.class);
+//		// Mock the auth object
+//		Authentication auth = mock(Authentication.class);
 //		// Stub the principal
 //		MyUser user = new MyUser();
 //		user.setId("userId");
-//		when(authentication.getPrincipal()).thenReturn(user);
+//		when(auth.getPrincipal()).thenReturn(user);
 //
 //		// Perform the request
-//		mockMvc.perform(delete("/items/del/{itemId}", "itemId").principal(authentication))
+//		mockMvc.perform(delete("/items/del/{itemId}", "itemId").principal(auth))
 //				.andExpect(status().isOk());
 //
 //		// Verify that the service method was called with the correct arguments

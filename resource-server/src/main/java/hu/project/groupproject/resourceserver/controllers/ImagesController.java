@@ -76,14 +76,19 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void postImageFile(@RequestParam("images") MultipartFile[] images, HttpServletRequest request) throws IOException{
         String uri = request.getRequestURI();
+        logger.debug("postImageFile uri: "+uri);
         String[] parts = uri.split("/"); //parts[2]= type parts[3]=id 
+        logger.debug("parts[2]: "+parts[2]);
+        logger.debug("parts[3]: "+parts[3]);
+        logger.debug("parts[4]: "+parts[4]);
         Boolean[] multiple={true};
         LoadableImages entity = determineImagePlacement(parts,multiple);
         logger.debug("Multiple after determineImagePlacement: "+multiple[0]);
+        logger.debug("entity in postImageFile: "+entity.getId());
         if (entity==null) {
             // new LoadableImages().saveImages(images, uri);
         }else{
-            entity.saveImages(images, null, multiple[0]);
+            entity.saveImages(images, entity.getPath(), multiple[0]);
         }
             logger.debug(uri);
         for (String string : parts) {
@@ -175,11 +180,11 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
             case "users":
                 switch(parts[4]){
                     case "posts":
-                        entity= manager.find(MyPost.class,parts[3]);
+                        entity= manager.find(MyPost.class,parts[5]);
 
                     break;
                     case "items":
-                        entity= manager.find(MyItemForSale.class,parts[3]);
+                        entity= manager.find(MyItemForSale.class,parts[5]);
                         
                     break;   
                     case "profile":
@@ -194,7 +199,7 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
                 case "orgs":
                     switch(parts[4]){
                     case "posts":
-                        entity= manager.find(MyPost.class,parts[3]);
+                        entity= manager.find(MyPost.class,parts[5]);
                         
                     break;  
                     case "logo":
