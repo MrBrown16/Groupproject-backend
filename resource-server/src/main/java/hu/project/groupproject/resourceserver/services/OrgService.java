@@ -24,6 +24,7 @@ import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -40,7 +41,7 @@ public class OrgService {
     public OrgService(OrgRepository orgRepository){
         this.orgRepository=orgRepository;
     }
-   
+    @Transactional
     public ImageUploadDetailsDto createOrg(OrgDtoCreate org){
         MyOrg newOrg = new MyOrg();
         MyUser admin = manager.find(MyUser.class, org.adminId());
@@ -50,6 +51,7 @@ public class OrgService {
         }
         return new ImageUploadDetailsDto("images/"+newOrg.getPath(), false);
     }
+    @Transactional
     public ImageUploadDetailsDto saveOrg(String orgId,OrgDtoCreate org) throws InvalidAttributeValueException{
         MyOrg oldOrg = manager.find(MyOrg.class, orgId);
         MyUser admin = manager.find(MyUser.class, org.adminId());
@@ -59,6 +61,7 @@ public class OrgService {
         oldOrg.setName(org.name());
         oldOrg.addUser(admin);
         //should save by itself
+        manager.persist(oldOrg);
         return new ImageUploadDetailsDto("images/"+oldOrg.getPath(), false);
     }
 

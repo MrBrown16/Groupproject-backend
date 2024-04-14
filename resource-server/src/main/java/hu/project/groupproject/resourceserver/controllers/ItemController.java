@@ -56,6 +56,7 @@ public class ItemController {
     }
     @GetMapping("/sajat/{userId}")
     public Set<ItemDtoPublicWithImages> getItemsForUser(@PathVariable String userId) {
+        logger.debug("getSajatItems userId: "+userId);
         return itemService.getItemsForUser(userId);
     }
 
@@ -84,8 +85,8 @@ public class ItemController {
     @DeleteMapping("/del/{itemId}")
     @PreAuthorize("hasRole('USER')")
     public void deleteItem(@PathVariable String itemId, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
-        logger.debug(user.getId());
-        itemService.deleteItem(user.getId(), itemId);
+        // MyUser user = (MyUser)auth.getPrincipal();
+        // logger.debug(user.getId());
+        itemService.deleteItem(auth, itemId);
     }
 }

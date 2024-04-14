@@ -61,38 +61,51 @@ public class ItemService {
             item = mapItemDtoToMyItemForSale(item, itemDto);
             manager.persist(item);
             return new ImageUploadDetailsDto("images/"+item.getPath(), true);
+        }else{
+            throw new AccessDeniedException("You don't have the right to change this item");
         }
-        throw new AccessDeniedException("You don't have the right to change this item");
+        
 
     }
+    @Transactional
     public ImageUploadDetailsDto updateItem(String userId,String itemId, ItemDto itemDto){
         if (canEditItem(userId, itemId, itemDto)) {
             MyItemForSale item = manager.find(MyItemForSale.class, itemId);
             item = mapItemDtoToMyItemForSale(item, itemDto);
             //should save by itself
+            manager.persist(item);
             return new ImageUploadDetailsDto("images/"+item.getPath(), true);
+        }else{
+            throw new AccessDeniedException("You don't have the right to change this item");
         }
-        throw new AccessDeniedException("You don't have the right to change this item");
 
     }
+    @Transactional
     public ImageUploadDetailsDto updateItem(Authentication auth,String itemId, ItemDto itemDto){
         MyItemForSale item = manager.find(MyItemForSale.class, itemId);
+        logger.debug("updateItem itemId: "+itemId);
+        logger.debug("updateItem item.getId: "+item.getId());
         if (canEditItem(auth, item, itemDto)) {
             item = mapItemDtoToMyItemForSale(item, itemDto);
             //should save by itself
+            manager.persist(item);
             return new ImageUploadDetailsDto("images/"+item.getPath(), true);
+        }else{
+            throw new AccessDeniedException("You don't have the right to change this item");
         }
-        throw new AccessDeniedException("You don't have the right to change this item");
 
     }
-    public void deleteItem(String userId,String itemId){
-        if (canDeleteItem(userId, itemId)) {
-            MyItemForSale item = manager.find(MyItemForSale.class, itemId);
-            if (item != null) {
-                itemRepository.delete(item);
-            }
+    @Transactional
+    public void deleteItem(Authentication auth,String itemId){
+        MyItemForSale item = manager.find(MyItemForSale.class, itemId);
+        logger.debug("deleteItem item:"+item);
+        logger.debug("deleteItem item.getName():"+item.getName());
+        if (canDeleteItem(auth, item)) {
+            logger.debug("deleteItem canDeleteItem:"+item.getName());
+            itemRepository.delete(item);
+        }else{
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to delete this item");
         }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to delete this item");
     }
 
     public ItemDtoPublicWithImages getItem(String itemId){
@@ -261,6 +274,20 @@ public class ItemService {
             MyUser user = manager.find(MyUser.class, userId);
             MyItemForSale item = manager.find(MyItemForSale.class, itemId);
             if (item != null && user != null && item.getUser() == user) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean canDeleteItem(Authentication auth, MyItemForSale item){
+        if (item != null) {
+            if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                //TODO:check if it works
+                logger.debug("admin so allowed");
+                return true;
+            }
+            MyUser user = (MyUser)auth;
+            if (user != null && item.getUser() == user) {
                 return true;
             }
         }

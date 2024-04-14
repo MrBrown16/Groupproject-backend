@@ -23,6 +23,7 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.EventRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Service
 public class EventService {
@@ -50,11 +51,13 @@ public class EventService {
             
         }
     }
+    @Transactional
     public void updateEvent(String eventId, EventDto eventDto, Authentication auth){
         if (canEditEvent(eventId, eventDto,auth)) {
             MyEvent event = manager.find(MyEvent.class, eventId);
             event = mapEventDtoToMyEvent(event, eventDto);
             //should save by itself
+            manager.persist(event);
         }
     }
     public void deleteEvent(String userId,String eventId, Authentication auth){
@@ -209,11 +212,13 @@ public class EventService {
             
 //         }
 //     }
+        // @Transactional
 //     public void updateEvent(String userId,String eventId, EventDto eventDto){
 //         if (canEditEvent(userId, eventId, eventDto)) {
 //             MyEvent event = manager.find(MyEvent.class, eventId);
 //             event = mapEventDtoToMyEvent(event, eventDto);
 //             //should save by itself
+                // manager.persist(event);
 //         }
 //     }
 //     public void deleteEvent(String userId,String eventId){

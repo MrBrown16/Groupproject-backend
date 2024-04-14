@@ -49,13 +49,16 @@ public class ReservationService {
             
         }
     }
+    @Transactional
     public void updateReservationByUser(String userId,String reservationId, ReservationDto reservationDto) throws InvalidAttributeValueException{
         if (canEditReservation(userId,null, reservationId, reservationDto)) {
             MyReservation reservation = manager.find(MyReservation.class, reservationId);
             reservation = mapReservationDtoToMyReservation(reservation, reservationDto);
             //should save by itself
+            manager.persist(reservation);
         }
     }
+    @Transactional
     public void deleteReservationByUser(String userId,String reservationId){
         if (canDeleteReservation(userId, null, reservationId)) {
             MyReservation reservation = manager.find(MyReservation.class, reservationId);
@@ -64,6 +67,7 @@ public class ReservationService {
             }
         }
     }
+    @Transactional
     public void createReservationByOrg(String orgId,ReservationDto reservationDto) throws InvalidAttributeValueException{
         if (canEditReservation(null,orgId,null, reservationDto)) {
             MyReservation reservation = new MyReservation();
@@ -72,13 +76,16 @@ public class ReservationService {
             
         }
     }
+    @Transactional
     public void updateReservationByOrg(String orgId,String reservationId, ReservationDto reservationDto) throws InvalidAttributeValueException{
         if (canEditReservation(null,orgId, reservationId, reservationDto)) {
             MyReservation reservation = manager.find(MyReservation.class, reservationId);
             reservation = mapReservationDtoToMyReservation(reservation, reservationDto);
             //should save by itself
+            manager.persist(reservation);
         }
     }
+    @Transactional
     public void deleteReservationByOrg(String orgId,String reservationId){
         if (canDeleteReservation(null, orgId, reservationId)) {
             MyReservation reservation = manager.find(MyReservation.class, reservationId);
