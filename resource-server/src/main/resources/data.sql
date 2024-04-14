@@ -39,8 +39,20 @@ INSERT INTO ITEMS ( ITEM_ID, CONDITION, CREATIONTIME, DESCRIPTION, LOCATION, NAM
 ('1','new','2024-03-19 13:57:35.259333','Piros Bicikli','Budapest','bicikli',342391,'email1@mail.bu',0,'2024-03-19 13:57:35.259333',0,'1'),
 ('2','newish','2024-03-19 13:57:35.259333','Sárga Bicikli','Budapest','bicikli',342391,'email2@mail.bu',71000,'2024-03-19 13:57:35.259333',0,'2'),
 ('3','new','2024-03-19 13:57:35.259333','Éjjeli Szekrény','Budapest','Szekrény',342391,'email3@mail.bu',23099,'2024-03-19 13:57:35.259333',0,'3'),
-('4','newish','2024-03-19 13:57:35.259333','Ágy','Budapest','Ágy',342391,'email4@mail.bu',10000,'2024-03-19 13:57:35.259333',0,'2'),
-('5','used','2024-03-19 13:57:35.259333','Szinglik a környékeden','Budapest','Szinglik',342391213424,'email5@mail.bu',0,'2024-03-19 13:57:35.259333',0,'1');
+('4','newish','2024-03-19 13:57:35.259333','Ágy','Budapest','Ágy',342391,'email4@mail.bu',10000,'2024-03-19 13:57:35.259333',0,'4'),
+('5','used','2024-03-19 13:57:35.259333','Szinglik a környékeden','Budapest','Szinglik',342391213424,'email5@mail.bu',0,'2024-03-19 13:57:35.259333',0,'5'),
+('6','new','2024-04-14 00:00:00','Eladó fürjek, ketreccel vihetőek','Sümeg','Eladó fürjek, ketreccel vihetőek',564764654,'47658',1398535,'2024-04-14 00:00:00',0,'6'),
+('7','used','2024-04-14 00:00:00','Samsung hangszóró eladó','8554','Samsung hangszóró eladó',46543,'46467',456456,'2024-04-14 00:00:00',0,'7'),
+('8','new','2024-04-14 00:00:00','Éjjeli Szekrény','Budapest','Szekrény',342391,'email3@mail.bu',23099,'2024-04-14 00:00:00',0,'1'),
+('9','newish','2024-04-14 00:00:00','Ágy','Budapest','Ágy',342391,'email4@mail.bu',10000,'2024-04-14 00:00:00',0,'2'),
+('10','newish','2024-04-14 00:00:00','Sárga Bicikli','Budapest','bicikli',342391,'email2@mail.bu',71000,'2024-04-14 00:00:00',0,'3'),
+('11','new','2024-04-14 00:00:00','Samsung TV adó el','8554','Samsung TV adó el',46543,'4646567',456456,'2024-04-14 00:00:00',0,'4'),
+('12','new','2024-04-14 00:00:00','IV. Baldwin király tanításai vihetőek','8554','IV. Baldwin király tanításai vihetőek',46543,'4646567',456456,'2024-04-14 00:00:00',0,'5'),
+('13','new','2024-04-14 00:00:00','IV. Baldwin király tanításai vihetőek','8554','IV. Baldwin király tanításai vihetőek',46543,'4646567',456456,'2024-04-14 00:00:00',0,'6'),
+('14','used','2024-04-14 00:00:00','Sérült szekrény elvihető','Budapest','Sérült szekrény elvihető',564764654,'47658',13535,'2024-04-14 00:00:00',0,'7'),
+('15','new','2024-04-14 00:00:00','LG Monitor eladó','8554','LG Monitor eladó',46543,'4646567',456456,'2024-04-14 00:00:00',0,'1'),
+('16','newish','2024-04-14 00:00:00','Alig használt éjjeli lámpa','Pócsag','Alig használt éjjeli lámpa',243234521,'12314345',343215,'2024-04-14 00:00:00',0,'2');
+
 
 INSERT INTO ORGS_ADMINS (USER_ID,ORG_ID,DELETED) VALUES
 ('4','1',0),--wouldn't be possible because user not ORG_ADMIN
