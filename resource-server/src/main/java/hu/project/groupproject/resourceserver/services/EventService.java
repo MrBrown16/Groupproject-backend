@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -109,10 +109,10 @@ public class EventService {
 
     private boolean canEditEvent(String eventId, EventDto eventDto,Authentication auth){
         logger.debug("canEditEvent authorities: "+auth.getAuthorities());
-        if (auth.getAuthorities().contains("")) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return true;
         }
-        MyUser userr = (MyUser)auth;
+        MyUser userr = (MyUser)auth.getPrincipal();
         String userId = userr.getId();
         if (userId != null && eventDto.userId() != null && userId == eventDto.userId() && eventDto.orgId() != null) {
             MyUser user = manager.find(MyUser.class, userId);
@@ -142,8 +142,8 @@ public class EventService {
         return false;
     }
     private boolean canDeleteEvent(MyUser user,MyEvent event, Authentication auth){
-        if (auth.getAuthorities().contains("ROLE_ADMIN")) {//TODO: check if this checks admin role correctly
-            logger.debug("canDeleteEvent auth.getAuthorities().contains(\"ROLE_ADMIN\")");
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {//TODO: check if this checks admin role correctly
+            logger.debug("canDeleteEvent auth.getAuthorities().contains(new SimpleGrantedAuthority(\"ROLE_ADMIN\")");
             return true;
         }
         if (event != null && user != null && user.getOrgs().contains(event.getOrganiser())) {

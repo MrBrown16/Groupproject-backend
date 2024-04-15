@@ -1,32 +1,31 @@
 package hu.project.groupproject.resourceserver.services;
 
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDto;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.ItemDtoPublicWithImages;
-import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyItemForSale;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.ItemRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.*;
-
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ItemService {
@@ -255,13 +254,12 @@ public class ItemService {
         return false;
     }
     private boolean canEditItem(Authentication auth,MyItemForSale item, ItemDto itemDto){
-        // if (auth.getAuthorities().contains("ROLE_ADMIN")) {
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             //TODO:check if it works
             logger.debug("admin so allowed");
             return true;
         }
-        MyUser user = (MyUser)auth;
+        MyUser user = (MyUser)auth.getPrincipal();
             if (user != null && item != null && itemDto != null 
                     && item.getUser().getId()==user.getId() && itemDto.itemId() == item.getId()) {
                         return true;
@@ -286,7 +284,7 @@ public class ItemService {
                 logger.debug("admin so allowed");
                 return true;
             }
-            MyUser user = (MyUser)auth;
+            MyUser user = (MyUser)auth.getPrincipal();
             if (user != null && item.getUser() == user) {
                 return true;
             }

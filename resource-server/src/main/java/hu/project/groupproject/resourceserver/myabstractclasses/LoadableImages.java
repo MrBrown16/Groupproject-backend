@@ -22,8 +22,8 @@ public abstract class LoadableImages {
     protected final Log logger = LogFactory.getLog(getClass());
     // @Value("${filesystem.images.root}")//TODO: move it to external configuration
     // private Path root= Path.of("C:\\Users\\diak\\Mora-Barna\\project");
-    // private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
     private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
+    // private Path root= Path.of("C:\\Users\\Barna\\Desktop\\vizsga");
 
     public abstract String getPath();//return the path with no trailing /
     public abstract String getId();//return the path with no trailing /
@@ -136,7 +136,7 @@ public abstract class LoadableImages {
             Path destination = this.root.resolve(Paths.get(path+"/"+filename.replace(' ', '_')).normalize());
             logger.debug("Destination: "+destination+" ImageName:  "+ images[i].getOriginalFilename());
             try (InputStream inputStream = images[i].getInputStream()) {
-                Files.createDirectories(destination);
+                destination = Files.createDirectories(destination);
                 logger.debug("Destination: "+destination+" ImageName:  "+ images[i].getOriginalFilename());
                 Files.copy(inputStream, destination,StandardCopyOption.REPLACE_EXISTING);
             } catch (FileAlreadyExistsException e) {

@@ -60,7 +60,7 @@ public class UserController {
     NoticeService noticeService;
     ReservationService reservationService;
     RoleService roleService;
-
+    
     @PersistenceContext
     EntityManager manager;
     
@@ -72,11 +72,17 @@ public class UserController {
         this.orgService=orgService;
         this.roleService = roleService;
     }
-
+    
     @GetMapping("id/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Optional<UserDtoPublic> getUser(@PathVariable String id) {
         return userService.getUser(id);
+    }
+
+    @GetMapping("/id/ex/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public Optional<UserDtoPrivatePartial> getUserByIdExtended(@PathVariable String id) {
+        return userService.getUserExtended(id);
     }
     @GetMapping("/{userName}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")

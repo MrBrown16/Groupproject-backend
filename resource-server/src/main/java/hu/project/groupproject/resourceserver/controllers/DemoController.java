@@ -51,9 +51,9 @@ public class DemoController {
         Authentication auth
         ) {
             logger.debug("before if");
-            if (auth.getAuthorities().contains("ROLE_ADMIN")) {
+            if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 //TODO:check if it works
-                logger.debug("auth.getAuthorities().contains('ROLE_ADMIN')");
+                logger.debug("auth.getAuthorities().contains(new SimpleGrantedAuthority('ROLE_ADMIN')");
             }
             var arr = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));            
                 logger.debug("auth.getAuthorities().getClass();"+arr);

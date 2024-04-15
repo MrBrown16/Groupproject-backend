@@ -1,12 +1,12 @@
 package hu.project.groupproject.resourceserver.services;
 
 import java.rmi.UnexpectedException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Map;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -62,6 +62,16 @@ public class UserService {
         return Optional.empty();
         // return userRepository.findById(id, UserDtoPublic.class);
     }
+
+    public Optional<UserDtoPrivatePartial> getUserExtended(String id){
+        MyUser user = manager.find(MyUser.class, id);
+        if (user != null) {
+            return Optional.of(mapMyUserToUserDtoPrivate(user));
+        }
+        return Optional.empty();
+    }
+
+
     public Optional<UserDtoPublic> getUserByUserName(String username){
         Optional<UserDtoPublicPartial> optDtoPartial = userRepository.findByUserName(username);
         if (optDtoPartial.isPresent()) {
@@ -219,6 +229,9 @@ public class UserService {
 
     private UserDtoPublic mapMyUserToUserDtoPublic(MyUser user){
         return new UserDtoPublic(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(),user.getPath());
+    }
+    private UserDtoPrivatePartial mapMyUserToUserDtoPrivate(MyUser user){
+        return new UserDtoPrivatePartial(user.getId(), user.getEmail(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getPhone());
     }
 
 }
