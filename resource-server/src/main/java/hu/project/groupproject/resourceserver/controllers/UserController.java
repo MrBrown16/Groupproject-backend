@@ -86,7 +86,7 @@ public class UserController {
     }
 
     @GetMapping("/id/ex/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Optional<UserDtoPrivatePartial> getUserByIdExtended(@PathVariable String id) {
         return userService.getUserExtended(id);
     }
