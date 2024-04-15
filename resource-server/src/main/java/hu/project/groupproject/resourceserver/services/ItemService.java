@@ -54,8 +54,8 @@ public class ItemService {
     }
     
     @Transactional
-    public ImageUploadDetailsDto createItem(String userId,ItemDto itemDto){
-        if (canEditItem(userId,null, itemDto)) {
+    public ImageUploadDetailsDto createItem(Authentication auth,ItemDto itemDto){
+        if (canEditItem(auth,null, itemDto)) {
             MyItemForSale item = new MyItemForSale();
             item = mapItemDtoToMyItemForSale(item, itemDto);
             manager.persist(item);
@@ -66,19 +66,18 @@ public class ItemService {
         
 
     }
-    @Transactional
-    public ImageUploadDetailsDto updateItem(String userId,String itemId, ItemDto itemDto){
-        if (canEditItem(userId, itemId, itemDto)) {
-            MyItemForSale item = manager.find(MyItemForSale.class, itemId);
-            item = mapItemDtoToMyItemForSale(item, itemDto);
-            //should save by itself
-            manager.persist(item);
-            return new ImageUploadDetailsDto("images/"+item.getPath(), true);
-        }else{
-            throw new AccessDeniedException("You don't have the right to change this item");
-        }
+    // @Transactional
+    // public ImageUploadDetailsDto updateItem(String userId,String itemId, ItemDto itemDto){
+    //     if (canEditItem(userId, itemId, itemDto)) {
+    //         MyItemForSale item = manager.find(MyItemForSale.class, itemId);
+    //         item = mapItemDtoToMyItemForSale(item, itemDto);
+    //         manager.persist(item);
+    //         return new ImageUploadDetailsDto("images/"+item.getPath(), true);
+    //     }else{
+    //         throw new AccessDeniedException("You don't have the right to change this item");
+    //     }
 
-    }
+    // }
     @Transactional
     public ImageUploadDetailsDto updateItem(Authentication auth,String itemId, ItemDto itemDto){
         MyItemForSale item = manager.find(MyItemForSale.class, itemId);
@@ -86,7 +85,6 @@ public class ItemService {
         logger.debug("updateItem item.getId: "+item.getId());
         if (canEditItem(auth, item, itemDto)) {
             item = mapItemDtoToMyItemForSale(item, itemDto);
-            //should save by itself
             manager.persist(item);
             return new ImageUploadDetailsDto("images/"+item.getPath(), true);
         }else{
@@ -114,6 +112,7 @@ public class ItemService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No item found by provided id");
     }
+
     private Optional<ItemDtoPublicWithImages> getItemOpt(String itemId){
         return addImagesOpt(itemRepository.findItemDtoById(itemId));
     }
@@ -228,66 +227,60 @@ public class ItemService {
     }
 
 
-    private boolean canEditItem(String userId,String itemId, ItemDto itemDto){
-        // if (userId!=null) {
-        //     System.out.println("userId!=null");
-        // }
-        // if (itemDto.userId()!=null) {
-        //     System.out.println("itemDto.userId()!=null");
-        // }
-        // if (userId.equals(itemDto.userId())) {
-        //     System.out.println("userId!=itemDto.userId()"+userId+", "+itemDto.userId());
-        // }
-        if (userId != null && itemDto.userId() != null && userId.equals(itemDto.userId())) {
-            MyUser user = manager.find(MyUser.class, userId);
-            if (user != null) {
-                if (itemId != null) {
-                    MyItemForSale item = manager.find(MyItemForSale.class, itemId);
-                    if (item != null && item.getUser().equals(user)) {
-                        return true;
-                    }
-                }else{
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    // private boolean canEditItem(String userId,String itemId, ItemDto itemDto){
+    //     if (userId != null && itemDto.userId() != null && userId.equals(itemDto.userId())) {
+    //         MyUser user = manager.find(MyUser.class, userId);
+    //         if (user != null) {
+    //             if (itemId != null) {
+    //                 MyItemForSale item = manager.find(MyItemForSale.class, itemId);
+    //                 if (item != null && item.getUser().equals(user)) {
+    //                     return true;
+    //                 }
+    //             }else{
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
     private boolean canEditItem(Authentication auth,MyItemForSale item, ItemDto itemDto){
-        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            //TODO:check if it works
-            logger.debug("admin so allowed");
-            return true;
+        if (itemDto == null) {
+            return false;
         }
-        MyUser user = (MyUser)auth.getPrincipal();
-        user = manager.find(MyUser.class, user.getId());
-        if (user != null && item != null && itemDto != null 
-                && item.getUser().equals(user) && itemDto.itemId().equals(item.getId())) {
-                    return true;
+        if (item != null) {
+            
+            if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                logger.debug("admin so allowed canEditItem");
+                return true;
+            }
+
+            MyUser user = (MyUser)auth.getPrincipal();
+            user = manager.find(MyUser.class, user.getId());
+            if (user != null && item.getUser().equals(user) && itemDto.itemId().equals(item.getId())) {
+                logger.debug("own item so allowed canEditItem (update)");
+                return true;
+            }
+        }else{
+            MyUser user = (MyUser)auth.getPrincipal();
+            user = manager.find(MyUser.class, user.getId());
+            if (user != null && itemDto.userId().equals(user.getId())) {
+                logger.debug("own item so allowed canEditItem (new)");
+                return true;
+            }
         }
         return false;
     }
 
-    private boolean canDeleteItem(String userId,String itemId){
-        if (userId != null && itemId != null) {
-            MyUser user = manager.find(MyUser.class, userId);
-            MyItemForSale item = manager.find(MyItemForSale.class, itemId);
-            if (item != null && user != null && item.getUser().equals(user)) {
-                return true;
-            }
-        }
-        return false;
-    }
     private boolean canDeleteItem(Authentication auth, MyItemForSale item){
         if (item != null) {
             if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-                //TODO:check if it works
-                logger.debug("admin so allowed");
+                logger.debug("admin so allowed canDeleteEvent");
                 return true;
             }
             MyUser user = (MyUser)auth.getPrincipal();
+            user = manager.find(MyUser.class, user.getId());
             if (user != null && item.getUser().equals(user)) {
-                logger.debug("admin so allowed");
+                logger.debug("own item so allowed canDeleteItem");
                 return true;
             }
         }

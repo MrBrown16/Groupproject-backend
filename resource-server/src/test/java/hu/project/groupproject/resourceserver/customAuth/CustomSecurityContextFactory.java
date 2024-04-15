@@ -5,7 +5,7 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;
 import org.springframework.security.core.context.*;
-import org.springframework.security.core.userdetails.*;
+// import org.springframework.security.core.userdetails.*;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.test.context.support.*;
 

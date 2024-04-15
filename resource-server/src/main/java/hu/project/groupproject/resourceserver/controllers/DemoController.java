@@ -16,12 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClient;
-
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyEvent;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyNews;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservation;
 import hu.project.groupproject.resourceserver.services.DemoService;
 import hu.project.groupproject.resourceserver.services.UserService;
 import jakarta.persistence.EntityManager;
@@ -52,7 +46,6 @@ public class DemoController {
         ) {
             logger.debug("before if");
             if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-                //TODO:check if it works
                 logger.debug("auth.getAuthorities().contains(new SimpleGrantedAuthority('ROLE_ADMIN')");
             }
             var arr = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));            

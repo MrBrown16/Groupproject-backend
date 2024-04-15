@@ -448,7 +448,6 @@
 // //         return createSuccessAuthentication(principalToReturn, authentication, user);
 // //     }
 
-// //     //TODO: my custom logic comes here
 // //     private String determineUsername(Authentication authentication) {
 // //         String username ="NONE_PROVIDED";
 // //         if (authentication.getPrincipal() instanceof String) {

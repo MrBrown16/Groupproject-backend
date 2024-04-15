@@ -85,9 +85,7 @@ public class ImagesController {//TODO: check to only allow uploads for users in 
         LoadableImages entity = determineImagePlacement(parts,multiple);
         logger.debug("Multiple after determineImagePlacement: "+multiple[0]);
         logger.debug("entity in postImageFile: "+entity.getId());
-        if (entity==null) {
-            // new LoadableImages().saveImages(images, uri);
-        }else{
+        if (entity!=null) {
             entity.saveImages(images, entity.getPath(), multiple[0]);
         }
             logger.debug(uri);

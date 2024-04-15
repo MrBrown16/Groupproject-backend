@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.En.news.NewsDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.news.NewsDtoCreate;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.services.NewsService;
 
 import java.sql.Timestamp;
@@ -15,7 +14,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,12 +37,6 @@ public class NewsController {
     public NewsController(NewsService newsService){
         this.newsService=newsService;
     }
-    
-    // use /{id} getNewsEx instead
-    // @GetMapping("/{id}/short")
-    // public Optional<NewsDtoPublicWithImages> getNewsShort(@PathVariable String id) {
-    //     return newsService.getNewsShort(id);
-    // }
 
     @GetMapping("/{id}")
     public Optional<NewsDtoPublic> getNews(@PathVariable String id) {
@@ -66,26 +58,20 @@ public class NewsController {
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public NewsDtoPublic saveNews(@RequestBody NewsDtoCreate news, Authentication auth){
-        return newsService.createNews(news);
+        return newsService.createNews(news,auth);
     }
 
-    @PutMapping("/{id}") 
+    @PutMapping("/{newsId}") 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public NewsDtoPublic updateNews(@PathVariable("id") String id, @RequestBody NewsDtoCreate news, Authentication auth) throws NotFoundException{
-        // MyUser user = (MyUser)auth.getPrincipal();
-        // if (user.getId()==news.userId() && id != null) {
-            return newsService.updateNews(id,news);
-        // }
-        // throw new AccessDeniedException("You don't have the right to change this news");
+    public NewsDtoPublic updateNews(@PathVariable("newsId") String newsId, @RequestBody NewsDtoCreate news, Authentication auth) throws NotFoundException{
+        return newsService.updateNews(newsId,news,auth);
     }
 
     
     @DeleteMapping("/del/{newsId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void deleteNews(@PathVariable String newsId, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
-        logger.debug(user.getId());
-        newsService.deleteNews(user.getId(), newsId);
+        newsService.deleteNews(newsId, auth);
     }
     
 }

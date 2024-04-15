@@ -37,7 +37,6 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.enums.UserFields;
 import hu.project.groupproject.resourceserver.services.NoticeService;
 import hu.project.groupproject.resourceserver.services.OrgService;
-import hu.project.groupproject.resourceserver.services.PostService;
 import hu.project.groupproject.resourceserver.services.ReservationService;
 import hu.project.groupproject.resourceserver.services.RoleService;
 import hu.project.groupproject.resourceserver.services.UserService;
@@ -55,7 +54,7 @@ public class UserController {
 
 
     UserService userService;
-    PostService postService;
+    // PostService postService;
     OrgService orgService;
     NoticeService noticeService;
     ReservationService reservationService;
@@ -64,14 +63,21 @@ public class UserController {
     @PersistenceContext
     EntityManager manager;
     
-    public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService,OrgService orgService, RoleService roleService) {
+    public UserController(UserService userService, NoticeService noticeService, ReservationService reservationService,OrgService orgService, RoleService roleService) {
         this.userService=userService;
-        this.postService=postService;
         this.noticeService = noticeService;
         this.reservationService = reservationService;
         this.orgService=orgService;
         this.roleService = roleService;
     }
+    // public UserController(UserService userService, PostService postService, NoticeService noticeService, ReservationService reservationService,OrgService orgService, RoleService roleService) {
+    //     this.userService=userService;
+    //     this.postService=postService;
+    //     this.noticeService = noticeService;
+    //     this.reservationService = reservationService;
+    //     this.orgService=orgService;
+    //     this.roleService = roleService;
+    // }
     
     @GetMapping("id/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
@@ -111,15 +117,15 @@ public class UserController {
         return new UserInfoDto(user.getId(), user.getEmail(), user.getUserName(), user.getPhone(), roles, "", orgIds);
     }
     
-    @GetMapping("/{userId}/posts")
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public Set<PostDtoPublicExtended> getPostsForUser(@PathVariable String userId, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
-        if (user != null && user.getId() == userId) {
-            return postService.getPostsForUser(userId);
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
+    // @GetMapping("/{userId}/posts")
+    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
+    // public Set<PostDtoPublicExtended> getPostsForUser(@PathVariable String userId, Authentication auth) {
+    //     MyUser user = (MyUser)auth.getPrincipal();
+    //     if (user != null && user.getId() == userId) {
+    //         return postService.getPostsForUser(userId);
+    //     }
+    //     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    // }
     @GetMapping("/{userId}/orgs")
     // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<OrgDtoPublicPartial> getOrgsForUser(@PathVariable String userId, @RequestParam("pageNum") int pageNum, Authentication auth) {

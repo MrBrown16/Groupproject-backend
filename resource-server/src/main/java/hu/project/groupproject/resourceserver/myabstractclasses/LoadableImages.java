@@ -81,7 +81,6 @@ public abstract class LoadableImages {
                 // } catch (DirectoryNotEmptyException e) {
                     //doNothing
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -113,7 +112,6 @@ public abstract class LoadableImages {
                 // } catch (DirectoryNotEmptyException e) {
                     //doNothing
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -40,50 +41,36 @@ public class NoticeService {
     }
 
     @Transactional
-    public void createNotice(String userId, NoticeDto noticeDto){
-        this.logger.debug("createNotice userId: "+userId+" noticeDto: "+noticeDto.toString());
-        // if (userId != null) {
-        //     this.logger.debug("userId != null");
-            
-        // }
-        // if (userId.equals(noticeDto.userId())) {
-        //     this.logger.debug("userId == noticeDto.userId()");
-            
-        // }
-        // if (noticeDto.userId() != null) {
-        //     this.logger.debug("noticeDto.userId() != null");
-            
-        // }
-        if (userId != null && noticeDto.userId() != null && userId.equals(noticeDto.userId())) {    
-            logger.debug("inside if userId != null && noticeDto.userId() != null && userId.equals(noticeDto.userId())");
+    public void createNotice(NoticeDto noticeDto, Authentication auth){
+        MyUser user = (MyUser) auth.getPrincipal();
+        user = manager.find(MyUser.class, user.getId());
+        if (user != null && noticeDto.userId() != null && user.getId().equals(noticeDto.userId())) {    
+            logger.debug("allowed for self createNotice");
             MyNotice notice = new MyNotice();
             notice = mapNoticeDtoToMyNotice(notice, noticeDto);
             manager.persist(notice);
         }else{
-        
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to create this notice");
         }
     }
     @Transactional
-    public void updateNotice(String userId, NoticeDtoPublic noticeDto){
-        this.logger.debug("createNotice userId: "+userId+" noticeDto: "+noticeDto.toString());
-        if (userId != null && noticeDto.userId() != null && userId.equals(noticeDto.userId())) {    
-            logger.debug("inside if userId != null && noticeDto.userId() != null && userId.equals(noticeDto.userId())");
+    public void updateNotice(NoticeDtoPublic noticeDto, Authentication auth){
+        MyUser user = (MyUser) auth.getPrincipal();
+        user = manager.find(MyUser.class, user.getId());
+        if (user != null && noticeDto.userId() != null && user.getId().equals(noticeDto.userId())) { 
+            logger.debug("allowed for self updateNotice");
             MyNotice notice = manager.find(MyNotice.class, noticeDto.noticeId());
             notice = mapNoticeDtoToMyNotice(notice, noticeDto);
-            manager.persist(notice);//redundant
+            manager.persist(notice);
         }else{
-        
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"You don't have the right to modify this notice");
         }
     }
 
-    public void deleteNotice(String userId,String noticeId){
-        if (canDeleteNotice(userId, noticeId)) {
-            MyNotice notice = manager.find(MyNotice.class, noticeId);
-            if (notice != null) {
-                noticeRepository.delete(notice);
-            }
+    public void deleteNotice(String noticeId, Authentication auth){
+        MyNotice notice = manager.find(MyNotice.class, noticeId);
+        if (canDeleteNotice(notice, auth)) {
+            noticeRepository.delete(notice);
         }
     }
 
@@ -101,16 +88,13 @@ public class NoticeService {
             }
         }
         return notices;
-        
     }
 
-    private boolean canDeleteNotice(String userId,String noticeId){
-        if (userId != null && noticeId != null) {
-            MyUser user = manager.find(MyUser.class, userId);
-            MyNotice notice = manager.find(MyNotice.class, noticeId);
-            if (notice != null && user != null && notice.getUser().equals(user)) {
-                return true;
-            }
+    private boolean canDeleteNotice(MyNotice notice, Authentication auth){
+        MyUser user = (MyUser) auth.getPrincipal();
+        user = manager.find(MyUser.class, user.getId());
+        if (notice != null && user != null && notice.getUser().equals(user)) {
+            return true;
         }
         return false;
     }

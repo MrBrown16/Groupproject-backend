@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.services.NoticeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -51,29 +49,18 @@ protected final Log logger = LogFactory.getLog(getClass());
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void saveNotice(@RequestBody NoticeDto notice, Authentication auth){
-        MyUser user = (MyUser)auth.getPrincipal();
-        logger.debug(user.getId());
-        noticeService.createNotice(user.getId(),notice);
+        noticeService.createNotice(notice,auth);
     }
     @PutMapping("/{noticeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void updateNotice(@PathVariable String noticeId, @RequestBody NoticeDtoPublic notice, Authentication auth){
-        MyUser user = (MyUser)auth.getPrincipal();
-        logger.debug(user.getId());
-        if (noticeId != null && notice.noticeId() != null && notice.noticeId().equals(noticeId)) {
-            noticeService.updateNotice(user.getId(),notice);
-        }else{
-            throw new AccessDeniedException("You don't have the right to change this notice");
-        }
-
+        noticeService.updateNotice(notice, auth);
     }
 
     @DeleteMapping("/del/{noticeId}")
     @PreAuthorize("hasRole('USER')")
     public void deleteNotice(@PathVariable String noticeId, Authentication auth) {
-        MyUser user = (MyUser)auth.getPrincipal();
-        logger.debug(user.getId());
-        noticeService.deleteNotice(user.getId(), noticeId);
+        noticeService.deleteNotice(noticeId,auth);
     }
 
 }

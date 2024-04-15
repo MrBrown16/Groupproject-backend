@@ -106,7 +106,6 @@ public class UserService {
                 user.setLastName(newUser.lastName());
             }
             user = userRepository.save(user);
-            //TODO: check if it works
             Map<String, String> userMap = new HashMap();
             userMap.put("userName", newUser.userName());
             userMap.put("password", newUser.password1());
@@ -115,7 +114,6 @@ public class UserService {
             if (success == null || success == false) {
                 throw new UnexpectedException("User login creation failed");
             }
-            //TODO:save user in auth server (webClient http request to createNewUser) 
             String url= user.getPath();
             return new ImageUploadDetailsDto(url, false);
         }else {

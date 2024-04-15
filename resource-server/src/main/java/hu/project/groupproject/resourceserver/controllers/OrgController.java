@@ -3,7 +3,6 @@ package hu.project.groupproject.resourceserver.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
-import hu.project.groupproject.resourceserver.dtos.En.EventDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoCreate;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
@@ -56,6 +55,10 @@ public class OrgController {
         this.userService=userService;
     }
     
+    @GetMapping("/")
+    public Set<OrgDtoPublic> getOrgs(int pageNum) {
+        return orgService.getOrgs(pageNum);
+    }
     @GetMapping("/{id}")
     public Optional<OrgDtoPublic> getOrg(@PathVariable String id) {
         return orgService.getOrg(id);
@@ -80,15 +83,7 @@ public class OrgController {
     public Set<OrgDtoPublicPartial> getOrgsByNameLike(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
         return orgService.getOrgsByNameLikePart(pageNum, name);
     }
-    @GetMapping("/")
-    public Set<OrgDtoPublic> getOrgs(int pageNum) {
-        return orgService.getOrgs(pageNum);
-    }
-    //EventController has it
-    // @GetMapping("/{orgId}/events")
-    // public Set<EventDtoPublic> getEventsForOrg(@PathVariable String orgId) {
-    //     return eventService.getEventsForOrg(orgId);
-    // }
+
     @GetMapping("/{orgId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public Set<ReservationDtoPublic> getReservationsForOrg(@PathVariable String orgId) {
