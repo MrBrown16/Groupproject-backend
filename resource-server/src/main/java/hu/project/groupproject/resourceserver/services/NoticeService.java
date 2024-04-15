@@ -108,7 +108,7 @@ public class NoticeService {
         if (userId != null && noticeId != null) {
             MyUser user = manager.find(MyUser.class, userId);
             MyNotice notice = manager.find(MyNotice.class, noticeId);
-            if (notice != null && user != null && notice.getUser()==user) {
+            if (notice != null && user != null && notice.getUser().equals(user)) {
                 return true;
             }
         }

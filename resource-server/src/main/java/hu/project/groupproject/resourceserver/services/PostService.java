@@ -168,7 +168,7 @@ public class PostService {
                 if (org != null && user.getOrgs().contains(org) && org.getUsers().contains(user)) {
                     if (postId != null) {
                         MyPost myPost = manager.find(MyPost.class, postId);
-                        if (myPost.getOrg().getId() == post.orgId()) {
+                        if (myPost.getOrg().getId().equals(post.orgId())) {
                             return true;
                         }
                         return false;
@@ -182,7 +182,7 @@ public class PostService {
             if (user != null) {
                 if (postId != null) {
                     MyPost myPost = manager.find(MyPost.class, postId);
-                    if (myPost != null && myPost.getUser().getId()==user.getId()) {
+                    if (myPost != null && myPost.getUser().getId().equals(user.getId())) {
                         return true;
                     }
                 }else{

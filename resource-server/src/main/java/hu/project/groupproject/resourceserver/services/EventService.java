@@ -114,13 +114,13 @@ public class EventService {
         }
         MyUser userr = (MyUser)auth.getPrincipal();
         String userId = userr.getId();
-        if (userId != null && eventDto.userId() != null && userId == eventDto.userId() && eventDto.orgId() != null) {
+        if (userId != null && eventDto.userId() != null && userId.equals(eventDto.userId()) && eventDto.orgId() != null) {
             MyUser user = manager.find(MyUser.class, userId);
             MyOrg org = manager.find(MyOrg.class, eventDto.orgId());
             if (user != null && org != null && user.getOrgs().contains(org)) {
                 if (eventId != null) {
                     MyEvent event = manager.find(MyEvent.class, eventId);
-                    if (event != null && event.getOrganiser()==org) {
+                    if (event != null && event.getOrganiser().equals(org)) {
                         return true;
                     }
                 }else{

@@ -157,7 +157,7 @@ public class NewsService {
                 if (org != null && user.getOrgs().contains(org) && org.getUsers().contains(user)) {
                     if (newsId != null) {
                         MyNews myNews = manager.find(MyNews.class, newsId);
-                        if (myNews.getOrg().getId() == news.orgId()) {
+                        if (myNews.getOrg().getId().equals(news.orgId())) {
                             return true;
                         }
                         return false;

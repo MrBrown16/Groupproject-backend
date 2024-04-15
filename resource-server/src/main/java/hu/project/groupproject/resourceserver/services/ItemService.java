@@ -243,7 +243,7 @@ public class ItemService {
             if (user != null) {
                 if (itemId != null) {
                     MyItemForSale item = manager.find(MyItemForSale.class, itemId);
-                    if (item != null && item.getUser()==user) {
+                    if (item != null && item.getUser().equals(user)) {
                         return true;
                     }
                 }else{
@@ -260,10 +260,11 @@ public class ItemService {
             return true;
         }
         MyUser user = (MyUser)auth.getPrincipal();
-            if (user != null && item != null && itemDto != null 
-                    && item.getUser().getId()==user.getId() && itemDto.itemId() == item.getId()) {
-                        return true;
-            }
+        user = manager.find(MyUser.class, user.getId());
+        if (user != null && item != null && itemDto != null 
+                && item.getUser().equals(user) && itemDto.itemId().equals(item.getId())) {
+                    return true;
+        }
         return false;
     }
 
@@ -271,7 +272,7 @@ public class ItemService {
         if (userId != null && itemId != null) {
             MyUser user = manager.find(MyUser.class, userId);
             MyItemForSale item = manager.find(MyItemForSale.class, itemId);
-            if (item != null && user != null && item.getUser() == user) {
+            if (item != null && user != null && item.getUser().equals(user)) {
                 return true;
             }
         }
@@ -285,7 +286,8 @@ public class ItemService {
                 return true;
             }
             MyUser user = (MyUser)auth.getPrincipal();
-            if (user != null && item.getUser() == user) {
+            if (user != null && item.getUser().equals(user)) {
+                logger.debug("admin so allowed");
                 return true;
             }
         }

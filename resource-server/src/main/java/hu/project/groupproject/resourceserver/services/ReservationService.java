@@ -6,14 +6,14 @@ import java.util.Set;
 
 import javax.management.InvalidAttributeValueException;
 
-import org.springframework.stereotype.Service;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDto;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
-import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservation;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
+import hu.project.groupproject.resourceserver.entities.softdeletable.MyReservation;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
 import hu.project.groupproject.resourceserver.repositories.ReservationRepository;
 import jakarta.persistence.EntityManager;
@@ -139,13 +139,13 @@ public class ReservationService {
             MyReservation reservation = manager.find(MyReservation.class, reservationId);
             if (userId != null && reservation != null && reservationDto.userId() != null && reservationDto.userId().equals(userId)) {
                 MyUser user = manager.find(MyUser.class, userId);
-                if (user != null && reservation.getUser()==user) {
+                if (user != null && reservation.getUser().equals(user)) {
                     return true;
                 }
             }
             if (orgId != null && reservation != null && reservationDto.orgId() != null && reservationDto.orgId().equals(orgId)) {
                 MyOrg org = manager.find(MyOrg.class, orgId);
-                if (org != null && reservation.getOrg()==org) {
+                if (org != null && reservation.getOrg().equals(org)) {
                     return true;
                 }
             }
@@ -172,13 +172,13 @@ public class ReservationService {
             if (userId != null) {
                 MyUser user = manager.find(MyUser.class, userId);
                 reservation = manager.find(MyReservation.class, reservationId);
-                if (user != null && reservation != null && reservation.getUser() == user) {
-                    
+                if (user != null && reservation != null && reservation.getUser().equals(user)) {
+                    return true;
                 }
             }else if (orgId != null) {
                 reservation = manager.find(MyReservation.class, reservationId);
                 MyOrg org = manager.find(MyOrg.class, orgId);
-                if (org != null && reservation != null && reservation.getOrg() == org) {
+                if (org != null && reservation != null && reservation.getOrg().equals(org)) {
                     return true;
                 }
             }
