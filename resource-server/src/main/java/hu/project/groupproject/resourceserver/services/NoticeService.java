@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
-import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.repositories.NoticeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -129,7 +127,7 @@ public class NoticeService {
     // }
 
     private MyNotice mapNoticeDtoToMyNotice(MyNotice notice, NoticeDto noticeDto){
-        notice.setType(NoticeTypes.valueOf( noticeDto.type()));
+        notice.setType(noticeDto.type());
         notice.setUrgency(noticeDto.urgency());
         notice.setDescription(noticeDto.description());
         notice.setLocation(noticeDto.location());
@@ -141,7 +139,7 @@ public class NoticeService {
     }
     private MyNotice mapNoticeDtoToMyNotice(MyNotice notice, NoticeDtoPublic noticeDto){
         notice.setId(noticeDto.noticeId());
-        notice.setType(NoticeTypes.valueOf( noticeDto.type()));
+        notice.setType(noticeDto.type());
         notice.setUrgency(noticeDto.urgency());
         notice.setDescription(noticeDto.description());
         notice.setLocation(noticeDto.location());
