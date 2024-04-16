@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
 
 
@@ -38,4 +39,9 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
     "FROM MyOrg o LEFT JOIN o.users users "+
     "WHERE users.id = :userId")
     Page<MyOrg> findOrgByUserId(@Param("userId") String userId, Pageable pageable);
+
+    @Query("SELECT o.responsibilities "+
+    "FROM MyOrg o "+
+    "WHERE o.id = :orgId")
+    Page<NoticeTypes> findResponsibilitiesForOrg(@Param("orgId") String orgId, Pageable pageable);
 }

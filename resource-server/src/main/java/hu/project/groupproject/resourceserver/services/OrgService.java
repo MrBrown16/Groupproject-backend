@@ -19,6 +19,7 @@ import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyOrg;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.repositories.OrgRepository;
 import jakarta.persistence.EntityManager;
@@ -101,6 +102,11 @@ public class OrgService {
         Set<String> reservationId = orgRepository.findReservationIdsByOrgId(id);
         logger.debug(reservationId);
         return reservationId;
+    }
+    public Page<NoticeTypes> getOrgsResponsibilities(String orgId, int pageNum){
+        Page<NoticeTypes> responsibilities = orgRepository.findResponsibilitiesForOrg(orgId, Pageable.ofSize(10).withPage(pageNum));
+        logger.debug(responsibilities);
+        return responsibilities;
     }
 
     public OrgDtoPublic addImages(OrgDtoPublicPartial org){
