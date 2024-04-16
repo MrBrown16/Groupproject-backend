@@ -9,6 +9,7 @@ import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.services.EventService;
 import hu.project.groupproject.resourceserver.services.OrgService;
@@ -134,6 +135,12 @@ public class OrgController {
     public Set<OrgCategory> addOrRemoveCategory(@PathVariable("orgId") String orgId, @PathVariable("category") OrgCategory category, Authentication auth) throws InvalidAttributeValueException{
         MyUser user = (MyUser)auth.getPrincipal();
         return orgService.addOrRemoveCategory(user.getId(), orgId,category);
+    }
+    @PutMapping("/setResponsibility")
+    @PreAuthorize("hasRole('ADMIN')")
+    public boolean setResponsibilityForOrg(@RequestParam("orgId") String orgId, @PathVariable("types") Set<NoticeTypes> types, Authentication auth) throws InvalidAttributeValueException{
+        MyUser user = (MyUser)auth.getPrincipal();
+        return orgService.addResponsibility(auth, orgId,types);
     }
     
     

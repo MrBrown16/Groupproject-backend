@@ -6,9 +6,5 @@ public enum OrgCategory {
     GOV,
     //...
 }
-// KOZTERULET,
-// UTHIBA,
-// VIZGAZ,
-// LOMTALANITAS,
-// SZEMETSZALLITAS,
+
 

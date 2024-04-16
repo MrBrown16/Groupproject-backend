@@ -80,6 +80,17 @@ public class MyOrg extends LoadableImages{
             }
         }
     }
+    public void setResponsibilities(Set<MyUser> users) {
+        if (this.users == null) {
+            this.users = users;
+        } else {
+            if (users != null) {
+                for (MyUser opt : users) {
+                    addUser(opt);
+                }
+            }
+        }
+    }
 
     public void addUser(MyUser user) {
         if (this.users == null) {

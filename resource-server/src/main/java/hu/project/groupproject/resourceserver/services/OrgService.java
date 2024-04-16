@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
@@ -146,6 +148,18 @@ public class OrgService {
             return org.getCategories();
         }
         throw new AccessDeniedException("You don't have the right to change this organisation");
+    } 
+
+    public boolean addResponsibility(Authentication auth,String orgId,Set<NoticeTypes> types){
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            logger.debug("admin so allowed addResponsibility");
+            MyOrg org = manager.find(MyOrg.class, orgId);
+            if (org != null) {
+                org.setResponsibilities(types);
+            }
+
+        }
+        return false;
     } 
 
     public Set<OrgDtoPublic> getOrgsByCategory(int pageNum, OrgCategory category){
