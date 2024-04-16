@@ -139,8 +139,12 @@ public class OrgController {
     @PutMapping("/setResponsibility")
     @PreAuthorize("hasRole('ADMIN')")
     public boolean setResponsibilityForOrg(@RequestParam("orgId") String orgId, @PathVariable("types") Set<NoticeTypes> types, Authentication auth) throws InvalidAttributeValueException{
-        MyUser user = (MyUser)auth.getPrincipal();
         return orgService.addResponsibility(auth, orgId,types);
+    }
+    @PutMapping("/removeResponsibility")
+    @PreAuthorize("hasRole('ADMIN')")
+    public boolean removeResponsibilityForOrg(@RequestParam("orgId") String orgId, @PathVariable("types") NoticeTypes types, Authentication auth) throws InvalidAttributeValueException{
+        return orgService.removeResponsibility(auth, orgId,types);
     }
     
     
