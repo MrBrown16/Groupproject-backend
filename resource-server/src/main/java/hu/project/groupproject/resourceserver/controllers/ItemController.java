@@ -43,6 +43,7 @@ public class ItemController {
         return itemService.getItemsByPropertyLike(value, pageNum, category);
     }
 
+    //TODO: hasznalt
     @GetMapping("/search/price")
     public Set<ItemDtoPublicWithImages> searchItemsByPrice(@RequestParam("price") Long price, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
         return itemService.getItemsByPriceLike(price, pageNum, category);
@@ -58,18 +59,21 @@ public class ItemController {
         return itemService.getItemsForUser(userId);
     }
 
+    //TODO: hasznalt
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")
     public ImageUploadDetailsDto saveItem(@RequestBody ItemDto item, Authentication auth){
         return itemService.createItem(auth,item);
     }
 
+    //TODO: hasznalt
     @PutMapping("/{itemId}") 
     @PreAuthorize("hasRole('USER')")
     public ImageUploadDetailsDto updateItem(@PathVariable String itemId,@RequestBody ItemDto item, Authentication auth) throws NotFoundException{
             return itemService.updateItem(auth,itemId,item);
     }
     
+    //TODO: hasznalt
     @DeleteMapping("/del/{itemId}")
     @PreAuthorize("hasRole('USER')")
     public void deleteItem(@PathVariable String itemId, Authentication auth) {

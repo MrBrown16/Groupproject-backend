@@ -81,6 +81,7 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    //TODO: hasznalt
     @GetMapping("/id/ex/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Optional<UserDtoPrivatePartial> getUserByIdExtended(@PathVariable String id) {
@@ -96,6 +97,8 @@ public class UserController {
     public Page<UserDtoPublicPartial> searchPubUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") UserFields category ) {
         return userService.getUsersByPropertyLikePublic(pageNum, value, category);
     }
+    
+    //TODO: hasznalt
     @GetMapping("/admin/search")
     @PreAuthorize("hasRole('ADMIN')")
     public Page<UserDtoPrivatePartial> searchPrivateUsersByProperty(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") UserFields category ) {
@@ -140,6 +143,8 @@ public class UserController {
     //     // }
     //     // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     // }
+
+    //TODO: hasznalt ??? 
     @GetMapping("/{userId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
@@ -157,14 +162,14 @@ public class UserController {
         return userService.newUser(user);
     }
     
-    
+    //TODO: hasznalt
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public ImageUploadDetailsDto updateUser(@PathVariable("id") String id, @RequestBody UserDtoNew user){
         return userService.updateUser(id, user);
     }
     
-    
+    //TODO: hasznalt
     @DeleteMapping("/del/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void deleteUser(@PathVariable String id) {

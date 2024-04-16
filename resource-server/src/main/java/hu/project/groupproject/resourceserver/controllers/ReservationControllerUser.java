@@ -52,6 +52,8 @@ public class ReservationControllerUser {
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
+
+    //TODO: hasznalt
     @GetMapping("/sajat/{userId}")
     @PreAuthorize("hasRole('USER')")
     public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
@@ -62,6 +64,7 @@ public class ReservationControllerUser {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
+    //TODO: hasznalt
     @PostMapping("/new")
     @PreAuthorize("hasRole('USER')")
     public void saveReservation(@RequestBody ReservationDto reservation, Authentication auth){
@@ -76,6 +79,7 @@ public class ReservationControllerUser {
         
     }
 
+    //TODO: hasznalt
     @PutMapping("/{reservationId}") 
     @PreAuthorize("hasRole('USER')")
     public void updateReservation(@PathVariable String reservationId,@RequestBody ReservationDto reservation, Authentication auth) throws NotFoundException{
@@ -90,6 +94,7 @@ public class ReservationControllerUser {
         }
     }
     
+    //TODO: hasznalt
     @DeleteMapping("/del/{reservationId}")
     @PreAuthorize("hasRole('USER')")
     public void deleteReservation(@PathVariable String reservationId, Authentication auth) {
