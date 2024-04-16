@@ -36,11 +36,12 @@ public class NoticeService {
 
     NoticeRepository noticeRepository;
     UserService userService;
+    OrgService orgService;
 
-
-    public NoticeService(NoticeRepository noticeRepository, UserService userService) {
+    public NoticeService(NoticeRepository noticeRepository, UserService userService, OrgService orgService) {
         this.noticeRepository = noticeRepository;
         this.userService=userService;
+        this.orgService=orgService;
     }
 
     @Transactional
@@ -88,6 +89,17 @@ public class NoticeService {
             Optional<NoticeDtoPublic> notice = getNotice(noticeId);
             if (notice.isPresent()) {
                 notices.add(notice.get());
+            }
+        }
+        return notices;
+    }
+    public Set<NoticeDtoPublic> getNoticesForOrg(String orgId, int pageNum){
+        Page<NoticeTypes> noticeTypes = orgService.getOrgsResponsibilities(orgId, pageNum);
+        Set<NoticeDtoPublic> notices = new HashSet<>();
+        for (NoticeTypes type : noticeTypes) {
+            Page<NoticeDtoPublic> notice = noticeRepository.findNoticeDtoPublicByType(type, Pageable.ofSize(10).withPage(pageNum));
+            for (NoticeDtoPublic noticeDtoPublic : notice) {
+                notices.add(noticeDtoPublic);
             }
         }
         return notices;

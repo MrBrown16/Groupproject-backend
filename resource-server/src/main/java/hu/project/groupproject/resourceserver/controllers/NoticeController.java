@@ -56,6 +56,10 @@ protected final Log logger = LogFactory.getLog(getClass());
     public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId) {
         return noticeService.getNoticesForUser(userId);
     }
+    @GetMapping("/org/{orgId}")
+    public Set<NoticeDtoPublic> getNoticesForOrg(@PathVariable String orgId,@RequestParam("pageNum") int pageNum) {
+        return noticeService.getNoticesForOrg(orgId,pageNum);
+    }
 
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
