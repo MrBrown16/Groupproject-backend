@@ -42,7 +42,7 @@ public class EventService {
         this.eventRepository = eventRepository;
         this.orgService=orgService;
     }
-    
+    @Transactional
     public void createEvent(EventDto eventDto,Authentication auth){
         if (canEditEvent(null, eventDto,auth)) {
             MyEvent event = new MyEvent();
@@ -59,6 +59,7 @@ public class EventService {
             manager.persist(event);
         }
     }
+    @Transactional
     public void deleteEvent(String eventId, Authentication auth){
         MyUser user = (MyUser)auth.getPrincipal();
         user = manager.find(MyUser.class, user.getId());
