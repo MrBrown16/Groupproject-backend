@@ -80,6 +80,7 @@ public class OrgController {
     public Set<OrgDtoPublic> getOrgsByNameLikeFull(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
         return orgService.getOrgsByNameLike(pageNum, name);
     }
+    //TODO: hasznalt
     @GetMapping("/search/name")
     public Set<OrgDtoPublicPartial> getOrgsByNameLike(@RequestParam("pageNum") int pageNum, @RequestParam("name") String name) {
         return orgService.getOrgsByNameLikePart(pageNum, name);

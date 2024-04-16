@@ -74,7 +74,6 @@ protected final Log logger = LogFactory.getLog(getClass());
         noticeService.createNotice(notice,auth);
     }
 
-    //TODO: hasznalt
     @PutMapping("/{noticeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void updateNotice(@PathVariable String noticeId, @RequestBody NoticeDtoPublic notice, Authentication auth){

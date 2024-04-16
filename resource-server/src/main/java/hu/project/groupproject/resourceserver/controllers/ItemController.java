@@ -53,6 +53,7 @@ public class ItemController {
     public ItemDtoPublicWithImages getItem(@PathVariable String itemId) {
         return itemService.getItem(itemId);
     }
+    //TODO: hasznalt
     @GetMapping("/sajat/{userId}")
     public Set<ItemDtoPublicWithImages> getItemsForUser(@PathVariable String userId) {
         logger.debug("getSajatItems userId: "+userId);

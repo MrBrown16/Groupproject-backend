@@ -105,8 +105,8 @@ public class UserController {
         return userService.getUsersByPropertyLikePrivate(pageNum, value, category);
     }
     
+    //TODO: hasznalt
     @GetMapping("/myUserInfo")
-    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public UserInfoDto getUserInfo(Authentication auth) {
         MyUser user = (MyUser)auth.getPrincipal();
         Set<String> orgIds = new HashSet<String>();
@@ -125,15 +125,13 @@ public class UserController {
     //     }
     //     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     // }
+
+    //TODO: hasznalt
     @GetMapping("/{userId}/orgs")
-    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<OrgDtoPublicPartial> getOrgsForUser(@PathVariable String userId, @RequestParam("pageNum") int pageNum, Authentication auth) {
-        // MyUser user = (MyUser)auth.getPrincipal();
-        // if (user != null && user.getId() == userId) {
             return orgService.getOrgsByUserId(userId,pageNum);
-        // }
-        // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
+
     // @GetMapping("/{userId}/notices")
     // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     // public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId, Authentication auth) {
@@ -144,7 +142,6 @@ public class UserController {
     //     // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     // }
 
-    //TODO: hasznalt ??? 
     @GetMapping("/{userId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
@@ -155,7 +152,7 @@ public class UserController {
         // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
     
-    
+    //TODO: hasznalt
     @PostMapping
     public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user) throws UnexpectedException{
         logger.debug("register......");
