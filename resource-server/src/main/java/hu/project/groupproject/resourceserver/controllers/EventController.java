@@ -46,6 +46,7 @@ public class EventController {
         return eventService.getEvent(eventId);
     }
 
+    //TODO: hasznalt
     @GetMapping("/search")
     public Page<EventDtoPublic> getPostsByContentLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category) {
         return eventService.getEventsByPropertyLike(pageNum,value,category);
@@ -55,23 +56,28 @@ public class EventController {
     public Page<EventDtoPublic> getPostsByTime(@RequestParam("time") Timestamp time, @RequestParam("pageNum") int pageNum) {
         return eventService.getEventsHappeningAtTime(time,pageNum);
     }
+
+    //TODO: hasznalt
     @GetMapping("/sajat/{orgId}")
     public Set<EventDtoPublic> getEventsForOrg(@PathVariable String orgId) {
         return eventService.getEventsForOrg(orgId);
     }
 
+    //TODO: hasznalt
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public void saveEvent(@RequestBody EventDto event, Authentication auth){
         eventService.createEvent(event,auth);
     }
 
+    //TODO: hasznalt
     @PutMapping("/{eventId}") 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public void updateEvent(@PathVariable String eventId,@RequestBody EventDto event, Authentication auth) throws NotFoundException{
         eventService.updateEvent(eventId,event,auth);
     }
     
+    //TODO: hasznalt
     @DeleteMapping("/del/{eventId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public void deleteEvent(@PathVariable String eventId, Authentication auth) {

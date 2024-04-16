@@ -58,6 +58,8 @@ public class ReservationControllerOrg {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
+
+    //TODO: hasznalt
     @GetMapping("/sajat/{orgId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public Set<ReservationDtoPublic> getReservationsForOrg(@PathVariable String orgId, Authentication auth) {
@@ -69,6 +71,7 @@ public class ReservationControllerOrg {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
+    //TODO: hasznalt
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public void saveReservation(@RequestBody ReservationDto reservation, Authentication auth){
@@ -84,6 +87,7 @@ public class ReservationControllerOrg {
         }
     }
 
+    //TODO: hasznalt
     @PutMapping("/{reservationId}") 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public void updateReservation(@PathVariable String reservationId,@RequestBody ReservationDto reservation, Authentication auth) throws NotFoundException{
@@ -99,6 +103,7 @@ public class ReservationControllerOrg {
         }
     }
     
+    //TODO: hasznalt
     @DeleteMapping("/del/{reservationId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN')")
     public void deleteReservation(@PathVariable String reservationId, Authentication auth) {

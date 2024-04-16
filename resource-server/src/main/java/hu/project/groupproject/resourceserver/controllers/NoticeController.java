@@ -44,6 +44,8 @@ protected final Log logger = LogFactory.getLog(getClass());
     // public Optional<NoticeDtoPublic> getNoticesForAdmin(@PathVariable String noticeId) {
     //     // return noticeService.getNotices();
     // }
+
+    //TODO: hasznalt
     @GetMapping("/search")
     public Page<NoticeDtoPublic> getNewssByPropertyLike(@RequestParam("pageNum") int pageNum, @RequestParam("category") NoticeTypes category ) {
         return noticeService.getNewsByPropertyLike(pageNum,category);
@@ -52,26 +54,34 @@ protected final Log logger = LogFactory.getLog(getClass());
     public Optional<NoticeDtoPublic> getNotice(@PathVariable String noticeId) {
         return noticeService.getNotice(noticeId);
     }
+
+    //TODO: hasznalt
     @GetMapping("/sajat/{userId}")
     public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId) {
         return noticeService.getNoticesForUser(userId);
     }
+
+    //TODO: hasznalt
     @GetMapping("/org/{orgId}")
     public Set<NoticeDtoPublic> getNoticesForOrg(@PathVariable String orgId,@RequestParam("pageNum") int pageNum) {
         return noticeService.getNoticesForOrg(orgId,pageNum);
     }
 
+    //TODO: hasznalt
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void saveNotice(@RequestBody NoticeDto notice, Authentication auth){
         noticeService.createNotice(notice,auth);
     }
+
+    //TODO: hasznalt
     @PutMapping("/{noticeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void updateNotice(@PathVariable String noticeId, @RequestBody NoticeDtoPublic notice, Authentication auth){
         noticeService.updateNotice(notice, auth);
     }
 
+    //TODO: hasznalt
     @DeleteMapping("/del/{noticeId}")
     @PreAuthorize("hasRole('USER')")
     public void deleteNotice(@PathVariable String noticeId, Authentication auth) {

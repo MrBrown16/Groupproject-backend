@@ -46,6 +46,8 @@ public class NewsController {
     public Set<NewsDtoPublic> getNewsForUser(@PathVariable String id) {
         return newsService.getNewsForUser(id);
     }
+
+    //TODO: hasznalt
     @GetMapping("/search")
     public Page<NewsDtoPublic> getNewssByPropertyLike(@RequestParam("value") String value, @RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
         return newsService.getNewsByPropertyLike(value,pageNum,category);
@@ -55,19 +57,21 @@ public class NewsController {
         return newsService.getNewsByTimeLike(time,pageNum,category);
     }
     
+    //TODO: hasznalt
     @PostMapping("/new")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public NewsDtoPublic saveNews(@RequestBody NewsDtoCreate news, Authentication auth){
         return newsService.createNews(news,auth);
     }
 
+    //TODO: hasznalt
     @PutMapping("/{newsId}") 
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public NewsDtoPublic updateNews(@PathVariable("newsId") String newsId, @RequestBody NewsDtoCreate news, Authentication auth) throws NotFoundException{
         return newsService.updateNews(newsId,news,auth);
     }
 
-    
+    //TODO: hasznalt
     @DeleteMapping("/del/{newsId}")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public void deleteNews(@PathVariable String newsId, Authentication auth) {
