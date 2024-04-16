@@ -11,7 +11,7 @@ import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
 
 public interface NoticeRepository extends JpaRepository<MyNotice, String>{
     
-    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic( n.id, n.user.id, n.type, n.urgency, n.description, n.location, n.phone, n.date) FROM MyNotice n LEFT JOIN n.user WHERE p.id=:id")
+    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic( n.id, n.user.id, n.type, n.urgency, n.description, n.location, n.phone, n.date) FROM MyNotice n LEFT JOIN n.user WHERE n.id=:id")
     Optional<NoticeDtoPublic> findNoticeDtoById(@Param(value = "id") String id);
 
 }
