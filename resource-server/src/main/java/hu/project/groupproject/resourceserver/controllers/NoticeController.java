@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
@@ -37,6 +39,14 @@ protected final Log logger = LogFactory.getLog(getClass());
         this.noticeService=noticeService;
     }
 
+    // @GetMapping("/")
+    // public Optional<NoticeDtoPublic> getNoticesForAdmin(@PathVariable String noticeId) {
+    //     // return noticeService.getNotices();
+    // }
+    // @GetMapping("/search")
+    // public Page<NoticeDtoPublic> getNewssByPropertyLike(@RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
+    //     return noticeService.getNewsByPropertyLike(pageNum,category);
+    // }
     @GetMapping("/{noticeId}")
     public Optional<NoticeDtoPublic> getNotice(@PathVariable String noticeId) {
         return noticeService.getNotice(noticeId);

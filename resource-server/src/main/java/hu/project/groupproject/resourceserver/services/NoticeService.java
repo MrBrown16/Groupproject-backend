@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -98,6 +99,34 @@ public class NoticeService {
         }
         return false;
     }
+
+    // KOZTERULET,
+    // UTHIBA,
+    // VIZGAZ,
+    // LOMTALANITAS,
+    // SZEMETSZALLITAS,
+    // public Page<NoticeDtoPublic> getNewsByPropertyLike(int pageNum, NoticeTypes type) {
+    //     Page<NoticeDtoPublic> news;
+    //     switch (type) {
+    //         case VIZGAZ:
+    //             news = noticeRepository.findNewsDtoByTitleLike(search, Pageable.ofSize(10).withPage(pageNum));
+
+    //             break;
+    //         case :
+    //             news = newsRepository.findNewsDtoByContentLike(search, Pageable.ofSize(10).withPage(pageNum));
+
+    //             break;
+    //         case "type":
+    //             news = newsRepository.findNewsDtoByTypeLike(search, Pageable.ofSize(10).withPage(pageNum));
+
+    //             break;
+
+    //         default:
+    //             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    //     }
+
+    //     return news;
+    // }
 
     private MyNotice mapNoticeDtoToMyNotice(MyNotice notice, NoticeDto noticeDto){
         notice.setType(NoticeTypes.valueOf( noticeDto.type()));
