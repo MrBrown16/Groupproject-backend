@@ -6,8 +6,11 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,6 +18,7 @@ import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyNotice;
 import hu.project.groupproject.resourceserver.entities.softdeletable.MyUser;
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.repositories.NoticeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -90,6 +94,10 @@ public class NoticeService {
     }
 
     private boolean canDeleteNotice(MyNotice notice, Authentication auth){
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            logger.debug("admin so allowed canDeleteNotice");
+            return true;
+        }
         MyUser user = (MyUser) auth.getPrincipal();
         user = manager.find(MyUser.class, user.getId());
         if (notice != null && user != null && notice.getUser().equals(user)) {
@@ -103,28 +111,9 @@ public class NoticeService {
     // VIZGAZ,
     // LOMTALANITAS,
     // SZEMETSZALLITAS,
-    // public Page<NoticeDtoPublic> getNewsByPropertyLike(int pageNum, NoticeTypes type) {
-    //     Page<NoticeDtoPublic> news;
-    //     switch (type) {
-    //         case VIZGAZ:
-    //             news = noticeRepository.findNewsDtoByTitleLike(search, Pageable.ofSize(10).withPage(pageNum));
-
-    //             break;
-    //         case :
-    //             news = newsRepository.findNewsDtoByContentLike(search, Pageable.ofSize(10).withPage(pageNum));
-
-    //             break;
-    //         case "type":
-    //             news = newsRepository.findNewsDtoByTypeLike(search, Pageable.ofSize(10).withPage(pageNum));
-
-    //             break;
-
-    //         default:
-    //             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     return news;
-    // }
+    public Page<NoticeDtoPublic> getNewsByPropertyLike(int pageNum, NoticeTypes type) {
+        return noticeRepository.findNoticeDtoPublicByType(type, Pageable.ofSize(10).withPage(pageNum));
+    }
 
     private MyNotice mapNoticeDtoToMyNotice(MyNotice notice, NoticeDto noticeDto){
         notice.setType(noticeDto.type());

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.enums.OrgCategory;
 import hu.project.groupproject.resourceserver.myabstractclasses.LoadableImages;
 import jakarta.persistence.Column;
@@ -62,6 +63,10 @@ public class MyOrg extends LoadableImages{
     @ElementCollection(targetClass = OrgCategory.class)
     @Enumerated(EnumType.STRING)
     Set<OrgCategory> categories;
+
+    @ElementCollection(targetClass = NoticeTypes.class)
+    @Enumerated(EnumType.STRING)
+    Set<NoticeTypes> responsibilities;
 
     
     public void setUsers(Set<MyUser> users) {

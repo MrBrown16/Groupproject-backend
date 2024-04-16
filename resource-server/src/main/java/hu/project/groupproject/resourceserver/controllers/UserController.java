@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,14 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
-import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
-import hu.project.groupproject.resourceserver.dtos.En.posts.out.PostDtoPublicExtended;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial;
@@ -135,15 +131,15 @@ public class UserController {
         // }
         // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/{userId}/notices")
-    @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
-    public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId, Authentication auth) {
-        // MyUser user = (MyUser)auth.getPrincipal();
-        // if (user != null && user.getId() == userId) {
-            return noticeService.getNoticesForUser(userId);
-        // }
-        // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
+    // @GetMapping("/{userId}/notices")
+    // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
+    // public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId, Authentication auth) {
+    //     // MyUser user = (MyUser)auth.getPrincipal();
+    //     // if (user != null && user.getId() == userId) {
+    //         return noticeService.getNoticesForUser(userId);
+    //     // }
+    //     // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    // }
     @GetMapping("/{userId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {

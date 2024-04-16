@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDto;
 import hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic;
+import hu.project.groupproject.resourceserver.enums.NoticeTypes;
 import hu.project.groupproject.resourceserver.services.NoticeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -43,10 +44,10 @@ protected final Log logger = LogFactory.getLog(getClass());
     // public Optional<NoticeDtoPublic> getNoticesForAdmin(@PathVariable String noticeId) {
     //     // return noticeService.getNotices();
     // }
-    // @GetMapping("/search")
-    // public Page<NoticeDtoPublic> getNewssByPropertyLike(@RequestParam("pageNum") int pageNum, @RequestParam("category") String category ) {
-    //     return noticeService.getNewsByPropertyLike(pageNum,category);
-    // }
+    @GetMapping("/search")
+    public Page<NoticeDtoPublic> getNewssByPropertyLike(@RequestParam("pageNum") int pageNum, @RequestParam("category") NoticeTypes category ) {
+        return noticeService.getNewsByPropertyLike(pageNum,category);
+    }
     @GetMapping("/{noticeId}")
     public Optional<NoticeDtoPublic> getNotice(@PathVariable String noticeId) {
         return noticeService.getNotice(noticeId);
