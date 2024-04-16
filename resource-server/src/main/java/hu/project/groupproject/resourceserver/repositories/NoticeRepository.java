@@ -17,6 +17,6 @@ public interface NoticeRepository extends JpaRepository<MyNotice, String>{
     @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic( n.id, n.user.id, n.type, n.urgency, n.description, n.location, n.phone, n.date) FROM MyNotice n LEFT JOIN n.user WHERE n.id=:id")
     Optional<NoticeDtoPublic> findNoticeDtoById(@Param(value = "id") String id);
 
-    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic( n.id, n.user.id, n.type, n.urgency, n.description, n.location, n.phone, n.date) FROM MyNotice n WHERE :type MEMBER OF n.type")
+    @Query("SELECT new hu.project.groupproject.resourceserver.dtos.En.NoticeDtoPublic( n.id, n.user.id, n.type, n.urgency, n.description, n.location, n.phone, n.date) FROM MyNotice n WHERE :type = n.type")
     Page<NoticeDtoPublic> findNoticeDtoPublicByType(@Param("type") NoticeTypes type, Pageable pageable);
 }
