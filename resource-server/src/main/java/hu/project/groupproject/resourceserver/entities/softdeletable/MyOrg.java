@@ -80,18 +80,27 @@ public class MyOrg extends LoadableImages{
             }
         }
     }
-    public void setResponsibilities(Set<MyUser> users) {
-        if (this.users == null) {
-            this.users = users;
+    public void setResponsibilities(Set<NoticeTypes> responsibilities) {
+        if (this.responsibilities == null) {
+            this.responsibilities = responsibilities;
         } else {
-            if (users != null) {
-                for (MyUser opt : users) {
-                    addUser(opt);
+            if (responsibilities != null) {
+                for (NoticeTypes opt : responsibilities) {
+                    addResponsibility(opt);
                 }
             }
         }
     }
 
+    public void addResponsibility(NoticeTypes responsibility) {
+        if (this.responsibilities == null) {
+            this.responsibilities = new HashSet<>();
+        }
+    
+        if (!this.responsibilities.contains(responsibility)) {
+            this.responsibilities.add(responsibility);
+        }
+    }
     public void addUser(MyUser user) {
         if (this.users == null) {
             this.users = new HashSet<>();
@@ -117,6 +126,11 @@ public class MyOrg extends LoadableImages{
     public void removeCategory(OrgCategory category) {
         if (this.categories != null && this.categories.contains(category)) {
             this.categories.remove(category);
+        }
+    }
+    public void removeResponsibility(NoticeTypes responsibility) {
+        if (this.responsibilities != null && this.responsibilities.contains(responsibility)) {
+            this.responsibilities.remove(responsibility);
         }
     }
 

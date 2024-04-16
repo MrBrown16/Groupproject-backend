@@ -156,6 +156,19 @@ public class OrgService {
             MyOrg org = manager.find(MyOrg.class, orgId);
             if (org != null) {
                 org.setResponsibilities(types);
+                return true;
+            }
+
+        }
+        return false;
+    } 
+    public boolean removeResponsibility(Authentication auth,String orgId,NoticeTypes types){
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            logger.debug("admin so allowed addResponsibility");
+            MyOrg org = manager.find(MyOrg.class, orgId);
+            if (org != null) {
+                org.removeResponsibility(types);
+                return true;
             }
 
         }
