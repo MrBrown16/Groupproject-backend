@@ -19,8 +19,14 @@ Url: http://localhost:8083
 Feladat: Felhasználók azonosítása, Jwt-k készítése, alap felhasználó adatok tárolása módosítása törlése, kommunikáció a resource serverrel jwt-k validálása érdekében
 
 ## Api(használatban lévő végpontok):
-Jelmagyarázat:
+
+__Jelmagyarázat:__
+
 {valami} = url részlet amit mint paramétert/változót használunk és amit @PathVariable annotációval megjelölve a Spring framework nyer ki és tesz elérhetővé mint valami
+
+__Általános paraméterek:__
+
+Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkezett felhasználó adatait tartalmazó objektum 
 
 ### Auth:
 
@@ -29,6 +35,7 @@ Jelmagyarázat:
 - [/h2-console](http://localhost:8083/h2-console) authorization server adatbázis belépés ()
 
 ### Resource: 
+
 
 - [/resource/](http://localhost:8081/resource/)
 
@@ -273,3 +280,15 @@ Jelmagyarázat:
 - JAVA 21
 - Maven
 - English (Basic)
+
+
+# Adatbázis
+
+__Jelenlegi / development:__ embedded H2 in-memory adatbázis mariadb driverrel
+__Jövőbeni:__ mariadb mariadb driverrel "drop in replacement"
+
+__Teszt adatok:__ src\main\resources\data.sql -ből van feltöltve a resource server indításakor
+
+__Schema:__ Jakarta Persistence Api / Hibernate ORM - által generált az entities classok alapján
+
+__Dump File:__ resource-server\dump.sql

@@ -18,13 +18,17 @@ INSERT INTO ORGANISATIONS (ORG_ID,NAME,DELETED) VALUES
 ('7','Dr. Baka Károly: Kardiológus',0),
 ('8','Dr. Osbáth László: Háziorvos',0),
 ('9','Dr. Kun Béla: Sebész',0),
-('10','Dr. Madár Katalin: Háziorvos',0);
+('10','Dr. Madár Katalin: Háziorvos',0),
+('11','Helyi Önkormányzat',0),
+('12','Közművek',0);
 
 INSERT INTO MYORG_CATEGORIES (DELETED, MYORG_ORG_ID, CATEGORIES) VALUES
 (0,'7','DOCTOR'),
 (0,'8','DOCTOR'),
 (0,'9','DOCTOR'),
-(0,'10','DOCTOR');
+(0,'10','DOCTOR'),
+(0,'11','GOV'),
+(0,'12','UTILITY');
 
 INSERT INTO users (USER_ID,EMAIL,FIRSTNAME,LASTNAME,PHONE,USERNAME,DELETED) VALUES
 ('1','bbb@ccc.bu','Ákos','Kovács',00303345677,'moba',0),
@@ -55,9 +59,9 @@ INSERT INTO ITEMS ( ITEM_ID, CONDITION, CREATIONTIME, DESCRIPTION, LOCATION, NAM
 
 
 INSERT INTO ORGS_ADMINS (USER_ID,ORG_ID,DELETED) VALUES
-('4','1',0),--wouldn't be possible because user not ORG_ADMIN
-('4','2',0),--wouldn't be possible because user not ORG_ADMIN
-('4','3',0),--wouldn't be possible because user not ORG_ADMIN
+-- ('4','1',0),--wouldn't be possible because user not ORG_ADMIN
+-- ('4','2',0),--wouldn't be possible because user not ORG_ADMIN
+-- ('4','3',0),--wouldn't be possible because user not ORG_ADMIN
 ('6','4',0),
 ('6','1',0),
 ('6','2',0),
