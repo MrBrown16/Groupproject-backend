@@ -1,4 +1,25 @@
-# Áttekintés:
+
+# TartalomJegyzék
+
+- [Áttekintés](#áttekintés)
+    - [Requirements](#requirements)
+- [API](#api)
+    - [Authorization server](#auth)
+    - [Resource server](#resource)
+    - [Visszatérési értékek](#visszatérési-értékek--paraméterek)
+- [Projekt futtatása](#projekt-futtatása)
+- [Adatbázis](#adatbázis)
+    - [auth-server](#authdump)
+    - [res-server](#resdump)
+
+
+# Áttekintés: 
+
+
+## REQUIREMENTS:
+- JAVA 21
+- Maven
+- English (Basic)
 
 ## [Frontend](https://github.com/Attila732/Onkormanyzat_)
 
@@ -141,7 +162,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
 
 ### Visszatérési értékek / Paraméterek:
 
-- <a name="userdtoprivatepartial"> __UserDtoPrivatePartial__ <a>
+- <a name="userdtoprivatepartial"> __UserDtoPrivatePartial__ </a>
     - id: szöveg
     - email: 
     - userName: szöveg
@@ -149,7 +170,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - lastName: szöveg
     - phone: szám
 
-- <a name="userinfodto"> __UserInfoDto__ <a>
+- <a name="userinfodto"> __UserInfoDto__ </a>
     - userId: szöveg
     - email: szöveg
     - name: szöveg
@@ -158,11 +179,11 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - location: szöveg 
     - orgs: szöveg tömb a felhasználó org(szervezet)-einek az id-i
 
-- <a name="orgdtopublicpartial"> __OrgDtoPublicPartial__ <a> 
+- <a name="orgdtopublicpartial"> __OrgDtoPublicPartial__ </a> 
     - id: szöveg
     - name: szöveg
 
-- <a name="userdtonewwithpw"> __UserDtoNewWithPW__ <a> 
+- <a name="userdtonewwithpw"> __UserDtoNewWithPW__ </a> 
     - userName: szöveg
     - firstName: szöveg
     - lastName: szöveg
@@ -171,14 +192,14 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - password1: szöveg
     - password2: szöveg
 
-- <a name="userdtonew"> __UserDtoNew__ <a> 
+- <a name="userdtonew"> __UserDtoNew__ </a> 
     - userName: szöveg
     - firstName: szöveg
     - lastName: szöveg
     - phone: szám
     - email: szöveg
 
-- <a name="itemdtopublicwithimages"> __ItemDtoPublicWithImages__ <a> 
+- <a name="itemdtopublicwithimages"> __ItemDtoPublicWithImages__ </a> 
     - itemId: szöveg
     - userId: szöveg
     - name: szöveg
@@ -190,7 +211,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - price: szám
     - images: szöveg tömb a képek url-je
 
-- <a name="itemdto"> __ItemDto__ <a> 
+- <a name="itemdto"> __ItemDto__ </a> 
     - itemId: szöveg
     - userId: szöveg
     - name: szöveg
@@ -201,7 +222,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - phone: szám
     - price: szám
 
-- <a name="newsdtopublic"> __NewsDtoPublic__ <a> 
+- <a name="newsdtopublic"> __NewsDtoPublic__ </a> 
     - id: szöveg
     - userId: szöveg
     - userName: szöveg
@@ -211,12 +232,12 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - content: szöveg
     - type: [NewsTypes](#newstypes)
 
-- <a name="newstypes"> __NewsTypes__ <a> (ENUM)
+- <a name="newstypes"> __NewsTypes__ </a> (ENUM)
     - LOCAL
     - NATIONAL
     - INTERNATIONAL
 
-- <a name="eventdtopublic"> __EventDtoPublic__ <a> 
+- <a name="eventdtopublic"> __EventDtoPublic__ </a> 
     - eventId: szöveg
     - name: szöveg
     - description: szöveg
@@ -228,7 +249,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - startDate: Timestamp
     - endDate: Timestamp
 
-- <a name="eventdto"> __EventDto__ <a>
+- <a name="eventdto"> __EventDto__ </a>
     - name: szöveg
     - description: szöveg
     - location: szöveg
@@ -241,7 +262,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
 
 
 
-- <a name="noticedtopublic"> NoticeDtoPublic <a> 
+- <a name="noticedtopublic"> NoticeDtoPublic </a> 
     - noticeId: szöveg
     - userId: szöveg
     - type: [NoticeTypes](#noticetypes)   
@@ -251,14 +272,14 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
     - phone: szám
     - date: Timestamp 
 
-- <a name="noticetypes"> __NoticeTypes__ <a> (ENUM)
+- <a name="noticetypes"> __NoticeTypes__ </a> (ENUM)
     - KOZTERULET
     - UTHIBA
     - VIZGAZ
     - LOMTALANITAS
     - SZEMETSZALLITAS
 
-- <a name="noticedto"> NoticeDto <a> 
+- <a name="noticedto"> NoticeDto </a> 
     - userId: szöveg
     - type: [NoticeTypes](#noticetypes)  
     - urgency: szöveg
@@ -276,10 +297,6 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
 
 
 
-# REQUIREMENTS:
-- JAVA 21
-- Maven
-- English (Basic)
 
 
 # Adatbázis
@@ -293,7 +310,7 @@ __Schema:__ Jakarta Persistence Api / Hibernate ORM - által generált az entiti
 
 __Dump File:__ 
 
-- __authorization-server\dump.sql__
+- <a name="authdump" > __authorization-server\dump.sql__ </a>
 
     - USERS:
 
@@ -306,7 +323,7 @@ __Dump File:__
         - USERNAME VARCHAR_IGNORECASE(50) __Foreign Key__
         - AUTHORITY VARCHAR_IGNORECASE(50)
 
-- __resource-server\dump.sql__ Soft-delete audit funkcionalitás érdekében a törlés nem törli csak töröltként jelöli meg a rekordokat (DELETED=true)
+- <a name="resdump" > __resource-server\dump.sql__ </a> Soft-delete audit funkcionalitás érdekében a törlés nem törli csak töröltként jelöli meg a rekordokat (DELETED=true)
 
     - EVENTS:
 
