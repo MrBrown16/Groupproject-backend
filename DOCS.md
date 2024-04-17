@@ -291,4 +291,146 @@ __Teszt adatok:__ src\main\resources\data.sql -ből van feltöltve a resource se
 
 __Schema:__ Jakarta Persistence Api / Hibernate ORM - által generált az entities classok alapján
 
-__Dump File:__ resource-server\dump.sql
+__Dump File:__ 
+
+- __authorization-server\dump.sql__
+
+    - USERS:
+
+        - USERNAME VARCHAR_IGNORECASE(50) __Primary Key__
+        - PASSWORD VARCHAR_IGNORECASE(150) 
+        - ENABLED BOOLEAN 
+
+    - AUTHORITIES:
+
+        - USERNAME VARCHAR_IGNORECASE(50) __Foreign Key__
+        - AUTHORITY VARCHAR_IGNORECASE(50)
+
+- __resource-server\dump.sql__ Soft-delete audit funkcionalitás érdekében a törlés nem törli csak töröltként jelöli meg a rekordokat (DELETED=true)
+
+    - EVENTS:
+
+        - EVENT_ID CHARACTER VARYING(255) __Primary Key__
+        - DESCRIPTION CHARACTER VARYING(255)
+        - ENDDATE TIMESTAMP(6)
+        - LOCATION CHARACTER VARYING(255)
+        - NAME CHARACTER VARYING(255)
+        - PUBLICEMAILS CHARACTER VARYING(255) ARRAY
+        - PUBLICPHONES BIGINT ARRAY
+        - STARTDATE TIMESTAMP(6)
+        - ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - USER_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator'
+
+    - ITEMS:
+        
+        - ITEM_ID CHARACTER VARYING(255) __Primary Key__
+        - CONDITION CHARACTER VARYING(255)
+        - CREATIONTIME TIMESTAMP(6)
+        - DESCRIPTION CHARACTER VARYING(255)
+        - EMAIL CHARACTER VARYING(255)
+        - LOCATION CHARACTER VARYING(255)
+        - NAME CHARACTER VARYING(255)
+        - PHONE BIGINT
+        - PRICE BIGINT
+        - UPDATETIME TIMESTAMP(6)
+        - USER_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - MYORG_CATEGORIES:
+
+        - MYORG_ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - CATEGORIES CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - MYORG_RESPONSIBILITIES:
+
+        - MYORG_ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - RESPONSIBILITIES CHARACTER VARYING(255)
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - NEWS
+
+        - NEWS_ID CHARACTER VARYING(255) __Primary Key__
+        - CONTENT CHARACTER LARGE OBJECT
+        - CREATIONTIME TIMESTAMP(6)
+        - TITLE CHARACTER LARGE OBJECT
+        - TYPE CHARACTER VARYING(255)
+        - UPDATETIME TIMESTAMP(6)
+        - ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - USER_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - NOTICES
+
+        - NOTICE_ID CHARACTER VARYING(255) __Primary Key__
+        - DATE TIMESTAMP(6)
+        - DESCRIPTION CHARACTER VARYING(255)
+        - LOCATION CHARACTER VARYING(255)
+        - PHONE BIGINT
+        - TYPE CHARACTER VARYING(255)
+        - URGENCY CHARACTER VARYING(255)
+        - USER_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - ORGANISATIONS
+
+        - ORG_ID CHARACTER VARYING(255) __Primary Key__
+        - NAME CHARACTER VARYING(255)
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - ORGS_ADMINS
+
+        - USER_ID CHARACTER VARYING(255) __Foreign Key__
+        - ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - POSTS
+
+        - POST_ID CHARACTER VARYING(255) __Primary Key__
+        - CONTENT CHARACTER VARYING(255)
+        - CREATIONTIME TIMESTAMP(6)
+        - DISLIKES BIGINT DEFAULT 0
+        - LIKES BIGINT DEFAULT 0
+        - UPDATETIME TIMESTAMP(6)
+        - ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - USER_ID CHARACTER VARYING(255) __Foreign Key__
+        - VOTE_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - RESERVATIONS
+
+        - RESERVATION_ID CHARACTER VARYING(255) __Primary Key__
+        - EMAIL CHARACTER VARYING(255)
+        - ENDDATE TIMESTAMP(6)
+        - PHONE BIGINT
+        - PREFERREDNAME CHARACTER VARYING(255)
+        - STARTDATE TIMESTAMP(6)
+        - ORG_ID CHARACTER VARYING(255) __Foreign Key__
+        - USER_ID CHARACTER VARYING(255)  __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - USERS
+
+        - USER_ID CHARACTER VARYING(255) __Primary Key__
+        - EMAIL CHARACTER VARYING(255) __UNIQUE__
+        - FIRSTNAME CHARACTER VARYING(255)
+        - LASTNAME CHARACTER VARYING(255)
+        - PHONE BIGINT
+        - USERNAME CHARACTER VARYING(255) __Foreign Key__ (authorization-server USERS) 
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - VOTE_OPTIONS
+
+        - VOTE_OPTION_ID CHARACTER VARYING(255) __Primary Key__
+        - OPTIONTEXT CHARACTER VARYING(255)
+        - VOTESNUM BIGINT DEFAULT 0
+        - VOTE_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
+
+    - VOTES
+
+        - VOTE_ID CHARACTER VARYING(255) __Primary Key__
+        - DESCRIPTION CHARACTER VARYING(255)
+        - POST_ID CHARACTER VARYING(255) __Foreign Key__
+        - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 

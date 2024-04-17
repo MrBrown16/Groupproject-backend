@@ -50,7 +50,7 @@ controllers: végpontokat tartalmazó java filek, témák/tárgyak/entity-k alap
 
 CustomAuthThings: authentikációhoz és authorizációhoz szükséges saját classok
 
-dtos: (data transfer objects) kimenő és beérkező illetve metódusok között
+dtos: (data transfer objects) kimenő és beérkező illetve metódusok között adat tárolók
 
 entities: 
 - nonsoftdeletable: jelenleg nem használt, adatbázisban adattárolás optimalizációjához lettek volna
