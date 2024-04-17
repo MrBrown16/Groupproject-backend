@@ -57,8 +57,6 @@ entities:
 - softdeletable: azok az entity-k (egyedek) amiket az adatbázisban tárolni akarunk, hibernate ORM/jakarta JPA mappings. törlés esetén nem törlődnek, hanem törölt jelzést kapnak, hogy audit funkció is biztosítható legyen
 
 
-enums: 
-
 myabstractclasses: képfeltöltéshez szükséges abstract class amit a képeket tartalmazó entity-k extendelnek
 
 

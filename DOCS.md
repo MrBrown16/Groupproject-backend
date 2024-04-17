@@ -2,19 +2,19 @@
 
 ## [Frontend](https://github.com/Attila732/Onkormanyzat_)
 
-Url:http://localhost:8081/client/
+Url: http://localhost:8081/client/
 
 ## [Backend](https://github.com/MrBrown16/Groupproject-backend)
 
 ### resource-server: 
 
-Url:http://localhost:8082  ==  http://localhost:8081/resource/
+Url: http://localhost:8082  ==  http://localhost:8081/resource/
 
 Feladat: felhasználók, szervezetek adatainak tárolása módosítása törlése
 
 ### authorization-server:
 
-Url:http://localhost:8083
+Url: http://localhost:8083
 
 Feladat: Felhasználók azonosítása, Jwt-k készítése, alap felhasználó adatok tárolása módosítása törlése, kommunikáció a resource serverrel jwt-k validálása érdekében
 
@@ -34,7 +34,7 @@ Jelmagyarázat:
 
     - [/user](http://localhost:8081/resource/user) felhasználó kezelés 
 
-        - [GET /id/ex/{id}](http://localhost:8081/resource/user/id/ex/{id}) felhasználó adatainak lekérése id alapján ex:extended 
+        - [GET /id/ex/{id}](http://localhost:8081/resource/user/id/ex/{id}) felhasználó adatainak lekérése id alapján ex: extended 
             - Visszatérési érték: [UserDtoPrivatePartial](#userdtoprivatepartial)
         - [GET /admin/search](http://localhost:8081/resource/user/admin/search) admin jogosultsággal felhasználók keresése 
             - Paraméterek:
@@ -43,11 +43,17 @@ Jelmagyarázat:
                 - category(UserFields ENUM): enum ami a felhasználó objektum field-jeit reprezentálja
             - Visszatérési érték: [UserDtoPrivatePartial](#userdtoprivatepartial)
         - [GET /myUserInfo](http://localhost:8081/resource/user/myUserInfo) a bejelentkezett felhasználó adatai lekérése Role-okkal és Org(szervezet)-ekkel kiegészítve
+            - Visszatérési érték: [UserInfoDto](#userinfodto)
         - [GET /{userId}/orgs](http://localhost:8081/resource/user/{userId}/orgs) felhasználó org(szervezet)-einek lekérése
             - Paraméterek:
                 - pageNum(szám): az oldalszám 
+            - Visszatérési érték: Set(halmaz) [OrgDtoPublicPartial](#orgdtopublicpartial)
         - [POST ](http://localhost:8081/resource/user) új felhasználó létrehozása regisztráció
+            - Paraméterek: 
+                - [UserDtoNewWithPW](#userdtonewwithpw)
         - [PUT /{id}](http://localhost:8081/resource/user/{id}) felhasználó adatainak módosítása
+            - Paraméterek: 
+                - [UserDtoNew](#userdtonew)
         - [DELETE /{id}](http://localhost:8081/resource/user/{id}) felhasználó törlése
 
     - [/org](http://localhost:8081/resource/org) szervezet kezelés
@@ -56,6 +62,7 @@ Jelmagyarázat:
             - Paraméterek:
                 - name(szöveg): a keresési érték/szöveg
                 - pageNum(szám): az oldalszám
+            - Visszatérési érték: Set(halmaz) [OrgDtoPublicPartial](#orgdtopublicpartial)
 
     - [/items](http://localhost:8081/resource/items) termék kezelés
 
@@ -64,9 +71,15 @@ Jelmagyarázat:
                 - price(szám): a keresési érték
                 - pageNum(szám): az oldalszám
                 - category(szöveg): a price- nél nagyobb("higher") vagy kisebb("lower") értékű termékeket kér
+            - Visszatérési érték: Set(halmaz) [ItemDtoPublicWithImages](#itemdtopublicwithimages)
         - [GET /sajat/{userId}](http://localhost:8081/resource/items/sajat/{userId}) termékek lekérése felhasználó id alapján
+            - Visszatérési érték: Set(halmaz) [ItemDtoPublicWithImages](#itemdtopublicwithimages)
         - [POST /new](http://localhost:8081/resource/items/new) új termék létrehozása
+            - Paraméterek: 
+                - [ItemDto](#itemdto)
         - [PUT /{itemId}](http://localhost:8081/resource/items/new) termék módosítása
+            - Paraméterek: 
+                - [ItemDto](#itemdto)
         - [DELETE /del/{itemId}](http://localhost:8081/resource/items/new) termék törlése 
 
     - [/news](http://localhost:8081/resource/news) hír kezelés
@@ -76,8 +89,11 @@ Jelmagyarázat:
                 - value(szöveg): a keresési érték/szöveg
                 - pageNum(szám): az oldalszám
                 - category(szöveg): a news objektum melyik field-jében keres ("title"/"content"/"type")
+            - Visszatérési érték: Page(Oldal) [NewsDtoPublic](#newsdtopublic)
         - [POST /new](http://localhost:8081/resource/news/new) hír létrehozása
+            - Visszatérési érték: [NewsDtoPublic](#newsdtopublic)
         - [PUT /{newsId}](http://localhost:8081/resource/news/{newsId}) hír módosítása
+            - Visszatérési érték: [NewsDtoPublic](#newsdtopublic)
         - [DELETE /del/{newsId}](http://localhost:8081/resource/news/del/{newsId}) hír törlése
 
     - [/event](http://localhost:8081/resource/event)
@@ -87,9 +103,15 @@ Jelmagyarázat:
                 - value(szöveg): a keresési érték/szöveg
                 - pageNum(szám): az oldalszám
                 - category(szöveg): az event objektum melyik field-jében keres ("name"/"description"/"location")
+            - Visszatérési érték: Page(Oldal) [EventDtoPublic](#eventdtopublic)
         - [GET /sajat/{orgId}](http://localhost:8081/resource/event/sajat/{orgId}) egy org(szervezet) által szervezett események lekérése 
+            - Visszatérési érték: Set(halmaz) [EventDtoPublic](#eventdtopublic)
         - [POST /new](http://localhost:8081/resource/event/new) új esemény létrehozása
+            - Paraméterek: 
+                - [EventDto](#eventdto)
         - [PUT /{eventId}](http://localhost:8081/resource/event/{eventId}) esemény módosítása
+            - Paraméterek: 
+                - [EventDto](#eventdto)
         - [DELETE /del/{eventId}](http://localhost:8081/resource/event/del/{eventId}) esemény törlése
     
     - [/notice](http://localhost:8081/resource/notice) bejelentések kezelése
@@ -97,15 +119,20 @@ Jelmagyarázat:
             - Paraméterek:
                 - pageNum(szám): az oldalszám
                 - category(NoticeTypes ENUM): a bejelentés típúsai
+            - Visszatérési érték: Page(Oldal) [NoticeDtoPublic](#noticedtopublic)
         - [GET /sajat/{userId}](http://localhost:8081/resource/notice/sajat/{userId}) bejelentések lekérése felhasználónként
+            - Visszatérési érték: Set(halmaz) [NoticeDtoPublic](#noticedtopublic)
         - [GET /org/{orgId}](http://localhost:8081/resource/notice/org/{orgId}) bejelentések lekérése org(szervezet) responsibility(ügykör) alapján
             - Paraméterek:
                 - pageNum(szám): az oldalszám
+            - Visszatérési érték: Set(halmaz) [NoticeDtoPublic](#noticedtopublic)
         - [POST /new](http://localhost:8081/resource/notice/new) új bejelentés létrehozása/megtétele
+            - Paraméterek: 
+                - [NoticeDto](#noticedto)
         - [DELETE /del/{noticeId}](http://localhost:8081/resource/notice/del/{noticeId}) bejelentés törlése
 
 
-### Visszatérési értékek:
+### Visszatérési értékek / Paraméterek:
 
 - <a name="userdtoprivatepartial"> __UserDtoPrivatePartial__ <a>
     - id: szöveg
@@ -124,8 +151,125 @@ Jelmagyarázat:
     - location: szöveg 
     - orgs: szöveg tömb a felhasználó org(szervezet)-einek az id-i
 
+- <a name="orgdtopublicpartial"> __OrgDtoPublicPartial__ <a> 
+    - id: szöveg
+    - name: szöveg
 
-        
+- <a name="userdtonewwithpw"> __UserDtoNewWithPW__ <a> 
+    - userName: szöveg
+    - firstName: szöveg
+    - lastName: szöveg
+    - phone: szám
+    - email : szöveg
+    - password1: szöveg
+    - password2: szöveg
+
+- <a name="userdtonew"> __UserDtoNew__ <a> 
+    - userName: szöveg
+    - firstName: szöveg
+    - lastName: szöveg
+    - phone: szám
+    - email: szöveg
+
+- <a name="itemdtopublicwithimages"> __ItemDtoPublicWithImages__ <a> 
+    - itemId: szöveg
+    - userId: szöveg
+    - name: szöveg
+    - description: szöveg
+    - condition: szöveg
+    - location: szöveg
+    - email: szöveg
+    - phone: szám
+    - price: szám
+    - images: szöveg tömb a képek url-je
+
+- <a name="itemdto"> __ItemDto__ <a> 
+    - itemId: szöveg
+    - userId: szöveg
+    - name: szöveg
+    - description: szöveg
+    - condition: szöveg
+    - location: szöveg
+    - email: szöveg
+    - phone: szám
+    - price: szám
+
+- <a name="newsdtopublic"> __NewsDtoPublic__ <a> 
+    - id: szöveg
+    - userId: szöveg
+    - userName: szöveg
+    - orgId: szöveg
+    - orgName: szöveg
+    - title: szöveg
+    - content: szöveg
+    - type: [NewsTypes](#newstypes)
+
+- <a name="newstypes"> __NewsTypes__ <a> (ENUM)
+    - LOCAL
+    - NATIONAL
+    - INTERNATIONAL
+
+- <a name="eventdtopublic"> __EventDtoPublic__ <a> 
+    - eventId: szöveg
+    - name: szöveg
+    - description: szöveg
+    - location: szöveg
+    - userId: szöveg
+    - orgId: szöveg
+    - publicPhones: szám lista
+    - publicEmails: szöveg lista
+    - startDate: Timestamp
+    - endDate: Timestamp
+
+- <a name="eventdto"> __EventDto__ <a>
+    - name: szöveg
+    - description: szöveg
+    - location: szöveg
+    - userId: szöveg
+    - orgId: szöveg
+    - publicPhones: szám lista
+    - publicEmails: szöveg lista
+    - startDate: Timestamp 
+    - endDate: Timestamp 
 
 
-             
+
+- <a name="noticedtopublic"> NoticeDtoPublic <a> 
+    - noticeId: szöveg
+    - userId: szöveg
+    - type: [NoticeTypes](#noticetypes)   
+    - urgency: szöveg
+    - description: szöveg
+    - location: szöveg
+    - phone: szám
+    - date: Timestamp 
+
+- <a name="noticetypes"> __NoticeTypes__ <a> (ENUM)
+    - KOZTERULET
+    - UTHIBA
+    - VIZGAZ
+    - LOMTALANITAS
+    - SZEMETSZALLITAS
+
+- <a name="noticedto"> NoticeDto <a> 
+    - userId: szöveg
+    - type: [NoticeTypes](#noticetypes)  
+    - urgency: szöveg
+    - description: szöveg
+    - location: szöveg
+    - phone: szám
+    - date: Timestamp 
+
+
+# Projekt Futtatása
+
+- 
+
+
+
+
+
+# REQUIREMENTS:
+- JAVA 21
+- Maven
+- English (Basic)
