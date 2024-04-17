@@ -39,7 +39,7 @@ Url: http://localhost:8083
 
 Feladat: Felhasználók azonosítása, Jwt-k készítése, alap felhasználó adatok tárolása módosítása törlése, kommunikáció a resource serverrel jwt-k validálása érdekében
 
-## Api(használatban lévő végpontok):
+## <a name="api" > Api </a> (használatban lévő végpontok):
 
 __Jelmagyarázat:__
 
@@ -402,7 +402,7 @@ __Dump File:__
         - ORG_ID CHARACTER VARYING(255) __Foreign Key__
         - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
 
-    - POSTS
+    - POSTS *nem használt*
 
         - POST_ID CHARACTER VARYING(255) __Primary Key__
         - CONTENT CHARACTER VARYING(255)
@@ -415,7 +415,7 @@ __Dump File:__
         - VOTE_ID CHARACTER VARYING(255) __Foreign Key__
         - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
 
-    - RESERVATIONS
+    - RESERVATIONS *nem használt*
 
         - RESERVATION_ID CHARACTER VARYING(255) __Primary Key__
         - EMAIL CHARACTER VARYING(255)
@@ -437,7 +437,7 @@ __Dump File:__
         - USERNAME CHARACTER VARYING(255) __Foreign Key__ (authorization-server USERS) 
         - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
 
-    - VOTE_OPTIONS
+    - VOTE_OPTIONS *nem használt*
 
         - VOTE_OPTION_ID CHARACTER VARYING(255) __Primary Key__
         - OPTIONTEXT CHARACTER VARYING(255)
@@ -445,7 +445,7 @@ __Dump File:__
         - VOTE_ID CHARACTER VARYING(255) __Foreign Key__
         - DELETED BOOLEAN COMMENT 'Soft-delete indicator' 
 
-    - VOTES
+    - VOTES *nem használt*
 
         - VOTE_ID CHARACTER VARYING(255) __Primary Key__
         - DESCRIPTION CHARACTER VARYING(255)
