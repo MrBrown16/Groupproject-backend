@@ -22,11 +22,14 @@ CREATE MEMORY TABLE "PUBLIC"."EVENTS"(
     "USER_ID" CHARACTER VARYING(255)
 );               
 ALTER TABLE "PUBLIC"."EVENTS" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_7" PRIMARY KEY("EVENT_ID"); 
--- 3 +/- SELECT COUNT(*) FROM PUBLIC.EVENTS;  
+-- 6 +/- SELECT COUNT(*) FROM PUBLIC.EVENTS;  
 INSERT INTO "PUBLIC"."EVENTS" VALUES
 ('977fdc7b-9d58-48ec-aa33-d376e03c4144', 'First event ever! How exciting!!', TIMESTAMP '2024-04-17 14:59:59.387793', 'A planet called Earth', 'First ever event', ARRAY ['PUBLICEMAIL1@email.bu', 'PUBLICEMAIL2@email.bu', 'PUBLICEMAIL2@email.bu'], ARRAY [12345678901, 12345678902, 12345678903], TIMESTAMP '2024-04-17 14:59:59.387793', FALSE, '5', '7'),
 ('e8374269-76da-4610-9e75-0fc12c3f015a', 'Second is not so bad...', TIMESTAMP '2024-04-17 14:59:59.41479', 'A planet called Mars', 'Not the First ever event', ARRAY ['PUBLICEMAIL12@email.bu', 'PUBLICEMAIL22@email.bu', 'PUBLICEMAIL22@email.bu'], ARRAY [12345433901, 12345458902, 12345656903], TIMESTAMP '2024-04-17 14:59:59.41479', FALSE, '4', '6'),
-('a764b4ad-d74b-4ad3-aa1b-6c1e485a301a', 'Ohh we are only third? nevermind will do it', TIMESTAMP '2024-04-17 14:59:59.422785', 'A planet called Venus', 'First ever event! What you say we aren''t??', ARRAY ['PUBLICEMAIL13@email.bu', 'PUBLICEMAIL23@email.bu', 'PUBLICEMAIL23@email.bu'], ARRAY [12343223901, 12343223902, 12343223903], TIMESTAMP '2024-04-17 14:59:59.422785', FALSE, '3', '5');     
+('a764b4ad-d74b-4ad3-aa1b-6c1e485a301a', 'Ohh we are only third? nevermind will do it', TIMESTAMP '2024-04-17 14:59:59.422785', 'A planet called Venus', 'First ever event! What you say we aren''t??', ARRAY ['PUBLICEMAIL13@email.bu', 'PUBLICEMAIL23@email.bu', 'PUBLICEMAIL23@email.bu'], ARRAY [12343223901, 12343223902, 12343223903], TIMESTAMP '2024-04-17 14:59:59.422785', FALSE, '3', '5'),
+('7e32c349-02a9-48ba-b0de-000715fc4f36', 'First event ever! How exciting!!', TIMESTAMP '2024-04-17 15:17:52.78386', 'A planet called Earth', 'First ever event', ARRAY ['PUBLICEMAIL1@email.bu', 'PUBLICEMAIL2@email.bu', 'PUBLICEMAIL2@email.bu'], ARRAY [12345678901, 12345678902, 12345678903], TIMESTAMP '2024-04-17 15:17:52.78386', FALSE, '5', '7'),
+('0f0c984c-07ec-4f54-80a9-eb6a6395d913', 'Second is not so bad...', TIMESTAMP '2024-04-17 15:17:52.788864', 'A planet called Mars', 'Not the First ever event', ARRAY ['PUBLICEMAIL12@email.bu', 'PUBLICEMAIL22@email.bu', 'PUBLICEMAIL22@email.bu'], ARRAY [12345433901, 12345458902, 12345656903], TIMESTAMP '2024-04-17 15:17:52.788864', FALSE, '4', '6'),
+('1acf4b0e-6db4-4cfc-963c-c6d5150a009b', 'Ohh we are only third? nevermind will do it', TIMESTAMP '2024-04-17 15:17:52.793861', 'A planet called Venus', 'First ever event! What you say we aren''t??', ARRAY ['PUBLICEMAIL13@email.bu', 'PUBLICEMAIL23@email.bu', 'PUBLICEMAIL23@email.bu'], ARRAY [12343223901, 12343223902, 12343223903], TIMESTAMP '2024-04-17 15:17:52.793861', FALSE, '3', '5');
 CREATE MEMORY TABLE "PUBLIC"."ITEMS"(
     "ITEM_ID" CHARACTER VARYING(255) NOT NULL,
     "CONDITION" CHARACTER VARYING(255),
@@ -42,7 +45,7 @@ CREATE MEMORY TABLE "PUBLIC"."ITEMS"(
     "USER_ID" CHARACTER VARYING(255) NOT NULL
 );    
 ALTER TABLE "PUBLIC"."ITEMS" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_4" PRIMARY KEY("ITEM_ID");   
--- 16 +/- SELECT COUNT(*) FROM PUBLIC.ITEMS;  
+-- 17 +/- SELECT COUNT(*) FROM PUBLIC.ITEMS;  
 INSERT INTO "PUBLIC"."ITEMS" VALUES
 ('1', 'new', TIMESTAMP '2024-03-19 13:57:35.259333', 'Piros Bicikli', 'email1@mail.bu', 'Budapest', 'bicikli', 342391, 0, TIMESTAMP '2024-03-19 13:57:35.259333', FALSE, '1'),
 ('2', 'newish', TIMESTAMP '2024-03-19 13:57:35.259333', U&'S\00e1rga Bicikli', 'email2@mail.bu', 'Budapest', 'bicikli', 342391, 71000, TIMESTAMP '2024-03-19 13:57:35.259333', FALSE, '2'),
@@ -59,7 +62,8 @@ INSERT INTO "PUBLIC"."ITEMS" VALUES
 ('13', 'new', TIMESTAMP '2024-04-14 00:00:00', U&'IV. Baldwin kir\00e1ly tan\00edt\00e1sai vihet\0151ek', '4646567', '8554', U&'IV. Baldwin kir\00e1ly tan\00edt\00e1sai vihet\0151ek', 46543, 456456, TIMESTAMP '2024-04-14 00:00:00', FALSE, '6'),
 ('14', 'used', TIMESTAMP '2024-04-14 00:00:00', U&'S\00e9r\00fclt szekr\00e9ny elvihet\0151', '47658', 'Budapest', U&'S\00e9r\00fclt szekr\00e9ny elvihet\0151', 564764654, 13535, TIMESTAMP '2024-04-14 00:00:00', FALSE, '7'),
 ('15', 'new', TIMESTAMP '2024-04-14 00:00:00', U&'LG Monitor elad\00f3', '4646567', '8554', U&'LG Monitor elad\00f3', 46543, 456456, TIMESTAMP '2024-04-14 00:00:00', FALSE, '1'),
-('16', 'newish', TIMESTAMP '2024-04-14 00:00:00', U&'Alig haszn\00e1lt \00e9jjeli l\00e1mpa', '12314345', U&'P\00f3csag', U&'Alig haszn\00e1lt \00e9jjeli l\00e1mpa', 243234521, 343215, TIMESTAMP '2024-04-14 00:00:00', FALSE, '2');          
+('16', 'newish', TIMESTAMP '2024-04-14 00:00:00', U&'Alig haszn\00e1lt \00e9jjeli l\00e1mpa', '12314345', U&'P\00f3csag', U&'Alig haszn\00e1lt \00e9jjeli l\00e1mpa', 243234521, 343215, TIMESTAMP '2024-04-14 00:00:00', FALSE, '2'),
+('6e188b11-5dce-4df9-bdcf-f1525920a5b5', 'used', TIMESTAMP '2024-04-17 15:21:28.155579', 'aaaaaaaaaaaaaaa', 'balintlaczko03@gmail.com', 'vvvvvvvvvv', 'bbb', 777, 33, TIMESTAMP '2024-04-17 15:24:36.551712', TRUE, '89f48162-dad3-4f48-bfe5-27f3802c2b11');            
 CREATE MEMORY TABLE "PUBLIC"."MYORG_CATEGORIES"(
     "DELETED" BOOLEAN COMMENT 'Soft-delete indicator' NOT NULL,
     "MYORG_ORG_ID" CHARACTER VARYING(255) NOT NULL,
@@ -91,7 +95,7 @@ CREATE MEMORY TABLE "PUBLIC"."NEWS"(
     "USER_ID" CHARACTER VARYING(255)
 );       
 ALTER TABLE "PUBLIC"."NEWS" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_24" PRIMARY KEY("NEWS_ID");   
--- 13 +/- SELECT COUNT(*) FROM PUBLIC.NEWS;   
+-- 27 +/- SELECT COUNT(*) FROM PUBLIC.NEWS;   
 INSERT INTO "PUBLIC"."NEWS" VALUES
 ('0a11aa03-6059-46c2-bb64-b5f9fb2f5e4f', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 14:59:59.428754', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 14:59:59.428754', FALSE, '4', '6'),
 ('a5b9e05c-6707-4bc5-9acc-f94bc18df0b0', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 14:59:59.433753', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 14:59:59.433753', FALSE, '5', '7'),
@@ -106,7 +110,22 @@ INSERT INTO "PUBLIC"."NEWS" VALUES
 INSERT INTO "PUBLIC"."NEWS" VALUES
 ('32503cbb-a74f-46a0-b2be-018abae4f699', U&'Alap\00edtv\00e1nyi t\00e1mogat\00e1ssal vitte szakmai kir\00e1ndul\00e1sokra 11-12. \00e9vfolyamos di\00e1kjait a K\00f6zg\00e9.', TIMESTAMP '2024-04-17 14:59:59.462755', U&'(orsz\00e1gos) Szakmai kir\00e1ndul\00e1sok a Nemzeti Egy\00fcttm\0171k\00f6d\00e9si Alap t\00e1mogat\00e1s\00e1val', 'NATIONAL', TIMESTAMP '2024-04-17 14:59:59.462755', FALSE, '5', '7'),
 ('5ad2d14d-ff3a-4d2d-ac83-3b249996e84b', U&'Kis-Fekete Vilmos, a Kiskunf\00e9legyh\00e1zi Bal\00e1zs \00c1rp\00e1d Alapfok\00fa M\0171v\00e9szeti Iskola int\00e9zm\00e9nyvezet\0151je tartott el\0151ad\00e1st m\00e1rcius 5-\00e9n, kedden a v\00e1rosi k\00f6nyvt\00e1r baba-mama klubj\00e1ban. A Bet\0171b\00f6lcsiben ez\00fattal a korai hang\00e9lm\00e9nyekr\0151l \00e9s a zenei nevel\00e9s fontoss\00e1g\00e1r\00f3l hallhattak az \00e9rdekl\0151d\0151k.', TIMESTAMP '2024-04-17 14:59:59.464754', U&'(orsz\00e1gos) Zenei \00e9lm\00e9nyek a Bet\0171b\00f6lcsiben', 'NATIONAL', TIMESTAMP '2024-04-17 14:59:59.464754', FALSE, '3', '7'),
-('97c62c85-a109-4792-83b6-3a0d77d1569b', U&'M\00e1rcius els\0151 h\00e9tv\00e9g\00e9j\00e9n rendezt\00e9k meg Kiskunf\00e9legyh\00e1z\00e1n a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1t. A sok versenyz\0151 csapatnak k\00f6sz\00f6nhet\0151en 2 helysz\00ednen zajlottak a teremlabdar\00fag\00f3-m\00e9rk\0151z\00e9sek. A F\00e9legyh\00e1zi T\00e9rs\00e9gi Sportiskola U11 koroszt\00e1lya 3 csapatot ind\00edtott a megm\00e9rettet\00e9sen. Az FTSI \201eA\201d \00e9s FTSI \201eB\201d csapat a Kiskunf\00e9legyh\00e1zi V\00e1rosi Sportcsarnokban, a harmadik csapat a Mezg\00e9 sportcsarnok\00e1ban ontotta a g\00f3lokat.', TIMESTAMP '2024-04-17 14:59:59.466755', U&'(orsz\00e1gos) \00c9remes\0151 a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1n', 'NATIONAL', TIMESTAMP '2024-04-17 14:59:59.466755', FALSE, '1', '4');        
+('97c62c85-a109-4792-83b6-3a0d77d1569b', U&'M\00e1rcius els\0151 h\00e9tv\00e9g\00e9j\00e9n rendezt\00e9k meg Kiskunf\00e9legyh\00e1z\00e1n a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1t. A sok versenyz\0151 csapatnak k\00f6sz\00f6nhet\0151en 2 helysz\00ednen zajlottak a teremlabdar\00fag\00f3-m\00e9rk\0151z\00e9sek. A F\00e9legyh\00e1zi T\00e9rs\00e9gi Sportiskola U11 koroszt\00e1lya 3 csapatot ind\00edtott a megm\00e9rettet\00e9sen. Az FTSI \201eA\201d \00e9s FTSI \201eB\201d csapat a Kiskunf\00e9legyh\00e1zi V\00e1rosi Sportcsarnokban, a harmadik csapat a Mezg\00e9 sportcsarnok\00e1ban ontotta a g\00f3lokat.', TIMESTAMP '2024-04-17 14:59:59.466755', U&'(orsz\00e1gos) \00c9remes\0151 a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1n', 'NATIONAL', TIMESTAMP '2024-04-17 14:59:59.466755', FALSE, '1', '4'),
+('355c6e5f-2686-40da-962d-d41a56e55de6', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 15:17:52.79686', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 15:17:52.79686', FALSE, '4', '6'),
+('a94f53cf-570c-47e8-ad0e-ee41df61bd06', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 15:17:52.799588', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 15:17:52.799588', FALSE, '5', '7'),
+('01c81fc9-8033-4fb8-b3cf-37139678597f', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 15:17:52.802109', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 15:17:52.802109', FALSE, '3', '4'),
+('3111e1be-df42-434f-beee-4dd7b177740b', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 15:17:52.808111', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 15:17:52.808111', FALSE, '2', '4'),
+('c5de8e2d-b7c9-4079-a467-af1c7d2342bb', 'What could i write thats worthy to be the first? Im not worthy', TIMESTAMP '2024-04-17 15:17:52.809108', 'First ever article!!', 'INTERNATIONAL', TIMESTAMP '2024-04-17 15:17:52.809108', FALSE, '3', '6'),
+('f6155fe3-1407-4781-b74b-14c422b8b0da', U&'Ism\00e9t \00f6ssze\00fclt a K\00f6nyvek klubja olvas\00f3k\00f6r a Kiskunf\00e9legyh\00e1zi Pet\0151fi S\00e1ndor V\00e1rosi K\00f6nyvt\00e1rban dr. Szab\00f3 Imre filoz\00f3fus vezet\00e9s\00e9vel. A m\00e1rcius 5-ei esem\00e9nyen Oliver Sacks: A f\00e9rfi, aki kalapnak n\00e9zte a feles\00e9g\00e9t c\00edm\0171 m\0171v\00e9t elemezt\00e9k.', TIMESTAMP '2024-04-17 15:17:52.811108', U&'Ism\00e9t \00f6ssze\00fclt a K\00f6nyvek klubja olvas\00f3k\00f6r a k\00f6nyvt\00e1rban', 'LOCAL', TIMESTAMP '2024-04-17 15:17:52.811108', FALSE, '3', '6'),
+('c604541c-fcbd-429a-85f2-03e5b264abce', U&'Alap\00edtv\00e1nyi t\00e1mogat\00e1ssal vitte szakmai kir\00e1ndul\00e1sokra 11-12. \00e9vfolyamos di\00e1kjait a K\00f6zg\00e9.', TIMESTAMP '2024-04-17 15:17:52.813111', U&'Szakmai kir\00e1ndul\00e1sok a Nemzeti Egy\00fcttm\0171k\00f6d\00e9si Alap t\00e1mogat\00e1s\00e1val', 'LOCAL', TIMESTAMP '2024-04-17 15:17:52.813111', FALSE, '5', '7'); 
+INSERT INTO "PUBLIC"."NEWS" VALUES
+('7fb9c40c-2d90-4f5d-8b24-ed67bd036f59', U&'Kis-Fekete Vilmos, a Kiskunf\00e9legyh\00e1zi Bal\00e1zs \00c1rp\00e1d Alapfok\00fa M\0171v\00e9szeti Iskola int\00e9zm\00e9nyvezet\0151je tartott el\0151ad\00e1st m\00e1rcius 5-\00e9n, kedden a v\00e1rosi k\00f6nyvt\00e1r baba-mama klubj\00e1ban. A Bet\0171b\00f6lcsiben ez\00fattal a korai hang\00e9lm\00e9nyekr\0151l \00e9s a zenei nevel\00e9s fontoss\00e1g\00e1r\00f3l hallhattak az \00e9rdekl\0151d\0151k.', TIMESTAMP '2024-04-17 15:17:52.81511', U&'Zenei \00e9lm\00e9nyek a Bet\0171b\00f6lcsiben', 'LOCAL', TIMESTAMP '2024-04-17 15:17:52.81511', FALSE, '3', '7'),
+('b1366638-2ec8-4fc4-bf12-7ed8c0f70932', U&'M\00e1rcius els\0151 h\00e9tv\00e9g\00e9j\00e9n rendezt\00e9k meg Kiskunf\00e9legyh\00e1z\00e1n a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1t. A sok versenyz\0151 csapatnak k\00f6sz\00f6nhet\0151en 2 helysz\00ednen zajlottak a teremlabdar\00fag\00f3-m\00e9rk\0151z\00e9sek. A F\00e9legyh\00e1zi T\00e9rs\00e9gi Sportiskola U11 koroszt\00e1lya 3 csapatot ind\00edtott a megm\00e9rettet\00e9sen. Az FTSI \201eA\201d \00e9s FTSI \201eB\201d csapat a Kiskunf\00e9legyh\00e1zi V\00e1rosi Sportcsarnokban, a harmadik csapat a Mezg\00e9 sportcsarnok\00e1ban ontotta a g\00f3lokat.', TIMESTAMP '2024-04-17 15:17:52.819109', U&'\00c9remes\0151 a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1n', 'LOCAL', TIMESTAMP '2024-04-17 15:17:52.819109', FALSE, '1', '4'),
+('de7206b4-279c-4fab-b98d-99ec3ca11d2c', U&'Ism\00e9t \00f6ssze\00fclt a K\00f6nyvek klubja olvas\00f3k\00f6r a Kiskunf\00e9legyh\00e1zi Pet\0151fi S\00e1ndor V\00e1rosi K\00f6nyvt\00e1rban dr. Szab\00f3 Imre filoz\00f3fus vezet\00e9s\00e9vel. A m\00e1rcius 5-ei esem\00e9nyen Oliver Sacks: A f\00e9rfi, aki kalapnak n\00e9zte a feles\00e9g\00e9t c\00edm\0171 m\0171v\00e9t elemezt\00e9k.', TIMESTAMP '2024-04-17 15:17:52.825127', U&'(orsz\00e1gos) Ism\00e9t \00f6ssze\00fclt a K\00f6nyvek klubja olvas\00f3k\00f6r a k\00f6nyvt\00e1rban', 'NATIONAL', TIMESTAMP '2024-04-17 15:17:52.825127', FALSE, '3', '6'),
+('ed726182-ff1a-4c58-b875-6be676a7e962', U&'Alap\00edtv\00e1nyi t\00e1mogat\00e1ssal vitte szakmai kir\00e1ndul\00e1sokra 11-12. \00e9vfolyamos di\00e1kjait a K\00f6zg\00e9.', TIMESTAMP '2024-04-17 15:17:52.82711', U&'(orsz\00e1gos) Szakmai kir\00e1ndul\00e1sok a Nemzeti Egy\00fcttm\0171k\00f6d\00e9si Alap t\00e1mogat\00e1s\00e1val', 'NATIONAL', TIMESTAMP '2024-04-17 15:17:52.82711', FALSE, '5', '7'),
+('1143ed30-3bf1-4ab5-9b17-771d27498287', U&'Kis-Fekete Vilmos, a Kiskunf\00e9legyh\00e1zi Bal\00e1zs \00c1rp\00e1d Alapfok\00fa M\0171v\00e9szeti Iskola int\00e9zm\00e9nyvezet\0151je tartott el\0151ad\00e1st m\00e1rcius 5-\00e9n, kedden a v\00e1rosi k\00f6nyvt\00e1r baba-mama klubj\00e1ban. A Bet\0171b\00f6lcsiben ez\00fattal a korai hang\00e9lm\00e9nyekr\0151l \00e9s a zenei nevel\00e9s fontoss\00e1g\00e1r\00f3l hallhattak az \00e9rdekl\0151d\0151k.', TIMESTAMP '2024-04-17 15:17:52.830918', U&'(orsz\00e1gos) Zenei \00e9lm\00e9nyek a Bet\0171b\00f6lcsiben', 'NATIONAL', TIMESTAMP '2024-04-17 15:17:52.830918', FALSE, '3', '7'),
+('cf02a76e-0abd-40cc-97d3-554055e7080f', U&'M\00e1rcius els\0151 h\00e9tv\00e9g\00e9j\00e9n rendezt\00e9k meg Kiskunf\00e9legyh\00e1z\00e1n a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1t. A sok versenyz\0151 csapatnak k\00f6sz\00f6nhet\0151en 2 helysz\00ednen zajlottak a teremlabdar\00fag\00f3-m\00e9rk\0151z\00e9sek. A F\00e9legyh\00e1zi T\00e9rs\00e9gi Sportiskola U11 koroszt\00e1lya 3 csapatot ind\00edtott a megm\00e9rettet\00e9sen. Az FTSI \201eA\201d \00e9s FTSI \201eB\201d csapat a Kiskunf\00e9legyh\00e1zi V\00e1rosi Sportcsarnokban, a harmadik csapat a Mezg\00e9 sportcsarnok\00e1ban ontotta a g\00f3lokat.', TIMESTAMP '2024-04-17 15:17:52.832928', U&'(orsz\00e1gos) \00c9remes\0151 a XI. Csik\00f3s J\00f3zsef eml\00e9ktorn\00e1n', 'NATIONAL', TIMESTAMP '2024-04-17 15:17:52.832928', FALSE, '1', '4'),
+('ce907cc7-7362-4f8b-acab-23c1728ee532', 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww wwwwwwwwwwwwww w  wwwwwwwwww', TIMESTAMP '2024-04-17 15:27:35.72756', U&'Olcs\00f3 a csirkefarh\00e1t a tescdoban', 'LOCAL', TIMESTAMP '2024-04-17 15:27:35.72756', FALSE, '3', '6');             
 CREATE MEMORY TABLE "PUBLIC"."NOTICES"(
     "NOTICE_ID" CHARACTER VARYING(255) NOT NULL,
     "DATE" TIMESTAMP(6),
@@ -119,7 +138,7 @@ CREATE MEMORY TABLE "PUBLIC"."NOTICES"(
     "USER_ID" CHARACTER VARYING(255) NOT NULL
 );    
 ALTER TABLE "PUBLIC"."NOTICES" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_A9" PRIMARY KEY("NOTICE_ID");              
--- 23 +/- SELECT COUNT(*) FROM PUBLIC.NOTICES;
+-- 26 +/- SELECT COUNT(*) FROM PUBLIC.NOTICES;
 INSERT INTO "PUBLIC"."NOTICES" VALUES
 ('ec8deb00-ec53-4076-bb67-ca3402f9d2c2', TIMESTAMP '2024-04-17 01:20:00', 'hip', '543tg', 21234, 'KOZTERULET', '1', FALSE, '1'),
 ('3926e198-36a1-4457-aa42-48af87f1c7c6', TIMESTAMP '2024-04-17 01:20:00', 'hip', '543tg', 21234, 'KOZTERULET', '1', FALSE, '2'),
@@ -143,7 +162,10 @@ INSERT INTO "PUBLIC"."NOTICES" VALUES
 ('e855252b-59cd-4cf7-bf50-598c77607afb', TIMESTAMP '2024-04-23 01:20:00', 'hip', '543tg', 21234, 'SZEMETSZALLITAS', '2', FALSE, '6'),
 ('28b237fb-cf3e-4494-ac92-4243ac804af9', TIMESTAMP '2024-04-17 14:59:59.467755', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '3', FALSE, '5'),
 ('0060ee84-91a6-4d8d-a40f-44937d82db5a', TIMESTAMP '2024-04-17 14:59:59.474756', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '3', FALSE, '2'),
-('c7ffcffc-e93f-4b09-b5ac-7eb4fae7be0c', TIMESTAMP '2024-04-17 14:59:59.478759', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '2', FALSE, '3');            
+('c7ffcffc-e93f-4b09-b5ac-7eb4fae7be0c', TIMESTAMP '2024-04-17 14:59:59.478759', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '2', FALSE, '3'),
+('16eeeadd-9be0-474f-8f66-c08f5fb03960', TIMESTAMP '2024-04-17 15:17:52.833928', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '3', FALSE, '5'),
+('95d9ba5a-b94a-4412-9570-d0abf96846f6', TIMESTAMP '2024-04-17 15:17:52.838948', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '3', FALSE, '2'),
+('498c2f92-0dd3-4bd3-b731-c68718ddaf0b', TIMESTAMP '2024-04-17 15:17:52.84293', 'There is an alien SpaceShip parked in front of our house illegaly', 'our address', 12345678901, 'KOZTERULET', '2', FALSE, '3');    
 CREATE MEMORY TABLE "PUBLIC"."ORGANISATIONS"(
     "ORG_ID" CHARACTER VARYING(255) NOT NULL,
     "NAME" CHARACTER VARYING(255),
@@ -206,11 +228,14 @@ CREATE MEMORY TABLE "PUBLIC"."RESERVATIONS"(
     "USER_ID" CHARACTER VARYING(255) NOT NULL
 );              
 ALTER TABLE "PUBLIC"."RESERVATIONS" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_41" PRIMARY KEY("RESERVATION_ID");    
--- 3 +/- SELECT COUNT(*) FROM PUBLIC.RESERVATIONS;            
+-- 6 +/- SELECT COUNT(*) FROM PUBLIC.RESERVATIONS;            
 INSERT INTO "PUBLIC"."RESERVATIONS" VALUES
 ('6bb860f6-af88-4332-9349-e65a7469292a', 'billspublicemail@email.bu', TIMESTAMP '2024-04-17 14:59:59.481754', 123456780, 'Bill', TIMESTAMP '2024-04-17 14:59:59.481754', FALSE, '6', '1'),
 ('b1bda6f7-cb22-4cf1-8ad4-b6613bfbdf85', 'marispublicemail@email.bu', TIMESTAMP '2024-04-17 14:59:59.489755', 123456780, 'Mari', TIMESTAMP '2024-04-17 14:59:59.489755', FALSE, '5', '3'),
-('75e11df6-6d44-46b0-a6ad-c1caea43c556', 'balintspublicemail@email.bu', TIMESTAMP '2024-04-17 14:59:59.492241', 123456780, U&'B\00e1lint', TIMESTAMP '2024-04-17 14:59:59.492241', FALSE, '4', '2');      
+('75e11df6-6d44-46b0-a6ad-c1caea43c556', 'balintspublicemail@email.bu', TIMESTAMP '2024-04-17 14:59:59.492241', 123456780, U&'B\00e1lint', TIMESTAMP '2024-04-17 14:59:59.492241', FALSE, '4', '2'),
+('243c27f1-1c26-486b-8365-b9f53cfe018e', 'billspublicemail@email.bu', TIMESTAMP '2024-04-17 15:17:52.846993', 123456780, 'Bill', TIMESTAMP '2024-04-17 15:17:52.846993', FALSE, '6', '1'),
+('46445a9c-a5e3-4c79-8ccd-136c64c4a9fe', 'marispublicemail@email.bu', TIMESTAMP '2024-04-17 15:17:52.851994', 123456780, 'Mari', TIMESTAMP '2024-04-17 15:17:52.851994', FALSE, '5', '3'),
+('1f9796c6-e78e-4e25-9226-5cbacf46f8b1', 'balintspublicemail@email.bu', TIMESTAMP '2024-04-17 15:17:52.856998', 123456780, U&'B\00e1lint', TIMESTAMP '2024-04-17 15:17:52.856998', FALSE, '4', '2');        
 CREATE MEMORY TABLE "PUBLIC"."USERS"(
     "USER_ID" CHARACTER VARYING(255) NOT NULL,
     "EMAIL" CHARACTER VARYING(255),
@@ -221,7 +246,7 @@ CREATE MEMORY TABLE "PUBLIC"."USERS"(
     "DELETED" BOOLEAN COMMENT 'Soft-delete indicator' NOT NULL
 );  
 ALTER TABLE "PUBLIC"."USERS" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_4D" PRIMARY KEY("USER_ID");  
--- 7 +/- SELECT COUNT(*) FROM PUBLIC.USERS;   
+-- 8 +/- SELECT COUNT(*) FROM PUBLIC.USERS;   
 INSERT INTO "PUBLIC"."USERS" VALUES
 ('1', 'bbb@ccc.bu', U&'\00c1kos', U&'Kov\00e1cs', 303345677, 'moba', FALSE),
 ('2', 'aaa@ddd.bu', U&'J\00f3ska', 'Kiss', 1130322677, 'Blob', FALSE),
@@ -229,7 +254,8 @@ INSERT INTO "PUBLIC"."USERS" VALUES
 ('4', 'admin@email.bu', 'Admin', 'Admin', 303345677, 'admin', FALSE),
 ('5', 'user@email.bu', 'User', 'User', 303345677, 'user', FALSE),
 ('6', 'orgadmin@email.bu', 'OrgAdmin', 'OrgAdmin', 303345677, 'orgadmin', FALSE),
-('7', 'adminorgadmin@email.bu', 'adminOrgAdmin', 'adminOrgAdmin', 303345677, 'adminorgadmin', FALSE);               
+('7', 'adminorgadmin@email.bu', 'adminOrgAdmin', 'adminOrgAdmin', 303345677, 'adminorgadmin', FALSE),
+('89f48162-dad3-4f48-bfe5-27f3802c2b11', 'KittyCica@gmail.com', 'Kitty', 'Cica', 777, 'Cica', FALSE);        
 CREATE MEMORY TABLE "PUBLIC"."VOTE_OPTIONS"(
     "VOTE_OPTION_ID" CHARACTER VARYING(255) NOT NULL,
     "OPTIONTEXT" CHARACTER VARYING(255),
