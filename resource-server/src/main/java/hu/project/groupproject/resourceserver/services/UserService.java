@@ -4,6 +4,7 @@ import java.rmi.UnexpectedException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -124,7 +125,7 @@ public class UserService {
     public void logout(Authentication auth){
         
         restClient.post().uri("/connect/logout").body(Collections.singletonMap("token", ((Jwt) auth.getCredentials()).getTokenValue()));
-
+        
     }
 
     @Transactional
@@ -134,9 +135,17 @@ public class UserService {
             if (user == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
+            Map<String,String> userData = new HashMap<>();
+            userData.put("old", user.getUserName());
+            userData.put("new", newUser.userName());
             user.setEmail(newUser.email());
             user.setPhone(newUser.phone());
             user.setUserName(newUser.userName());
+            //TODO: set username in auth server
+            Boolean success = restClient.post().uri("/user/updateUserName").body(userData).retrieve().body(Boolean.class);
+            if (success != null && !success || success == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
             if (newUser.firstName() != null && newUser.firstName().length() > 2) {
                 user.setFirstName(newUser.firstName());
             }

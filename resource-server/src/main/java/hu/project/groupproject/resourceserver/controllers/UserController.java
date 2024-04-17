@@ -2,6 +2,8 @@ package hu.project.groupproject.resourceserver.controllers;
 
 import java.rmi.UnexpectedException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,6 +26,7 @@ import hu.project.groupproject.resourceserver.dtos.ImageUploadDetailsDto;
 import hu.project.groupproject.resourceserver.dtos.En.ReservationDtoPublic;
 import hu.project.groupproject.resourceserver.dtos.En.UserInfoDto;
 import hu.project.groupproject.resourceserver.dtos.En.orgs.OrgDtoPublicPartial;
+import hu.project.groupproject.resourceserver.dtos.En.users.ReturnUserRoles;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNew;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoNewWithPW;
 import hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPrivatePartial;
@@ -131,7 +134,7 @@ public class UserController {
     public Set<OrgDtoPublicPartial> getOrgsForUser(@PathVariable String userId, @RequestParam("pageNum") int pageNum, Authentication auth) {
             return orgService.getOrgsByUserId(userId,pageNum);
     }
-
+    
     // @GetMapping("/{userId}/notices")
     // @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     // public Set<NoticeDtoPublic> getNoticesForUser(@PathVariable String userId, Authentication auth) {
@@ -157,6 +160,16 @@ public class UserController {
     public ImageUploadDetailsDto newUser(@RequestBody UserDtoNewWithPW user) throws UnexpectedException{
         logger.debug("register......");
         return userService.newUser(user);
+    }
+    //TODO: kene hasznalni
+    @PostMapping("/admin/userRoles")
+    public List<ReturnUserRoles> getUserRoles(@RequestBody List<ReturnUserRoles> users, Authentication auth) {
+        return roleService.getUserRolesByUserIdAndUserName(users,auth);
+    }
+    //TODO: kene hasznalni
+    @PutMapping("/admin/setRolesTo")
+    public ReturnUserRoles setRolesTo(@RequestBody ReturnUserRoles user, Authentication auth){
+        return roleService.changeRolesTo(user, auth);
     }
     
     //TODO: hasznalt

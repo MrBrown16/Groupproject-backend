@@ -21,6 +21,7 @@ public interface UserRepository extends JpaRepository<MyUser, String>{
     <T> Optional<T> findById(String id, Class<T> type);
 
     Optional<MyUser> findByOrgsIdAndId(String orgId, String adminId);
+
     
     @Query("Select new hu.project.groupproject.resourceserver.dtos.En.users.UserDtoPublicPartial(u.id, u.userName, u.firstName, u.lastName) "+
     "from MyUser u "+
