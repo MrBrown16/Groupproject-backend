@@ -53,7 +53,7 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
 
 - [/login](http://localhost:8083/login) bejelentkező oldal 
 - [/.well-known/openid-configuration](http://localhost:8083/.well-known/openid-configuration) authorization server végpontok info
-- [/h2-console](http://localhost:8083/h2-console) authorization server adatbázis belépés ()
+- [/h2-console](http://localhost:8083/h2-console) authorization server adatbázis belépés 
 
 ### Resource: 
 
@@ -291,11 +291,20 @@ Authorization auth: A Spring Framework / Spring Security a jelenleg bejelentkeze
 
 # Projekt Futtatása
 
-- 
+1. Az authorization server mappájában terminal: mvnw spring-boot:run
+2. Az authorizációs server elindulása után (akár 30mp is lehet) a Resource server mappájában szintén terminal: mvnw spring-boot:run
+3. A frontend Onkormanyzat_/Onkormanyzat_ mappájában terminal: ng build
+4. A hármas pont után a frontend Onkormanyzat_ mappájában terminal: mvnw spring-boot:run
+5. Az alkalmazás a [http://localhost:8081](http://localhost:8081) - en érhető el.
 
-
-
-
+6. A Resource server adatbázisához a [http://localhost:8082/h2-console](http://localhost:8082/h2-console) útvonalon lehet hozzáférni, a resource server src\main\resources\application.properties fájljában levő adatokkal lehet belépni 
+    - General mariadb
+    - driver
+    - jdbc url
+    - felhasználónév
+    - jelszó (nincs: üres)
+7. Az Authorization server adatbázisához a [http://localhost:8083/h2-console](http://localhost:8083/h2-console) útvonalon lehet hozzáférni, az authorization server src\main\resources\application.properties fájljában levő adatokkal lehet belépni
+    az előző ponthoz hasonlóan.
 
 
 
