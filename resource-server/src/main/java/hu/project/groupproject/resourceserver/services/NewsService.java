@@ -48,7 +48,7 @@ public class NewsService {
     @SuppressWarnings("null")
     public NewsDtoPublic updateNews(String newsId, NewsDtoCreate newsUpdate, Authentication auth)
             throws NotFoundException {
-        MyNews news = manager.find(MyNews.class, newsUpdate);
+        MyNews news = manager.find(MyNews.class, newsId);
         if (canEditNews(news, newsUpdate,auth)) {
             news.setTitle(newsUpdate.title());
             news.setContent(newsUpdate.content());

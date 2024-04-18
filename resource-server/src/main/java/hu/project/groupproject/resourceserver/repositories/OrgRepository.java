@@ -34,7 +34,7 @@ public interface OrgRepository extends JpaRepository<MyOrg, String>{
     @Query("SELECT o FROM MyOrg o WHERE :category MEMBER OF o.categories")
     Page<MyOrg> findOrgsByCategory(@Param("category") OrgCategory category, Pageable pageable);
 
-    @Query("SELECT news.id FROM MyOrg u JOIN u.news news WHERE u.org = :orgId")
+    @Query("SELECT news.id FROM MyOrg u JOIN u.news news WHERE u.id = :orgId")
     Set<String> findNewsIdsByOrgId(@Param("orgId") String orgId);
 
 
