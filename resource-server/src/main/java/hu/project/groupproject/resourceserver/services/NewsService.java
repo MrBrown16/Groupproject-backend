@@ -37,10 +37,12 @@ public class NewsService {
 
     NewsRepository newsRepository;
     UserService userService;
+    OrgService orgService;
 
-    public NewsService(NewsRepository newsRepository, UserService userService) {
+    public NewsService(NewsRepository newsRepository, UserService userService, OrgService orgService) {
         this.newsRepository = newsRepository;
         this.userService = userService;
+        this.orgService=orgService;
     }
 
     @SuppressWarnings("null")
@@ -82,6 +84,18 @@ public class NewsService {
 
     public Set<NewsDtoPublic> getNewsForUser(String userId) {
         Set<String> newsIds = userService.getNewsIdsForUser(userId);
+        Set<NewsDtoPublic> news = new HashSet<>();
+        for (String newsId : newsIds) {
+            Optional<NewsDtoPublic> newsOpt = getNews(newsId);
+            if (newsOpt.isPresent()) {
+                news.add(newsOpt.get());
+            }
+        }
+        return news;
+
+    }
+    public Set<NewsDtoPublic> getNewsForOrg(String orgId) {
+        Set<String> newsIds = orgService.getNewsIdsForOrg(orgId);
         Set<NewsDtoPublic> news = new HashSet<>();
         for (String newsId : newsIds) {
             Optional<NewsDtoPublic> newsOpt = getNews(newsId);

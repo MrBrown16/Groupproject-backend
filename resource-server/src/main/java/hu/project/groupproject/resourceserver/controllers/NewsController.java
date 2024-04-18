@@ -46,6 +46,10 @@ public class NewsController {
     public Set<NewsDtoPublic> getNewsForUser(@PathVariable String id) {
         return newsService.getNewsForUser(id);
     }
+    @GetMapping("/org/{orgId}")
+    public Set<NewsDtoPublic> getNewsForOrg(@PathVariable String orgId) {
+        return newsService.getNewsForOrg(orgId);
+    }
 
     //TODO: hasznalt
     @GetMapping("/search")

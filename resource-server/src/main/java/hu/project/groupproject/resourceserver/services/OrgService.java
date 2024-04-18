@@ -95,6 +95,11 @@ public class OrgService {
         }
     }
 
+    public Set<String> getNewsIdsForOrg(String id){
+        Set<String> newsIds = orgRepository.findNewsIdsByOrgId(id);
+        logger.debug(newsIds);
+        return newsIds;
+    }
     public Set<String> getEventsIdsForOrg(String id){
         Set<String> eventIds = orgRepository.findEventIdsByOrgId(id);
         logger.debug(eventIds);

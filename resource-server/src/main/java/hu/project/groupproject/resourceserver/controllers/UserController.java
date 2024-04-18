@@ -148,11 +148,7 @@ public class UserController {
     @GetMapping("/{userId}/reservations")
     @PreAuthorize("hasAnyRole('ADMIN','ORG_ADMIN','USER')")
     public Set<ReservationDtoPublic> getReservationsForUser(@PathVariable String userId, Authentication auth) {
-        // MyUser user = (MyUser)auth.getPrincipal();
-        // if (user != null && user.getId() == userId) {
-            return reservationService.getReservationsForUser(userId);
-        // }
-        // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        return reservationService.getReservationsForUser(userId);
     }
     
     //TODO: hasznalt
