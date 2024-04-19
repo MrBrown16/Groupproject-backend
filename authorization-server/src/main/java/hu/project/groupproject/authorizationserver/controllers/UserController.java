@@ -53,7 +53,7 @@ public class UserController {
             for (GrantedAuthority role : roles) {
                 rolesStrings.add(role.toString());
             }
-            myList.set(i,new ReturnUserRoles(users.get(i).userName(), users.get(i).userId(), rolesStrings));
+            myList.add(i,new ReturnUserRoles(users.get(i).userName(), users.get(i).userId(), rolesStrings));
         };
        
         return myList;

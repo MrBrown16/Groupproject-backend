@@ -160,6 +160,7 @@ public class UserController {
     //TODO: kene hasznalni
     @PostMapping("/admin/userRoles")
     public List<ReturnUserRoles> getUserRoles(@RequestBody List<ReturnUserRoles> users, Authentication auth) {
+        logger.debug("users.size(): "+users.size());
         return roleService.getUserRolesByUserIdAndUserName(users,auth);
     }
     //TODO: kene hasznalni

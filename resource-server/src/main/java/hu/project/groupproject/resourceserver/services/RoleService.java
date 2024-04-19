@@ -84,16 +84,21 @@ public class RoleService {
 
 
     public List<ReturnUserRoles> getUserRolesByUserIdAndUserName(List<ReturnUserRoles> users, Authentication auth){
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         List<ReturnUserRoles> returnUserRoles = restClient.post().uri("/user/getRoles").body(users).retrieve().body(new ParameterizedTypeReference<List<ReturnUserRoles>>() {});
-        
+        // List<ReturnUserRoles> returnUserRoles = restClient.post().uri("/user/getRoles").body(users).retrieve().body(new ParameterizedTypeReference<List<ReturnUserRoles>>() {});
+        if (returnUserRoles == null ) {
+            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
+        }else{
+            logger.debug("returnUserRoles.size()"+returnUserRoles.size());
+        }
         return returnUserRoles;
     }    
     
     public ReturnUserRoles changeRolesTo(ReturnUserRoles retUser, Authentication auth){
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         ReturnUserRoles returnUserRoles = restClient.post().uri("/user/updateRoles").body(retUser).retrieve().body(ReturnUserRoles.class);
