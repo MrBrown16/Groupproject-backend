@@ -97,17 +97,27 @@ public class RoleService {
         return returnUserRoles;
     }    
     
+    // public ReturnUserRoles changeRolesTo(ReturnUserRoles retUser, Authentication auth){
+    //     if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+    //         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    //     }
+    //     ReturnUserRoles returnUserRoles = restClient.put().uri("/user/updateRoles").body(retUser).retrieve().body(ReturnUserRoles.class);
+    //     if (returnUserRoles == null) {
+    //         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    //     }
+    //     return returnUserRoles;
+    // }
     public ReturnUserRoles changeRolesTo(ReturnUserRoles retUser, Authentication auth){
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        ReturnUserRoles returnUserRoles = restClient.post().uri("/user/updateRoles").body(retUser).retrieve().body(ReturnUserRoles.class);
+        MyUser admin = (MyUser)auth.getPrincipal();
+        ReturnUserRoles returnUserRoles = restClient.put().uri("/user/updateRoles/"+admin.getUserName()).body(retUser).retrieve().body(ReturnUserRoles.class);
         if (returnUserRoles == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return returnUserRoles;
     }
-
 
     // private boolean addRolesIfNotExist(String username, List<String> rolesList){
 

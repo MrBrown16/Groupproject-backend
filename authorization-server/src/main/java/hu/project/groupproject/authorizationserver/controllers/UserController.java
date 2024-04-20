@@ -10,7 +10,6 @@ import java.util.Set;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.project.groupproject.authorizationserver.dtos.ReturnUserRoles;
-import hu.project.groupproject.authorizationserver.dtos.UserDTOPublic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,34 +67,71 @@ public class UserController {
         return true;
     }
 
-    @PutMapping("/updateRoles")
-    public ReturnUserRoles updateUser(@AuthenticationPrincipal User admin,@RequestBody ReturnUserRoles retUser, Set<String> roles) {
-        boolean isAdmin = roles.contains("ADMIN");
-        boolean isOrgAdmin = roles.contains("ORG_ADMIN");
-        Set<GrantedAuthority> toBeRoles = new HashSet<>();
-        toBeRoles.add(new SimpleGrantedAuthority("USER"));
+    // @PutMapping("/updateRoles")
+    // public ReturnUserRoles updateUser(@AuthenticationPrincipal User admin,@RequestBody ReturnUserRoles retUser) {
+    //     boolean isAdmin = retUser.roles().contains("ADMIN");
+    //     boolean isOrgAdmin = retUser.roles().contains("ORG_ADMIN");
+    //     List<GrantedAuthority> toBeRoles = new ArrayList<>();
+    //     toBeRoles.add(new SimpleGrantedAuthority("USER"));
+    //     // if (admin.getAuthorities().contains(new SimpleGrantedAuthority("ORG_ADMIN")) || admin.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+    //     UserDetails oldUser = manager.loadUserByUsername(retUser.userName());
+    //     if (admin.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+    //         Collection<? extends GrantedAuthority> oldRoles = oldUser.getAuthorities(); 
+    //         if(isOrgAdmin && !oldRoles.contains(new SimpleGrantedAuthority("ORG_ADMIN"))){
+    //             toBeRoles.add(new SimpleGrantedAuthority("ORG_ADMIN"));
+    //         }
+    //         if(isAdmin && !oldRoles.contains(new SimpleGrantedAuthority("ADMIN"))){
+    //             toBeRoles.add(new SimpleGrantedAuthority("ORG_ADMIN"));
+    //         }
+    //         if (isOrgAdmin && oldRoles.contains(new SimpleGrantedAuthority("ORG_ADMIN"))) {
+    //             //Do Nothing
+    //         }
+    //         if (isAdmin && oldRoles.contains(new SimpleGrantedAuthority("ADMIN"))) {
+    //             //Do Nothing
+    //         }
+    //         if (!isOrgAdmin && oldRoles.contains(new SimpleGrantedAuthority("ORG_ADMIN"))) {
+    //             //Remove ORG_ADMIN (Do Nothing because the oldRoles won't be used)
+    //         }
+    //         if (!isAdmin && oldRoles.contains(new SimpleGrantedAuthority("ADMIN"))) {
+    //             //Remove Admin (Do Nothing because the oldRoles won't be used)
+    //         }
+
+    //         UserDetails newDetails = new User(retUser.userName(), oldUser.getPassword(),  toBeRoles);
+    //         manager.updateUser(newDetails);
+    //         newDetails = manager.loadUserByUsername(retUser.userName());
+    //         Set<String> rolesStrings = new HashSet<>();
+    //         Collection<? extends GrantedAuthority> rolesG = newDetails.getAuthorities();
+    //         for (GrantedAuthority role : rolesG) {
+    //             rolesStrings.add(role.toString());
+    //         }
+    //         return new ReturnUserRoles(newDetails.getUsername(), retUser.userId(), rolesStrings);
+    //     }
+    //     return null;
+    // }
+    
+    @PutMapping("/updateRoles/{adminName}")
+    public ReturnUserRoles updateUser(@PathVariable String adminName,@RequestBody ReturnUserRoles retUser) {
+        boolean isAdmin = retUser.roles().contains("ADMIN");
+        boolean isOrgAdmin = retUser.roles().contains("ORG_ADMIN");
+        System.out.println("isAdmin: "+isAdmin+" isOrgAdmin: "+isOrgAdmin);
+        List<GrantedAuthority> toBeRoles = new ArrayList<>();
+        toBeRoles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        System.out.println("adminName: "+adminName+" retUser: "+retUser.toString());
         // if (admin.getAuthorities().contains(new SimpleGrantedAuthority("ORG_ADMIN")) || admin.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        UserDetails admin = manager.loadUserByUsername(adminName);
         UserDetails oldUser = manager.loadUserByUsername(retUser.userName());
-        if (admin.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        admin.getAuthorities().forEach(e->{
+            System.out.println("admin.getAuthorities: "+e.toString());
+        });
+        if (admin.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             Collection<? extends GrantedAuthority> oldRoles = oldUser.getAuthorities(); 
-            if(isOrgAdmin && !oldRoles.contains(new SimpleGrantedAuthority("ORG_ADMIN"))){
-                toBeRoles.add(new SimpleGrantedAuthority("ORG_ADMIN"));
+            if(isOrgAdmin){
+                toBeRoles.add(new SimpleGrantedAuthority("ROLE_ORG_ADMIN"));
             }
-            if(isAdmin && !oldRoles.contains(new SimpleGrantedAuthority("ADMIN"))){
-                toBeRoles.add(new SimpleGrantedAuthority("ORG_ADMIN"));
+            if(isAdmin){
+                toBeRoles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             }
-            if (isOrgAdmin && oldRoles.contains(new SimpleGrantedAuthority("ORG_ADMIN"))) {
-                //Do Nothing
-            }
-            if (isAdmin && oldRoles.contains(new SimpleGrantedAuthority("ADMIN"))) {
-                //Do Nothing
-            }
-            if (!isOrgAdmin && oldRoles.contains(new SimpleGrantedAuthority("ORG_ADMIN"))) {
-                //Remove ORG_ADMIN (Do Nothing because the oldRoles won't be used)
-            }
-            if (!isAdmin && oldRoles.contains(new SimpleGrantedAuthority("ADMIN"))) {
-                //Remove Admin (Do Nothing because the oldRoles won't be used)
-            }
+            
 
             UserDetails newDetails = new User(retUser.userName(), oldUser.getPassword(),  toBeRoles);
             manager.updateUser(newDetails);
@@ -105,12 +141,12 @@ public class UserController {
             for (GrantedAuthority role : rolesG) {
                 rolesStrings.add(role.toString());
             }
-            return new ReturnUserRoles(newDetails.getUsername(), retUser.userId(), rolesStrings);
+            ReturnUserRoles ret =new ReturnUserRoles(newDetails.getUsername(), retUser.userId(), rolesStrings);
+            System.out.println("returning ret: "+ret);
+            return ret;
         }
         return null;
     }
-    
-
 
 
     //requestbody:[password:"oldPassword",password1:"newPassword",password2:"newPassword"]
