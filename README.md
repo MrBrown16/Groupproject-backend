@@ -22,7 +22,7 @@ PORTS:
 - frontend server: 8081
 
 
-## Temporary But Important!!
+## Important!!
 
 To use the image upload option change the root Path in the resource server 
 src\main\java\hu\project\groupproject\resourceserver\myabstractclasses\LoadableImages.java
